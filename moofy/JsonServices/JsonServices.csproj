@@ -53,12 +53,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IManagerService.cs" />
+    <Compile Include="IMovieService.cs" />
+    <Compile Include="ISongService.cs" />
     <Compile Include="IUserService.cs" />
     <Compile Include="ListOfMovies.cs" />
+    <Compile Include="ListOfSongs.cs" />
+    <Compile Include="ManagerService.cs" />
     <Compile Include="MovieWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SongWrapper.cs" />
     <Compile Include="SuccessFlag.cs" />
+    <Compile Include="SuccessFlagDownload.cs" />
     <Compile Include="SuccessFlagId.cs" />
+    <Compile Include="SuccessFlagUpload.cs" />
     <Compile Include="UserService.cs" />
     <Compile Include="UserWrapper.cs" />
   </ItemGroup>
@@ -72,6 +80,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="moofy.svc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Backend\Backend.csproj">
+      <Project>{C2018782-2598-4300-AA59-B755F5FD0771}</Project>
+      <Name>Backend</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

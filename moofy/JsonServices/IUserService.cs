@@ -24,5 +24,11 @@ namespace moofy.JsonServices {
 
         [OperationContract]
         ListOfMovies GetCurrentMoviesFromUser(string id);
+
+        [OperationContract]
+        ListOfSongs GetSongsFromUser(string id);
+
+        [OperationContract]
+        ListOfSongs GetCurrentSongsFromUser(string id);
     }
 }
