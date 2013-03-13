@@ -2,16 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.ServiceModel.Web;
 
 namespace moofy.JsonServices {
-    public class UserService : IUserService {
+    public partial class MoofyServices : IUserService {
 
-        [WebInvoke(Method = "POST",
-            ResponseFormat = WebMessageFormat.Json,
-            RequestFormat = WebMessageFormat.Json,
-            BodyStyle = WebMessageBodyStyle.WrappedRequest,
-            UriTemplate = "create")]
         public SuccessFlag CreateUser(string name, string username, string email, string password) {
             if (name != "" && username != "" && email != "" && password != "")
                 return new SuccessFlag() {
@@ -25,9 +19,6 @@ namespace moofy.JsonServices {
                 };
         }
 
-        [WebInvoke(Method = "GET",
-            ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "{id}")]
         public UserWrapper GetUser(string id) {
             int uid = Convert.ToInt32(id);
             if (uid > 0)
@@ -41,11 +32,6 @@ namespace moofy.JsonServices {
                 throw new ArgumentException("The specified user does not exist");
         }
 
-        [WebInvoke(Method = "POST",
-            ResponseFormat = WebMessageFormat.Json,
-            RequestFormat = WebMessageFormat.Json,
-            BodyStyle = WebMessageBodyStyle.WrappedRequest,
-            UriTemplate = "login")]
         public SuccessFlagId Login(string username, string password) {
             if (username != "" && password != "")
                 return new SuccessFlagId() {
@@ -59,11 +45,6 @@ namespace moofy.JsonServices {
                 };
         }
 
-        [WebInvoke(Method = "POST",
-            ResponseFormat = WebMessageFormat.Json,
-            RequestFormat = WebMessageFormat.Json,
-            BodyStyle = WebMessageBodyStyle.WrappedRequest,
-            UriTemplate = "{id}/deposit")]
         public SuccessFlag DepositMoney(string id, int moneyAmount) {
             int uid = Convert.ToInt32(id);
             if (uid > 0 && moneyAmount > 0)
@@ -78,9 +59,6 @@ namespace moofy.JsonServices {
                 };
         }
 
-        [WebInvoke(Method = "GET",
-            ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "{id}/movies")]
         public ListOfMovies GetMoviesFromUser(string id) {
             int uid = Convert.ToInt32(id);
             if (uid > 0)
@@ -100,9 +78,6 @@ namespace moofy.JsonServices {
             else throw new ArgumentException("Illegal id");
         }
 
-        [WebInvoke(Method = "GET",
-            ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "{id}/movies/current")]
         public ListOfMovies GetCurrentMoviesFromUser(string id) {
             int uid = Convert.ToInt32(id);
             if (uid > 0)
@@ -116,6 +91,44 @@ namespace moofy.JsonServices {
                             description = "When Simon, Rich, and Eva head out on an eagerly anticipated road trip, they bring along a video camera to record their journey. What starts out as a carefree adventure slowly becomes a descent into the ominous as unexplained events threaten to disrupt the balance between the three close friends. Each one of them must struggle with personal demons and paranoia as friendships are tested and gruesome realities are revealed...and recorded.",
                             rentalPrice = 10,
                             purchasePrice = 30
+                        }
+                    }
+                };
+            else throw new ArgumentException("Illegal id");
+        }
+
+        public ListOfSongs GetSongsFromUser(string id) {
+            int uid = Convert.ToInt32(id);
+            if (uid > 0)
+                return new ListOfSongs() {
+                    songs = new SongWrapper[] {
+                        new SongWrapper() {
+                            title = "I Knew You Were Trouble",
+                            release = 2012,
+                            genres = new string[] { "Pop" },
+                            album = "Red",
+                            artist = "Taylor Swift",
+                            rentalPrice = 2,
+                            purchasePrice = 8
+                        }
+                    }
+                };
+            else throw new ArgumentException("Illegal id");
+        }
+
+        public ListOfSongs GetCurrentSongsFromUser(string id) {
+            int uid = Convert.ToInt32(id);
+            if (uid > 0)
+                return new ListOfSongs() {
+                    songs = new SongWrapper[] {
+                        new SongWrapper() {
+                            title = "I Knew You Were Trouble",
+                            release = 2012,
+                            genres = new string[] { "Pop" },
+                            album = "Red",
+                            artist = "Taylor Swift",
+                            rentalPrice = 2,
+                            purchasePrice = 8
                         }
                     }
                 };
