@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace moofy.Backend {
-    class Song {
+    public class Song {
         //A set of backing fields - must explictly declare accessors Interface properties
         private int id;
         private short year;
