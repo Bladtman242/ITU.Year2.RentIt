@@ -14,21 +14,32 @@ namespace moofy.JsonServices.Tests {
     [TestClass]
     public class UnitTest1 {
 
-        ServiceHost host = null;
+        static ServiceHost host = null;
 
         //This should probably be a test-utility class on its own
         [AssemblyInitialize]
         public static void InitiateServices(TestContext t) {
             Uri baseAddr = new Uri("http://localhost:8732/moofytest");
+            string addr = "users";
 
-            using (ServiceHost host = new ServiceHost(typeof(MoofyServices), baseAddr)) {
-                host.Open();
-            }
+            host = new ServiceHost(typeof(MoofyServices), baseAddr);
+            host.AddServiceEndpoint(typeof(IUserService), new BasicHttpBinding(), addr);
+            host.Open();
+
+        }
+
+        [AssemblyCleanup]
+        public static void KillServices() {
+            Thread.Sleep(300);
+            host.Close();
         }
 
         [TestMethod]
         public void TestMethod1() {
-            
+            Uri u = new Uri("http://localhost:8732/moofytest/users/1");
+            WebRequest r = WebRequest.Create(u);
+            WebResponse res = r.GetResponse();
+            System.Console.WriteLine(res);
         }
     }
 }
