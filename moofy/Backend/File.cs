@@ -19,7 +19,7 @@ namespace moofy.Backend {
             set;
         }
 
-        IList<string> Genre {
+        IList<string> Genres {
             get;
             set;
         }
@@ -29,17 +29,17 @@ namespace moofy.Backend {
             set;
         }
 
-        string URI {
-            get;
-            set;
-        }
-
-        float RentPrice {
+        string Uri {
             get;
             set;
         }
 
         float BuyPrice {
+            get;
+            set;
+        }
+
+        float RentPrice {
             get;
             set;
         }
