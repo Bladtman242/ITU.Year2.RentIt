@@ -1,0 +1,71 @@
+\section{Deciding on the API format}
+
+The two teams quickly agreed on using a RESTful JSON-based API as interface between
+frontend (client) and backend (server). This, however, still left a lot to design.
+
+When designing an API it is important for it to be intuitive and attractive, as this
+allows third-party developers, as well as our overseas colleagues, to use the API for
+their purposes. Third-party developers in general represent a huge business opportunity
+in our case, as the system requires purchases in order to actually access movies. This
+means that third-party clients may create new revenue sources for us.
+
+When discussion how to best attack the problem of what a "nice API" is, we found two
+alternatives.
+
+Either we could let the API handle arbitrary datatypes or have specific services for
+every allowed datatype. The difference between the two possibilities can be illustrated
+through which services are offered by them:
+
+High abstraction | Low abstraction
+files/           | movies/
+                 | songs/
+
+In the high abstraction case a call to the files service may return any of the supported
+data types, so the client can not know this for sure at the time of calling the service.
+This problem can be solved in the following ways: first off, the client discovers content
+through a service that will also disclose the type of the content (so it is already aware
+of the type) and, secondly, the files-service itself will return the type of the content
+as well as the content itself.
+
+In contrast, the movies- and songs-services always return movies and songs, respectively.
+
+This difference can be illustrated by looking at the services as if they were method calls.
+In this case, the files-service would have a return-type of "Object", whereas the movies-
+and songs-services would have "Movie" and "Song".
+
+The high abstraction level works like a dynamically typed language (PHP, Javascript) would
+work, wheras the low abstraction level works like a type-strong language like C# or Java.
+
+\subsection{Cost of Change}
+In the high abstraction level service it is easy to expand the range of datatypes we offer,
+as they will be using the same API. This can with great advantage be paired with a discovery
+service that lets clients discover the supported data-types in real-time. The cost of change
+is pretty much non-existent.
+
+This has a lot of coolness factor.
+
+This approach is very dynamic and allows for updates to be rolled out seamlessly. It is, however,
+best suited for a tuple-space based database and not a relational one, such as the one we have
+chosen to work with.
+
+In a relational database, using the high abstraction would require either massive scans of one
+huge table containing all files in the system or having multiple indexes for the same, huge table,
+which would be quicker, but also take up double the space.
+
+The low abstraction level is very well suited for the relational database. Creating a table for each
+of the services (one for movies, one for songs) is a natural choice and lets us have the desired
+attributes for the types. Additionally searching is easier and fewer indexes are needed per table
+(so it takes up less space).
+
+On the downside, the low abstraction level requires for entire new tables and services to be added
+whenever we want to support a new datatype. In turn, adding new services to the API does not make
+them accessible from the clients. In order to fully roll out an update, {\bf all clients},
+including third-party ones, must be updated. This all adds up, so the cost of change is massive.
+
+\subsection{Conclusion}
+In our application we consider the support of a new datatype to be somewhat a rare occasion. In our
+business, which is centered around a very specific set of products - movies and songs - and it is with
+this line of products that our business will be known.
+
+With this in mind, a high cost of change is considered acceptable. With the advantages we trade in for
+it, it is a more than acceptable potential loss.
