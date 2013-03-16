@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace moofy.Backend {
-    public class Purchase {
+    public struct Purchase {
         private File file;
         private DateTime endTime;
 
