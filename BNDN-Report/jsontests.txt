@@ -19,8 +19,7 @@ GET users/{id}
 
 GET users/{id}/movies
 	Input property	| Data set:
-	exactly the same as users/{id}, albeit with different expectancies
-
+	exactly the same as users/{id}, albeit with different expectancies 
 	Input data set	| input	| Expected result	| actual result:
 	exactly the same as users/{id}, albeit with different expectancies
 
@@ -39,3 +38,34 @@ GET movies/{id}
 	exactly the same as users/{id}, albeit with different expectancies
 
 GET movies/filter/
+	Expect a list of all movies. This should be reviewed after the API has been updated to paginate the results.
+
+GET movies/filter/{filter}
+	Input property			| Data set:
+	|filters| < |properties|	| A1
+	all hits			|
+	|filters| < |properties|	| A2
+	mixed hit and miss		|
+	|filters| < |properties|	| A3
+	all miss			|
+	|filters| = |properties|	| B1
+	all hits			|
+	|filters| = |properties|	| B2
+	mixed hit and miss		|
+	|filters| = |properties|	| B3
+	all miss			|
+	|filters| > |properties|	| C1
+	all hits			|
+	|filters| > |properties|	| C2
+	mixed hit and miss		|
+	|filters| > |properties|	| C3
+	all miss			|
+
+	Input data set	| Input		| Expected result	| Actual result
+	A1	| one movie is a hit in all	|			|
+	A1	| different movies hit in different props	|	|	|
+	A2	| some props hit the same movie, rest miss all	|	|	|
+	A2	| some props hit different movs, rest miss all	|	|	|
+	A3	|
+
+title, release, directors, genre, describtion, , rentalPrice, purchaseprice
