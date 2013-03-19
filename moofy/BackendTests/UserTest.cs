@@ -10,15 +10,12 @@ namespace moofy.Backend.Tests {
     /// </summary>
     [TestClass]
     public class UserTest {
-        public UserTest() {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
 
+        /// <summary>
+        /// Tests that the basic properties are set and retrieved correctly.
         [TestMethod]
         public void basicPropertyTest() {
-            User testUser = new User(1) {
+            User firstTestUser = new User(1) {
                 Name = "Test Name",
                 Username = "Test Username",
                 Password = "Test Password",
@@ -26,16 +23,32 @@ namespace moofy.Backend.Tests {
                 Balance = 150,
             };
 
+            Assert.AreEqual<int>(1, firstTestUser.Id);
+            Assert.AreEqual<string>("Test Name", firstTestUser.Name);
+            Assert.AreEqual<string>("Test Username", firstTestUser.Username);
+            Assert.AreEqual<string>("Test Password", firstTestUser.Password);
+            Assert.AreEqual<string>("test@test.com", firstTestUser.Email);
+            Assert.AreEqual<int>(150, firstTestUser.Balance);
 
 
-
-            Assert.AreEqual<bool>(true, DBUser.GetUser(1).IsAdmin);
-
-            //Negative test
-            Assert.AreEqual<bool>(false, DBUser.GetUser(2).IsAdmin);
+            User otherTestUser = new User(2) {
+                Name = "other Name",
+                Username = "other Username",
+                Password = "other Password",
+                Email = "other@test.com",
+                Balance = 200,
+            };
+            Assert.AreEqual<int>(2, otherTestUser.Id);
+            Assert.AreEqual<string>("other Name", otherTestUser.Name);
+            Assert.AreEqual<string>("other Username", otherTestUser.Username);
+            Assert.AreEqual<string>("other Password", otherTestUser.Password);
+            Assert.AreEqual<string>("other@test.com", otherTestUser.Email);
+            Assert.AreEqual<int>(200, otherTestUser.Balance);
         }
 
-
+        /// <summary>
+        /// Tests whether the Admin boolean is retrieved correctly in the user object
+        /// </summary>
         [TestMethod]
         public void IsAdminTest() {
             //Positive test
@@ -45,14 +58,14 @@ namespace moofy.Backend.Tests {
             Assert.AreEqual<bool>(false, DBUser.GetUser(2).IsAdmin);
         }
 
+        /// <summary>
+        /// Tests whether the purchases are retrieved correctly in the user object
+        /// </summary>
         [TestMethod]
         public void PurchasesTest() {
-            IList<Purchase> purchases = new List<Purchase>();
-
-            //Positive test
-
-            //Negative test
-            Assert.AreEqual<bool>(false, DBUser.GetUser(2).IsAdmin);
+            //Cannot be implemented without some test data
+            //awaiting the DB classes
+            Assert.Fail("awaiting the DB classes");
         }
     }
 }
