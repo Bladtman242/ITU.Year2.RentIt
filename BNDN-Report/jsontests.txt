@@ -1,0 +1,71 @@
+So far, only GET methods are covered.
+Blackbox tests.
+GET users/{id}
+	Input property	| Data set:
+	valid in-use id	| A1
+	valid vacant id	| A2
+	invalid id	| A3
+
+	#positive ids are examples, change at leisure.
+	#the "large values" are also quite arbitrary (exceeds |16^2|), and up for discussion.
+	Input data set	| input		| Expected result	| actual result:
+	A1		| 1		| User info		|
+	A1		| 70.000	| User info		|
+	A2		| 2		| http 404		|
+	A3		| 0		| error	or 404?		|
+	A3		| -1		| error	or 404?		|
+	A3		| -70.000	| error or 404?		|
+
+
+GET users/{id}/movies
+	Input property	| Data set:
+	exactly the same as users/{id}, albeit with different expectancies 
+	Input data set	| input	| Expected result	| actual result:
+	exactly the same as users/{id}, albeit with different expectancies
+
+GET users/{id}/movies/current
+	Input property	| Data set:
+	exactly the same as users/{id}, albeit with different expectancies
+
+	Input data set	| input	| Expected result	| actual result:
+	exactly the same as users/{id}, albeit with different expectancies
+
+GET movies/{id}
+	Input property	| Data set:
+	exactly the same as users/{id}, albeit with different expectancies
+
+	Input data set	| input	| Expected result	| actual result:
+	exactly the same as users/{id}, albeit with different expectancies
+
+GET movies/filter/
+	Expect a list of all movies. This should be reviewed after the API has been updated to paginate the results.
+
+GET movies/filter/{filter}
+	Input property			| Data set:
+	|filters| < |properties|	| A1
+	all hits			|
+	|filters| < |properties|	| A2
+	mixed hit and miss		|
+	|filters| < |properties|	| A3
+	all miss			|
+	|filters| = |properties|	| B1
+	all hits			|
+	|filters| = |properties|	| B2
+	mixed hit and miss		|
+	|filters| = |properties|	| B3
+	all miss			|
+	|filters| > |properties|	| C1
+	all hits			|
+	|filters| > |properties|	| C2
+	mixed hit and miss		|
+	|filters| > |properties|	| C3
+	all miss			|
+
+	Input data set	| Input		| Expected result	| Actual result
+	A1	| one movie is a hit in all	|			|
+	A1	| different movies hit in different props	|	|	|
+	A2	| some props hit the same movie, rest miss all	|	|	|
+	A2	| some props hit different movs, rest miss all	|	|	|
+	A3	|
+
+title, release, directors, genre, describtion, , rentalPrice, purchaseprice
