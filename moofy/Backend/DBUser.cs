@@ -8,9 +8,27 @@ namespace moofy.Backend {
     public static class DBUser {
         private static SqlConnection connection = new SqlConnection("user id=RentIt25db;" +
                                        "password=ZAQ12wsx;server=rentit.itu.dk;" +
-                                       "Trusted_Connection=yes;" +
-                                       "database=database; " +
+                                       "Trusted_Connection=no;" +
+                                       "database=RENTIT25; " +
                                        "connection timeout=30");
+
+        //public static int AddUser(User user) {
+        //    try {
+        //        connection.Open();
+        //        SqlCommand command = new SqlCommand("INSERT INTO Userz VALUES ('" + 
+        //                                                user.Username + "', '" + 
+        //                                                user.Password + "', '" + 
+        //                                                user.Name + "', '" + 
+        //                                                user.Email + "', " + 
+        //                                                user.Balance + ")",
+        //                                                connection);
+        //        SqlDataReader reader = command.ExecuteReader();
+        //    } catch (Exception e) {
+        //        Console.WriteLine(e.ToString());
+        //    } finally {
+        //        connection.Close();
+        //    }
+        //}
 
         public static User GetUser(int userId) {
             try {
@@ -24,7 +42,7 @@ namespace moofy.Backend {
                     return new User(userId) {
                         Name = reader["name"].ToString(),
                         Username = reader["userName"].ToString(),
-                        Balance = (float)reader["balance"],
+                        Balance = (int)reader["balance"],
                         Email = reader["email"].ToString(),
                         Password = reader["password"].ToString()
                     };

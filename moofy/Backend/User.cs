@@ -25,7 +25,7 @@ namespace moofy.Backend {
 
         public string Email { get; set; }
 
-        public float Balance { get; set; }
+        public int Balance { get; set; }
 
         public bool IsAdmin {
             get { return (bool)(isAdmin ?? DBUser.getIsAdmin(this.Id)); }
