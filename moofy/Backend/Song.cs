@@ -5,58 +5,32 @@ using System.Text;
 
 namespace moofy.Backend {
     public class Song : File {
-        //A set of backing fields - must explictly declare accessors Interface properties
-        private int id;
-        private short year;
-        private string title, description, uri;
-        private float buyPrice, rentPrice;
-        private IList<string> genres;
 
-        public Song(int id) {
-            this.id = id;
-        }
-
-        public int Id {
-            get { return id; }
-        }
-
-        public string Title {
-            get { return title; }
-            set { title = value; }
-        }
-
-        public string Description {
-            get { return description; }
-            set { description = value; }
-        }
+        public Song(int id) : base(id) {} //Call base constructor
 
         public string Artist { get; set; }
         
         public string Album { get; set; }
 
-        public IList<string> Genres {
-            get { return genres; }
-            set { genres = value; }
+        //Equals override according to http://msdn.microsoft.com/en-us/library/ms173147(v=vs.80).aspx
+        public override bool Equals(System.Object obj) {
+            // If parameter cannot be cast to Movie return false.
+            Song s = obj as Song;
+            if ((System.Object)s == null) {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return base.Equals(obj) && (Artist == s.Artist) && (Album == s.Album);
         }
 
-        public short Year {
-            get { return year; }
-            set { year = value; }
+        public bool Equals(Song s) {
+            // Return true if the fields match:
+            return base.Equals((File)s) && (Artist == s.Artist) && (Album == s.Album);
         }
 
-        public string Uri {
-            get { return uri; }
-            set { uri = value; }
-        }
-
-        public float BuyPrice {
-            get { return buyPrice; }
-            set { buyPrice = value; }
-        }
-
-        public float RentPrice {
-            get { return rentPrice; }
-            set { rentPrice = value; }
+        public override int GetHashCode() {
+            return Id;
         }
     }
 }

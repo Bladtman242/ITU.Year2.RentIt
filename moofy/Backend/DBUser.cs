@@ -193,7 +193,7 @@ namespace moofy.Backend {
         /// <returns>All files purchased by the user</returns>
         public static IList<Purchase> getPurchases(int userId) {
             //Get information on which movies the user has purchased
-            List<Purchase> purchases = new List<Purchase>();
+            IList<Purchase> purchases = new List<Purchase>();
             try {
                 connection.Open();
                 SqlCommand command = new SqlCommand("SELECT * FROM UserFile WHERE uid=" + userId,
