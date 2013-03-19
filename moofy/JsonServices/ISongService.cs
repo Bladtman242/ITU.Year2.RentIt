@@ -42,19 +42,19 @@ namespace moofy.JsonServices {
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "filter/")]
-        ListOfSongs ListAllSongs();
+        SongWrapper[] ListAllSongs();
 
         [OperationContract]
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "filter/{filter}")]
-        ListOfSongs FilterSongs(string filter);
+        SongWrapper[] FilterSongs(string filter);
 
         [OperationContract]
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "filter/{filter}?sortBy={sortBy}")]
-        ListOfSongs FilterAndSortSongs(string filter, string sortBy);
+        SongWrapper[] FilterAndSortSongs(string filter, string sortBy);
 
         [OperationContract]
         [WebInvoke(Method = "POST",

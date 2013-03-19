@@ -42,19 +42,19 @@ namespace moofy.JsonServices {
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "filter/")]
-        ListOfMovies ListAllMovies();
+        MovieWrapper[] ListAllMovies();
 
         [OperationContract]
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "filter/{filter}")]
-        ListOfMovies FilterMovies(string filter);
+        MovieWrapper[] FilterMovies(string filter);
 
         [OperationContract]
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "filter/{filter}?sortBy={sortBy}")]
-        ListOfMovies FilterAndSortMovies(string filter, string sortBy);
+        MovieWrapper[] FilterAndSortMovies(string filter, string sortBy);
 
         [OperationContract]
         [WebInvoke(Method = "POST",

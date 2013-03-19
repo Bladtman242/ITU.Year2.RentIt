@@ -70,62 +70,52 @@ namespace moofy.JsonServices {
             }
         }
 
-        public ListOfSongs ListAllSongs() {
-            return new ListOfSongs() {
-                songs = new SongWrapper[] {
-                            new SongWrapper() {
-                                title = "I Knew You Were Trouble",
-                                release = 2012,
-                                genres = new string[] { "Pop" },
-                                album = "Red",
-                                artist = "Taylor Swift",
-                                rentalPrice = 2,
-                                purchasePrice = 8
-                            }
-                        }
+        public SongWrapper[] ListAllSongs() {
+            return new SongWrapper[] {
+                new SongWrapper() {
+                    title = "I Knew You Were Trouble",
+                    release = 2012,
+                    genres = new string[] { "Pop" },
+                    album = "Red",
+                    artist = "Taylor Swift",
+                    rentalPrice = 2,
+                    purchasePrice = 8
+                }
             };
         }
 
-        public ListOfSongs FilterSongs(string filter) {
+        public SongWrapper[] FilterSongs(string filter) {
             if (filter != "emptyList")
-                return new ListOfSongs() {
-                    songs = new SongWrapper[] {
-                            new SongWrapper() {
-                                title = "I Knew You Were Trouble",
-                                release = 2012,
-                                genres = new string[] { "Pop" },
-                                album = "Red",
-                                artist = "Taylor Swift",
-                                rentalPrice = 2,
-                                purchasePrice = 8
-                            }
-                        }
+                return new SongWrapper[] {
+                    new SongWrapper() {
+                        title = "I Knew You Were Trouble",
+                        release = 2012,
+                        genres = new string[] { "Pop" },
+                        album = "Red",
+                        artist = "Taylor Swift",
+                        rentalPrice = 2,
+                        purchasePrice = 8
+                    }
                 };
             else
-                return new ListOfSongs() {
-                    songs = new SongWrapper[0]
-                };
+                return new SongWrapper[0];
         }
 
-        public ListOfSongs FilterAndSortSongs(string filter, string sortBy) {
+        public SongWrapper[] FilterAndSortSongs(string filter, string sortBy) {
             if (filter != "emptyList")
-                return new ListOfSongs() {
-                    songs = new SongWrapper[] {
-                            new SongWrapper() {
-                                title = "I Knew You Were Trouble",
-                                release = 2012,
-                                genres = new string[] { "Pop" },
-                                album = "Red",
-                                artist = "Taylor Swift",
-                                rentalPrice = 2,
-                                purchasePrice = 8
-                            }
-                        }
+                return new SongWrapper[] {
+                    new SongWrapper() {
+                        title = "I Knew You Were Trouble",
+                        release = 2012,
+                        genres = new string[] { "Pop" },
+                        album = "Red",
+                        artist = "Taylor Swift",
+                        rentalPrice = 2,
+                        purchasePrice = 8
+                    }
                 };
             else
-                return new ListOfSongs() {
-                    songs = new SongWrapper[0]
-                };
+                return new SongWrapper[0];
         }
 
         public SuccessFlagUpload UploadSong(Stream fileStream) {

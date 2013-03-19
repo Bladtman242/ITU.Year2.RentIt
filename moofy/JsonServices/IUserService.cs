@@ -43,24 +43,24 @@ namespace moofy.JsonServices {
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "{id}/movies")]
-        ListOfMovies GetMoviesFromUser(string id);
+        MovieWrapper[] GetMoviesFromUser(string id);
 
         [OperationContract]
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "{id}/movies/current")]
-        ListOfMovies GetCurrentMoviesFromUser(string id);
+        MovieWrapper[] GetCurrentMoviesFromUser(string id);
 
         [OperationContract]
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "{id}/songs")]
-        ListOfSongs GetSongsFromUser(string id);
+        SongWrapper[] GetSongsFromUser(string id);
 
         [OperationContract]
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "{id}/songs/current")]
-        ListOfSongs GetCurrentSongsFromUser(string id);
+        SongWrapper[] GetCurrentSongsFromUser(string id);
     }
 }
