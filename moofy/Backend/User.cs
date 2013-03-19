@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace moofy.Backend {
-    class User {
+   public class User {
         private int id;
 
         public User(int id) {
