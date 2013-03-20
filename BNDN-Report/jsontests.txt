@@ -4,31 +4,61 @@ GET users/{id}
 	Input property	| Data set:
 	valid in-use id	| A1
 	valid vacant id	| A2
-	invalid id	| A3
+	invalid id	| B1
+	invalid type	| C1
 
-	#positive ids are examples, change at leisure.
-	#the "large values" are also quite arbitrary (exceeds |16^2|), and up for discussion.
+	#positive id's are examples, change at leisure.
+	#the "large values" are also quite arbitrary (exceeds 16^2), and up for discussion.
 	Input data set	| input		| Expected result	| actual result:
-	A1		| 1		| User info		|
+	A1		| 1		| User info		| 
 	A1		| 70.000	| User info		|
 	A2		| 2		| http 404		|
-	A3		| 0		| error	or 404?		|
-	A3		| -1		| error	or 404?		|
-	A3		| -70.000	| error or 404?		|
+	B1		| 0		| error	or 404?		|
+	B1		| -1		| error	or 404?		|
+	B1		| -70.000	| error or 404?		|
+	C1		| twenty	| error or 404?		|
+	C1		| katmandu	| error or 404?		|
 
 
 GET users/{id}/movies
 	Input property	| Data set:
-	exactly the same as users/{id}, albeit with different expectancies 
+	valid in-use id	| A1
+	valid vacant id	| A2
+	invalid id	| B1
+	invalid type	| C1
+
 	Input data set	| input	| Expected result	| actual result:
-	exactly the same as users/{id}, albeit with different expectancies
+	#positive id's are examples, change at leisure.
+	#the "large values" are also quite arbitrary (exceeds 16^2), and up for discussion.
+	Input data set	| input		| Expected result	| actual result:
+	A1		| 1		| Movie info		|
+	A1		| 70.000	| Movie info		|
+	A2		| 2		| http 404		|
+	B1		| 0		| error	or 404?		|
+	B1		| -1		| error	or 404?		|
+	B1		| -70.000	| error or 404?		|
+	C1		| twenty	| error or 404?		|
+	C1		| katmandu	| error or 404?		|
 
 GET users/{id}/movies/current
 	Input property	| Data set:
-	exactly the same as users/{id}, albeit with different expectancies
+	valid in-use id	| A1
+	with movies 	|
+	valid in-use id	| A2
+	without movies
+	valid vacant id	| A3
+	invalid id	| A4
+	invalid type	| A5
 
 	Input data set	| input	| Expected result	| actual result:
-	exactly the same as users/{id}, albeit with different expectancies
+	A1		| 1		| Movie info		|
+	A1		| 70.000	| Movie info		|
+	A2		| 2		| http 404		|
+	A3		| 0		| error	or 404?		|
+	A3		| -1		| error	or 404?		|
+	A3		| -70.000	| error or 404?		|
+	A4		| twenty	| error or 404?		|
+	A4		| katmandu	| error or 404?		|
 
 GET movies/{id}
 	Input property	| Data set:
