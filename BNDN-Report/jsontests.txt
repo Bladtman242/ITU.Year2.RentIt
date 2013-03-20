@@ -12,7 +12,7 @@ GET users/{id}
 	Input data set	| input		| Expected result	| actual result:
 	A1		| 1		| User info		| 
 	A1		| 70.000	| User info		|
-	A2		| 2		| http 404		|
+	A2		| 2		| http 404 or empty?	|
 	B1		| 0		| error	or 404?		|
 	B1		| -1		| error	or 404?		|
 	B1		| -70.000	| error or 404?		|
@@ -23,7 +23,10 @@ GET users/{id}
 GET users/{id}/movies
 	Input property	| Data set:
 	valid in-use id	| A1
-	valid vacant id	| A2
+	with assoc movs |
+	valid in-use id	| A2
+	without assoc movs |
+	valid vacant id	| A3
 	invalid id	| B1
 	invalid type	| C1
 
@@ -33,7 +36,8 @@ GET users/{id}/movies
 	Input data set	| input		| Expected result	| actual result:
 	A1		| 1		| Movie info		|
 	A1		| 70.000	| Movie info		|
-	A2		| 2		| http 404		|
+	A2		| 42		| http 404 or empty?	|
+	A3		| 2		| http 404 or empty?	|
 	B1		| 0		| error	or 404?		|
 	B1		| -1		| error	or 404?		|
 	B1		| -70.000	| error or 404?		|
@@ -41,31 +45,71 @@ GET users/{id}/movies
 	C1		| katmandu	| error or 404?		|
 
 GET users/{id}/movies/current
-	Input property	| Data set:
-	valid in-use id	| A1
-	with movies 	|
-	valid in-use id	| A2
-	without movies
-	valid vacant id	| A3
-	invalid id	| A4
-	invalid type	| A5
+	Input property			| Data set:
+	valid in-use id			| A1
+	with movies 			|
+	valid in-use id			| A2
+	without movies			|
+	valid in-use id			| A3
+	with only old assocs		|
+	valid in-use id			| A4
+	with mixed valid and old assocs	|
+	valid vacant id			| A5
+	invalid id			| B1
+	invalid type			| C1
 
 	Input data set	| input	| Expected result	| actual result:
+	#positive id's are examples, change at leisure.
+	#the "large values" are also quite arbitrary (exceeds 16^2), and up for discussion.
 	A1		| 1		| Movie info		|
 	A1		| 70.000	| Movie info		|
-	A2		| 2		| http 404		|
-	A3		| 0		| error	or 404?		|
-	A3		| -1		| error	or 404?		|
-	A3		| -70.000	| error or 404?		|
-	A4		| twenty	| error or 404?		|
-	A4		| katmandu	| error or 404?		|
+	A2		| 42		| http 404 or empty?	|
+	A3		| 43		| http 404 or empty?	|
+	A4		| 44		| list of valid assocs	|
+	A5		| 2		| error	or 404?		|
+	B1		| 0		| error	or 404?		|
+	B1		| -1		| error	or 404?		|
+	B1		| -70.000	| error or 404?		|
+	C1		| twenty	| error or 404?		|
+	C1		| katmandu	| error or 404?		|
 
 GET movies/{id}
 	Input property	| Data set:
-	exactly the same as users/{id}, albeit with different expectancies
+	valid in-use id	| A1
+	valid vacant id	| A2
+	invalid id	| B1
+	invalid type	| C1
 
 	Input data set	| input	| Expected result	| actual result:
-	exactly the same as users/{id}, albeit with different expectancies
+	#positive id's are examples, change at leisure.
+	#the "large values" are also quite arbitrary (exceeds 16^2), and up for discussion.
+	A1		| 1		| Movie info		|
+	A1		| 70.000	| Movie info		|
+	A2		| 42		| http 404 or empty?	|
+	B1		| 0		| error	or 404?		|
+	B1		| -1		| error	or 404?		|
+	B1		| -70.000	| error or 404?		|
+	C1		| twenty	| error or 404?		|
+	C1		| katmandu	| error or 404?		|
+
+GET movies/{id}/download
+	Input property	| Data set:
+	valid in-use id	| A1
+	valid vacant id	| A2
+	invalid id	| B1
+	invalid type	| C1
+	
+	#positive id's are examples, change at leisure.
+	#the "large values" are also quite arbitrary (|n| exceeds 16^2), and up for discussion.
+	Input data set	| input		| Expected result	| actual result:
+	A1		| 1		| User info		| 
+	A1		| 70.000	| User info		|
+	A2		| 2		| http 404 or empty?	|
+	B1		| 0		| error	or 404?		|
+	B1		| -1		| error	or 404?		|
+	B1		| -70.000	| error or 404?		|
+	C1		| twenty	| error or 404?		|
+	C1		| katmandu	| error or 404?		|
 
 GET movies/filter/
 	Expect a list of all movies. This should be reviewed after the API has been updated to paginate the results.
@@ -90,12 +134,88 @@ GET movies/filter/{filter}
 	mixed hit and miss		|
 	|filters| > |properties|	| C3
 	all miss			|
+	non-regular strings		| D1
 
 	Input data set	| Input		| Expected result	| Actual result
-	A1	| one movie is a hit in all	|			|
-	A1	| different movies hit in different props	|	|	|
-	A2	| some props hit the same movie, rest miss all	|	|	|
-	A2	| some props hit different movs, rest miss all	|	|	|
-	A3	|
+	#preferably serveral variations over the following:
+	#title, release, directors, genre, describtion, rentalPrice, purchaseprice
+	A1	| one movie is a hit in all	|				|
+	A1	| different movies hit in different props	|		|	|
+	A2	| some props hit the same movie, rest miss all	|		|	|
+	A2	| some props hit different movs, rest miss all	|		|	|
+	A3	| all miss					|		|	|
+	B1	| one movie is a hit in all	|				|
+	B1	| one movie is a hit in all	|				|
+	B1	| different movies hit in different props	|		|	|
+	B2	| some props hit the same movie, rest miss all	|		|	|
+	B2	| some props hit different movs, rest miss all	|		|	|
+	B3	| all miss					|		|	|
+	C1	| different movies hit in different props	|		|	|
+	C2	| some props hit the same movie, rest miss all	|		|	|
+	C2	| some props hit different movs, rest miss all	|		|	|
+	C3	| all miss					|		|	|
+	D1	| £*123						| empty		|	|
+	D1	| %£*124					| some hit	|	|
 
-title, release, directors, genre, describtion, , rentalPrice, purchaseprice
+GET movies/filter/{filter}?sortBy={sortBy}
+	These are equal to GET movies/filter/{filter}, but should be checked for
+	ordering
+	Input property			| Data set:
+	|filters| < |properties|	| A1
+	all hits			|
+	|filters| < |properties|	| A2
+	mixed hit and miss		|
+	|filters| < |properties|	| A3
+	all miss			|
+	|filters| = |properties|	| B1
+	all hits			|
+	|filters| = |properties|	| B2
+	mixed hit and miss		|
+	|filters| = |properties|	| B3
+	all miss			|
+	|filters| > |properties|	| C1
+	all hits			|
+	|filters| > |properties|	| C2
+	mixed hit and miss		|
+	|filters| > |properties|	| C3
+	all miss			|
+	non-regular strings		| D1
+
+	Input data set	| Input		| Expected result	| Actual result
+	#preferably serveral variations over the following:
+	#title, release, directors, genre, describtion, rentalPrice, purchaseprice
+	A1	| one movie is a hit in all	|				|
+	A1	| different movies hit in different props	|		|	|
+	A2	| some props hit the same movie, rest miss all	|		|	|
+	A2	| some props hit different movs, rest miss all	|		|	|
+	A3	| all miss					|		|	|
+	B1	| one movie is a hit in all	|				|
+	B1	| one movie is a hit in all	|				|
+	B1	| different movies hit in different props	|		|	|
+	B2	| some props hit the same movie, rest miss all	|		|	|
+	B2	| some props hit different movs, rest miss all	|		|	|
+	B3	| all miss					|		|	|
+	C1	| different movies hit in different props	|		|	|
+	C2	| some props hit the same movie, rest miss all	|		|	|
+	C2	| some props hit different movs, rest miss all	|		|	|
+	C3	| all miss					|		|	|
+	D1	| £*123						| empty		|	|
+	D1	| %£*124					| some hit	|	|
+
+GET songs/{id}
+	Same as for movies
+
+GET songs/{id}/download
+	Same as for movies
+
+GET songs/filter
+	Same as for movies
+
+GET songs/filter/{filter}
+	Same as for movies
+
+GET songs/filter/{filter}?sortBy={sortBy}
+	Same as for movies
+
+GET songs/filter/{filter}?sortBy={sortBy}
+	Same as for movies
