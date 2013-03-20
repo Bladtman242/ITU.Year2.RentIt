@@ -126,6 +126,9 @@ namespace moofy.Backend.Tests {
             User actualUser = DBUser.GetUser(id);
 
             if (flag) Assert.AreEqual(balance + deposit, actualUser.Balance);
+
+            //Cleanup
+            DBUser.deleteUser(id);
         }
 
         [TestMethod]
@@ -149,6 +152,7 @@ namespace moofy.Backend.Tests {
 
             //clean up
             DBUser.DemoteAdmin(promoterId, promoteeId);
+            DBUser.deleteUser(promoteeId);
         }
 
         [TestMethod]
@@ -173,6 +177,9 @@ namespace moofy.Backend.Tests {
             DBUser.DemoteAdmin(demoterId, demoteeId);
 
             Assert.IsFalse(DBUser.getIsAdmin(demoteeId));
+
+            //Cleanup
+            DBUser.deleteUser(demoteeId);
         }
     }
 }
