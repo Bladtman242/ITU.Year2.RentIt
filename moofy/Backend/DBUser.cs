@@ -12,6 +12,54 @@ namespace moofy.Backend {
                                        "database=RENTIT25; " +
                                        "connection timeout=30");
 
+
+        public static bool deleteUser(int userId)
+        {
+            try
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand("DELETE FROM Userz WHERE id =" + userId, connection);
+                return command.ExecuteNonQuery() > 0;
+                
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return false;
+        }
+        /// <summary>
+        /// Demote a current admin to be just a regular user again
+        /// </summary>
+        /// <param name="demoterId">The ID of an who agrees to this demotion</param>
+        /// <param name="demoteeId">The admin which will be demoted</param>
+        /// <returns>success flag</returns>
+        public static bool DemoteAdmin(int demoterId, int demoteeId)
+        {
+            try
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand("SELECT * FROM Admin WHERE id =" + demoterId, connection);
+                if (command.ExecuteScalar() != null)
+                {
+                    command.CommandText = "DELETE FROM Admin WHERE id=" + demoteeId;
+                    return command.ExecuteNonQuery() > 0;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return false;
+        }
         /// <summary>
         /// Promoter a user to admin status
         /// </summary>
@@ -80,9 +128,9 @@ namespace moofy.Backend {
             try
             {
                 connection.Open();
-                SqlCommand command = new SqlCommand("SELECT id FROM Userz" +
-                                                    "WHERE password=" + password +
-                                                    "AND userName=" + uname,
+                SqlCommand command = new SqlCommand("SELECT id FROM Userz " +
+                                                    "WHERE password='" + password +"'"+
+                                                    " AND userName='" + uname+"'",
                                                     connection);
                 Object id = command.ExecuteScalar();
                 if (id != null) return (int)id;
@@ -120,7 +168,7 @@ namespace moofy.Backend {
                 if (command.ExecuteNonQuery() > 0)
                 {
                     command.CommandText = "SELECT IDENT_CURRENT('Userz')";
-                    return (int)command.ExecuteScalar();
+                    return Int32.Parse(command.ExecuteScalar().ToString());
                 }
             }
             catch (Exception e)
