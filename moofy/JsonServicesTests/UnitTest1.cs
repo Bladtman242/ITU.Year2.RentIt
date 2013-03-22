@@ -6,18 +6,16 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
-using System.ServiceModel.Web
+using System.ServiceModel.Web;
 using System.ServiceModel.Description;
-using Microsoft.VisualStudio.TestTools.UnitTesting
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 
 namespace moofy.JsonServices.Tests {
 
-    private String users = new "http://localhost:8732/moofytest/users/";
-
     [TestClass]
-<<<<<<< HEAD
     public class UnitTest1 {
+        private String users = "http://localhost:8732/moofytest/users/";
 
         //static ServiceHost host = null;
 
@@ -47,10 +45,10 @@ namespace moofy.JsonServices.Tests {
 
         [TestMethod]
         public void ValidInUseIdOne(){
-            Uri u = new Uri(users+"1"),
-            WebRequest r = WebRequest.Create(users);
+            string u = users + "1";
+            WebRequest r = WebRequest.Create(u);
             WebResponse res = r.GetResponse();
-            StreamReader reader = new Streamreader(res.GetResponseStream());
+            StreamReader reader = new StreamReader(res.GetResponseStream());
             String conts = reader.ReadToEnd();
             bool isJsonUser = conts.StartsWith("{") &&
                 conts.EndsWith("}") &&
