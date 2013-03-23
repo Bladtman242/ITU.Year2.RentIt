@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Net;
+using System.ServiceModel.Web;
 
 namespace moofy.JsonServices {
     public partial class MoofyServices : IUserService {
@@ -20,7 +19,14 @@ namespace moofy.JsonServices {
         }
 
         public UserWrapper GetUser(string id) {
-            int uid = Convert.ToInt32(id);
+            int uid;
+            try {
+                uid = Convert.ToInt32(id);
+            } catch (FormatException e) {
+                WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.NotFound;
+                WebOperationContext.Current.OutgoingResponse.StatusDescription = id + " does not seem to be a number";
+                return null;
+            }
             if (uid > 0)
                 return new UserWrapper() {
                     name = "John Doe",
@@ -61,6 +67,7 @@ namespace moofy.JsonServices {
 
         public MovieWrapper[] GetMoviesFromUser(string id) {
             int uid = Convert.ToInt32(id);
+            
             if (uid > 0)
                 return new MovieWrapper[] {
                     new MovieWrapper() {

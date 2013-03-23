@@ -86,7 +86,7 @@ GET movies/{id}
 	#the "large values" are also quite arbitrary (exceeds 16^2), and up for discussion.
 	A1		| 1		| Movie info		|
 	A1		| 70.000	| Movie info		|
-	A2		| 42		| http 404 or empty?	|
+	A2		| 2		| http 404 or empty?	|
 	B1		| 0		| error	or 404?		|
 	B1		| -1		| error	or 404?		|
 	B1		| -70.000	| error or 404?		|
@@ -103,7 +103,7 @@ GET movies/{id}/download
 	#positive id's are examples, change at leisure.
 	#the "large values" are also quite arbitrary (|n| exceeds 16^2), and up for discussion.
 	Input data set	| input		| Expected result	| actual result:
-	A1		| 1		| User info		| 
+	A1		| 1		| download 		| 
 	A1		| 70.000	| User info		|
 	A2		| 2		| http 404 or empty?	|
 	B1		| 0		| error	or 404?		|
