@@ -13,7 +13,7 @@ namespace moofy.Backend.Tests {
         static DBAccess db;
 
         public UserTest() {
-            db = new DBAccessTest();
+            db = new DBAccess();
             db.Open();
         }
 

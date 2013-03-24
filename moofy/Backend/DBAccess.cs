@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -9,12 +10,7 @@ namespace moofy.Backend {
         protected SqlConnection connection;
        
         public DBAccess() {
-            connection = new SqlConnection("user id=RentIt25db;" +
-                                       "password=ZAQ12wsx;server=rentit.itu.dk;" +
-                                       "Trusted_Connection=no;" +
-                                       "database=RENTIT25;" +
-                                       "connection timeout=30;" +
-                                       "MultipleActiveResultSets=True");
+            connection = new SqlConnection(ConfigurationManager.AppSettings["DBConnectionString"]);
         }
 
         public void Open() {
