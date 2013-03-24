@@ -49,14 +49,16 @@ namespace moofy.Backend {
         /// Whether or not this user is an admin
         /// </summary>
         public bool IsAdmin {
-            get { return (bool)(isAdmin ?? (isAdmin= DBAccess.getIsAdmin(this.Id))); }
+            get { return (bool)isAdmin; }
+            //get { return (bool)(isAdmin ?? (isAdmin= DBAccess.getIsAdmin(this.Id))); }
         }
 
         /// <summary>
         /// The purchases of the User
         /// </summary>
         public IList<Purchase> Purchases {
-            get { return purchases ?? (purchases = DBAccess.getPurchases(this.Id)); }
+            get { return purchases; }
+            //get { return purchases ?? (purchases = DBAccess.getPurchases(this.Id)); }
         }
 
         //Equals override according to http://msdn.microsoft.com/en-us/library/ms173147(v=vs.80).aspx

@@ -5,9 +5,9 @@ using System.Text;
 using System.Data.SqlClient;
 
 namespace moofy.Backend {
-    public static partial class DBAccess {
+    public partial class DBAccess {
 
-        public static bool deleteUser(int userId) {
+        public bool deleteUser(int userId) {
             try {
                 connection.Open();
                 SqlCommand command = new SqlCommand("DELETE FROM Userz WHERE id =" + userId, connection);
@@ -26,7 +26,7 @@ namespace moofy.Backend {
         /// <param name="demoterId">The ID of an who agrees to this demotion</param>
         /// <param name="demoteeId">The admin which will be demoted</param>
         /// <returns>success flag</returns>
-        public static bool DemoteAdmin(int demoterId, int demoteeId) {
+        public bool DemoteAdmin(int demoterId, int demoteeId) {
             try {
                 connection.Open();
                 SqlCommand command = new SqlCommand("SELECT * FROM Admin WHERE id =" + demoterId, connection);
@@ -47,7 +47,7 @@ namespace moofy.Backend {
         /// <param name="promoterId">The ID of an admin who accepts this user as an admin</param>
         /// <param name="promoteeId">The user to be promoted</param>
         /// <returns>succes flag</returns>
-        public static bool PromotetoAdmin(int promoterId, int promoteeId) {
+        public bool PromotetoAdmin(int promoterId, int promoteeId) {
             try {
                 connection.Open();
                 SqlCommand command = new SqlCommand("SELECT * FROM Admin WHERE id =" + promoterId, connection);
@@ -69,7 +69,7 @@ namespace moofy.Backend {
         /// <param name="amount">The amount to deposit</param>
         /// <param name="userId">The Id of the user who will have the amount deposited</param>
         /// <returns>success flag</returns>
-        public static bool Deposit(int amount, int userId) {
+        public bool Deposit(int amount, int userId) {
             try {
                 connection.Open();
                 SqlCommand command = new SqlCommand("UPDATE Userz" +
@@ -91,7 +91,7 @@ namespace moofy.Backend {
         /// <param name="uname">The username to check</param>
         /// <param name="password">The password to check</param>
         /// <returns>success flag</returns>
-        public static int Login(string uname, string password) {
+        public int Login(string uname, string password) {
             try {
                 connection.Open();
                 SqlCommand command = new SqlCommand("SELECT id FROM Userz " +
@@ -114,7 +114,7 @@ namespace moofy.Backend {
         /// </summary>
         /// <param name="user">The user to add</param>
         /// <returns>the id of the user, or -1 if the user could not be added</returns>
-        public static int AddUser(User user) {
+        public int AddUser(User user) {
             try {
                 connection.Open();
                 SqlCommand command = new SqlCommand("INSERT INTO Userz(userName, password, name, email, balance)" +
@@ -143,7 +143,7 @@ namespace moofy.Backend {
         /// </summary>
         /// <param name="userId">The id of the user to return</param>
         /// <returns>The user with the given id or null if no such user exists</returns>
-        public static User GetUser(int userId) {
+        public User GetUser(int userId) {
             try {
                 connection.Open();
                 //Get the data tied directly to the user table
@@ -174,7 +174,7 @@ namespace moofy.Backend {
         /// </summary>
         /// <param name="userId">The id of the user to check if is admin</param>
         /// <returns>true if the user is admin else false</returns>
-        public static bool getIsAdmin(int userId) {
+        public bool getIsAdmin(int userId) {
             try {
                 connection.Open();
                 //Get information as to wether this is an admin and add this information
@@ -194,7 +194,7 @@ namespace moofy.Backend {
         /// </summary>
         /// <param name="userId">The id of the user to return all purchased files for</param>
         /// <returns>All files purchased by the user</returns>
-        public static IList<Purchase> getPurchases(int userId) {
+        public IList<Purchase> getPurchases(int userId) {
             //Get information on which movies the user has purchased
             IList<Purchase> purchases = new List<Purchase>();
             try {

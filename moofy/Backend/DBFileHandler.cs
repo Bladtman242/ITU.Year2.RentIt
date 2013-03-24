@@ -6,9 +6,9 @@ using System.Data.SqlClient;
 using System.IO;
 
 namespace moofy.Backend {
-    public static partial class DBAccess {
+    public partial class DBAccess {
 
-        public static string UploadFile(Stream file) {
+        public string UploadFile(Stream file) {
             using (var fileStream = System.IO.File.Create("C:\\Path\\To\\File")) {
                 file.CopyTo(fileStream);
             }

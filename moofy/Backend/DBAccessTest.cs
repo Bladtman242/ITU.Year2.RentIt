@@ -5,14 +5,12 @@ using System.Linq;
 using System.Text;
 
 namespace moofy.Backend {
-    public partial class DBAccess {
-        protected SqlConnection connection;
-       
-        public DBAccess() {
+    public class DBAccessTest : DBAccess {
+        public DBAccessTest() : base() {
             connection = new SqlConnection("user id=RentIt25db;" +
                                        "password=ZAQ12wsx;server=rentit.itu.dk;" +
                                        "Trusted_Connection=no;" +
-                                       "database=RENTIT25; " +
+                                       "database=RENTIT25TEST; " +
                                        "connection timeout=30");
         }
     }

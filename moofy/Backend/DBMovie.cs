@@ -6,14 +6,14 @@ using System.Data.SqlClient;
 
 namespace moofy.Backend
 {
-    public static partial class DBAccess
+    public partial class DBAccess
     {
         /// <summary>
         /// Return the movie with a given id
         /// </summary>
         /// <param name="movieId">The id of the movie to get</param>
         /// <returns>The movie with the given id, or null if no such movie exists</returns>
-        public static Movie getMovie(int movieId)
+        public Movie getMovie(int movieId)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace moofy.Backend
         /// <param name="movieId">The movie to purchase</param>
         /// <param name="userId">The user purchasing the movie</param>
         /// <returns>true if the movie is bought, false if the movie could no be bought (f.ex. due to insufficient funds), null if an error occurred</returns>
-        public static bool? PurchaseMovie(int movieId, int userId)
+        public bool? PurchaseMovie(int movieId, int userId)
         {
             try
             {
@@ -99,7 +99,7 @@ namespace moofy.Backend
         /// <param name="movieId">The movie to rent</param>
         /// <param name="userId">The user renting the movie</param>
         /// <returns>true if the movie is rented, false if the movie could no be rented (i.e. due to insufficient funds), null if an error occurred</returns>
-        public static bool? RentMovie(int movieId, int userId)
+        public bool? RentMovie(int movieId, int userId)
         {
             try
             {
@@ -141,7 +141,7 @@ namespace moofy.Backend
         /// <param name="movieId">The movie to delete</param>
         /// <param name="adminId">The admin who authorised the deletion</param>
         /// <returns>true if the movie/file record is deleted or false otherwise</returns>
-        public static bool DeleteMovie(int movieId, int adminId)
+        public bool DeleteMovie(int movieId, int adminId)
         {
             try
             {
@@ -183,7 +183,7 @@ namespace moofy.Backend
         /// <param name="genres">The genres the movie fit into</param>
         /// <param name="description">A description of the movie</param>
         /// <returns>The id the movie is granted in the database or -1 if the movie could not be added to the database</returns>
-        public static int CreateMovie(int managerId, string tmpId, string title, short year, int buyPrice,
+        public int CreateMovie(int managerId, string tmpId, string title, short year, int buyPrice,
                                         int rentPrice, string director, string[] genres, string description)
         {
             try
@@ -254,7 +254,7 @@ namespace moofy.Backend
         /// </summary>
         /// <param name="filter">The filter to match against</param>
         /// <returns>An array with all movies matching the filter or an array of size 0 if no movies match</returns>
-        public static Movie[] FilterMovies(string filter)
+        public Movie[] FilterMovies(string filter)
         {
             try
             {

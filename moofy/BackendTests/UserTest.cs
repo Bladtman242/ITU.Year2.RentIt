@@ -10,6 +10,10 @@ namespace moofy.Backend.Tests {
     /// </summary>
     [TestClass]
     public class UserTest {
+        DBAccess db;
+        public UserTest() {
+            db = new DBAccessTest();
+        }
 
         /// <summary>
         /// Tests that the basic properties are set and retrieved correctly.
@@ -52,10 +56,10 @@ namespace moofy.Backend.Tests {
         [TestMethod]
         public void IsAdminTest() {
             //Positive test
-            Assert.AreEqual<bool>(true, DBAccess.GetUser(1).IsAdmin);
+            Assert.AreEqual<bool>(true, db.GetUser(1).IsAdmin);
             
             //Negative test
-            Assert.AreEqual<bool>(false, DBAccess.GetUser(2).IsAdmin);
+            Assert.AreEqual<bool>(false, db.GetUser(2).IsAdmin);
         }
 
         /// <summary>
