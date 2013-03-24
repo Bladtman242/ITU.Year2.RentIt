@@ -8,11 +8,29 @@ using System.IO;
 namespace moofy.Backend {
     public partial class DBAccess {
 
-        public string UploadFile(Stream file) {
-            using (var fileStream = System.IO.File.Create("C:\\Path\\To\\File")) {
+        public int UploadFile(Stream file) {
+            string path = "C:\\RENTIT25\\" + file.GetHashCode();
+            Random rand = new Random();
+
+            //Ensure that no other file exists with this name
+            while (new FileInfo(path).Exists)
+            {
+                path = path + rand.Next();
+            }
+
+            using (var fileStream = System.IO.File.Create(path))
+            {
                 file.CopyTo(fileStream);
             }
-            return "rofl/pops/file";
+
+            SqlCommand command = new SqlCommand("INSERT INTO StagedFile(path) VALUES('" + path + "')", connection);
+
+            if (command.ExecuteNonQuery() > 0)
+            {
+                command.CommandText = "SELECT IDENT_CURRENT('StagedFile')";
+                return Int32.Parse(command.ExecuteScalar().ToString());
+            }
+            return -1;
         }
 
     }
