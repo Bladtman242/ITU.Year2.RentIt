@@ -6,14 +6,8 @@ using System.Data.SqlClient;
 
 namespace moofy.Backend
 {
-    class DBMovie
+    public static partial class DBAccess
     {
-        private static SqlConnection connection = new SqlConnection("user id=RentIt25db;" +
-                                       "password=ZAQ12wsx;server=rentit.itu.dk;" +
-                                       "Trusted_Connection=no;" +
-                                       "database=RENTIT25; " +
-                                       "connection timeout=30");
-
         /// <summary>
         /// Return the movie with a given id
         /// </summary>
@@ -76,7 +70,7 @@ namespace moofy.Backend
                 if (balance - price >= 0)
                 {
                     //Withdraw the amount from the users balance and only continue if it is successful
-                    if (DBUser.Deposit(-price, userId))
+                    if (Deposit(-price, userId))
                     {
                         command.CommandText = "INSERT INTO UserFile" +
                                               "VALUES(" + userId +
@@ -119,7 +113,7 @@ namespace moofy.Backend
                 if (balance - price >= 0)
                 {
                     //Withdraw the amount from the users balance and only continue if it is successful
-                    if (DBUser.Deposit(-price, userId))
+                    if (Deposit(-price, userId))
                     {
                         command.CommandText = "INSERT INTO UserFile" +
                                               "VALUES(" + userId +
@@ -300,7 +294,7 @@ namespace moofy.Backend
                 command.CommandText ="SELECT * FROM Filez " +
                                      "WHERE title LIKE '%" + filter + "%' "+
                                      "OR description LIKE '%" + filter + "%' "+
-                                     "OR id =("+
+                                     "OR id IN ("+
                                             "SELECT fid FROM GenreFile "+
                                             "WHERE gid =("+
                                                          "SELECT id FROM Genre "+

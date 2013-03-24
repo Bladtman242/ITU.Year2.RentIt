@@ -52,10 +52,10 @@ namespace moofy.Backend.Tests {
         [TestMethod]
         public void IsAdminTest() {
             //Positive test
-            Assert.AreEqual<bool>(true, DBUser.GetUser(1).IsAdmin);
+            Assert.AreEqual<bool>(true, DBAccess.GetUser(1).IsAdmin);
             
             //Negative test
-            Assert.AreEqual<bool>(false, DBUser.GetUser(2).IsAdmin);
+            Assert.AreEqual<bool>(false, DBAccess.GetUser(2).IsAdmin);
         }
 
         /// <summary>

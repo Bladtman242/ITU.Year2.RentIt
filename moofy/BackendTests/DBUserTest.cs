@@ -32,7 +32,7 @@ namespace moofy.Backend.Tests {
                 Password = "jegerdum"
             };
 
-            User actualUser = DBUser.GetUser(1);
+            User actualUser = DBAccess.GetUser(1);
             Assert.AreEqual<int>(expectedUser.Id, actualUser.Id);
             Assert.AreEqual<string>(expectedUser.Name, actualUser.Name);
             Assert.AreEqual<string>(expectedUser.Username, actualUser.Username);
@@ -41,7 +41,7 @@ namespace moofy.Backend.Tests {
             Assert.AreEqual<string>(expectedUser.Password, actualUser.Password);
 
             //Negative tests
-            User otherUser = DBUser.GetUser(2); //Other user with completely different data
+            User otherUser = DBAccess.GetUser(2); //Other user with completely different data
             Assert.AreNotEqual<int>(otherUser.Id, actualUser.Id);
             Assert.AreNotEqual<string>(otherUser.Name, actualUser.Name);
             Assert.AreNotEqual<string>(otherUser.Username, actualUser.Username);
@@ -50,7 +50,7 @@ namespace moofy.Backend.Tests {
             Assert.AreNotEqual<string>(otherUser.Password, actualUser.Password);
 
             //No user
-            User nonExistingUser = DBUser.GetUser(-2);
+            User nonExistingUser = DBAccess.GetUser(-2);
             Assert.AreEqual<User>(null, nonExistingUser);
         }
 
@@ -67,9 +67,9 @@ namespace moofy.Backend.Tests {
                 Password = "test"
             };
 
-            int givenId = DBUser.AddUser(expectedUser);
+            int givenId = DBAccess.AddUser(expectedUser);
             Console.WriteLine(givenId);
-            User actualUser = DBUser.GetUser(givenId);
+            User actualUser = DBAccess.GetUser(givenId);
 
             //Check that the user added to the database is the same as returned by the get method for the givenId
             Assert.AreEqual<int>(givenId, actualUser.Id);
@@ -80,7 +80,7 @@ namespace moofy.Backend.Tests {
             Assert.AreEqual<string>(expectedUser.Password, actualUser.Password);
 
             //Cleanup
-            DBUser.deleteUser(givenId);
+            DBAccess.deleteUser(givenId);
         }
 
         [TestMethod]
@@ -96,16 +96,16 @@ namespace moofy.Backend.Tests {
                 Password = "test"
             };
 
-            int id = DBUser.AddUser(expectedUser);
+            int id = DBAccess.AddUser(expectedUser);
             Assert.AreNotEqual<int>(-1, id);
 
             //Test that the right ID of the user is returned
-            Assert.AreEqual<int>(DBUser.Login("Login","test"), id);
+            Assert.AreEqual<int>(DBAccess.Login("Login","test"), id);
             //Test that -1 is returned for a user which does not exist
-            Assert.AreEqual<int>(DBUser.Login("XXXXXXXXOOOOOOllIIIlllIIaaaaAAAAaadd", "kkieklaklmcmmenns"), -1);
+            Assert.AreEqual<int>(DBAccess.Login("XXXXXXXXOOOOOOllIIIlllIIaaaaAAAAaadd", "kkieklaklmcmmenns"), -1);
 
             //Cleanup
-            DBUser.deleteUser(id);
+            DBAccess.deleteUser(id);
         }
 
         [TestMethod]
@@ -122,14 +122,14 @@ namespace moofy.Backend.Tests {
                 Email = "testuser@deposit.com",
                 Password = "test"
             };
-            int id = DBUser.AddUser(expectedUser);
-            bool flag = DBUser.Deposit(deposit, id);
-            User actualUser = DBUser.GetUser(id);
+            int id = DBAccess.AddUser(expectedUser);
+            bool flag = DBAccess.Deposit(deposit, id);
+            User actualUser = DBAccess.GetUser(id);
 
             if (flag) Assert.AreEqual(balance + deposit, actualUser.Balance);
 
             //Cleanup
-            DBUser.deleteUser(id);
+            DBAccess.deleteUser(id);
         }
 
         [TestMethod]
@@ -144,16 +144,16 @@ namespace moofy.Backend.Tests {
                 Password = "test"
             };
 
-            int promoteeId = DBUser.AddUser(user);
+            int promoteeId = DBAccess.AddUser(user);
             int promoterId = 1;//predefined admin in the db
 
-            bool flag = DBUser.PromotetoAdmin(promoterId, promoteeId);
+            bool flag = DBAccess.PromotetoAdmin(promoterId, promoteeId);
 
-            Assert.IsTrue(DBUser.getIsAdmin(promoteeId));
+            Assert.IsTrue(DBAccess.getIsAdmin(promoteeId));
 
             //clean up
-            DBUser.DemoteAdmin(promoterId, promoteeId);
-            DBUser.deleteUser(promoteeId);
+            DBAccess.DemoteAdmin(promoterId, promoteeId);
+            DBAccess.deleteUser(promoteeId);
         }
 
         [TestMethod]
@@ -168,19 +168,19 @@ namespace moofy.Backend.Tests {
                 Password = "test"
             };
 
-            int demoteeId = DBUser.AddUser(user);
+            int demoteeId = DBAccess.AddUser(user);
             int demoterId = 1;//predefined admin in the db
 
             //Promote admin 
-            DBUser.PromotetoAdmin(demoterId, demoteeId);
+            DBAccess.PromotetoAdmin(demoterId, demoteeId);
 
             //Demote and assert
-            DBUser.DemoteAdmin(demoterId, demoteeId);
+            DBAccess.DemoteAdmin(demoterId, demoteeId);
 
-            Assert.IsFalse(DBUser.getIsAdmin(demoteeId));
+            Assert.IsFalse(DBAccess.getIsAdmin(demoteeId));
 
             //Cleanup
-            DBUser.deleteUser(demoteeId);
+            DBAccess.deleteUser(demoteeId);
         }
     }
 }
