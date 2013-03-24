@@ -48,9 +48,10 @@ namespace moofy.Backend {
         /// <param name="userId">The Id of the user who will have the amount deposited</param>
         /// <returns>success flag</returns>
         public bool Deposit(int amount, int userId) {
-            SqlCommand command = new SqlCommand("UPDATE Userz" +
+
+            SqlCommand command = new SqlCommand("UPDATE Userz " +
                                                 "SET balance = balance + " + amount +
-                                                "WHERE id =" + userId,
+                                                "WHERE id = " + userId,
                                                 connection);
             return command.ExecuteNonQuery() > 0;
         }
