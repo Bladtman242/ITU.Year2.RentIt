@@ -18,6 +18,7 @@ namespace moofy.Backend {
                 path = path + rand.Next();
             }
 
+            //Create a filestream to the wanted path and copy the contents of the input stream to this 
             using (var fileStream = System.IO.File.Create(path))
             {
                 file.CopyTo(fileStream);

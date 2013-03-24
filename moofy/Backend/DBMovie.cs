@@ -30,6 +30,7 @@ namespace moofy.Backend {
                     Year = (short)reader["year"]
                 };
             }
+            reader.Close();
             return null;
         }
 
@@ -157,6 +158,7 @@ namespace moofy.Backend {
                             command.CommandText = "INSERT INTO GenreFile VALUES(" + reader["id"] + " ," + fileId + ")";
                             command.ExecuteNonQuery();
                         }
+                        reader.Close();
 
                     }
                     return fileId;
@@ -227,6 +229,7 @@ namespace moofy.Backend {
                     });
                 }
             }
+            reader.Close();
             return movies.ToArray();
         }
 
