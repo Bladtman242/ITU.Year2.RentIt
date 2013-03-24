@@ -11,7 +11,7 @@ namespace moofy.Backend.Tests {
     [TestClass]
     public class DBUserTest {
         static DBAccess db;
-        
+
         public DBUserTest() {
             db = new DBAccessTest();
             db.Open();
@@ -57,11 +57,9 @@ namespace moofy.Backend.Tests {
         }
 
         [TestMethod]
-        public void AddUserTest()
-        {
+        public void AddUserTest() {
             //User to add. Note Id is not given here but generated and returned in the AddUser method
-            User expectedUser = new User(0)
-            {
+            User expectedUser = new User(0) {
                 Name = "AddTestUser",
                 Username = "AddTestUser",
                 Balance = 10,
@@ -86,11 +84,9 @@ namespace moofy.Backend.Tests {
         }
 
         [TestMethod]
-        public void LoginTest()
-        {
+        public void LoginTest() {
             //Adding a user with easy testable login information.
-            User expectedUser = new User(0)
-            {
+            User expectedUser = new User(0) {
                 Name = "LoginTestUser",
                 Username = "Login",
                 Balance = 100,
@@ -102,7 +98,7 @@ namespace moofy.Backend.Tests {
             Assert.AreNotEqual<int>(-1, id);
 
             //Test that the right ID of the user is returned
-            Assert.AreEqual<int>(db.Login("Login","test"), id);
+            Assert.AreEqual<int>(db.Login("Login", "test"), id);
             //Test that -1 is returned for a user which does not exist
             Assert.AreEqual<int>(db.Login("XXXXXXXXOOOOOOllIIIlllIIaaaaAAAAaadd", "kkieklaklmcmmenns"), -1);
 
@@ -111,13 +107,11 @@ namespace moofy.Backend.Tests {
         }
 
         [TestMethod]
-        public void DepositTest()
-        {
+        public void DepositTest() {
             //Adding a user with a known balance which is easy to test against.
             int balance = 100;
             int deposit = 50;
-            User expectedUser = new User(0)
-            {
+            User expectedUser = new User(0) {
                 Name = "DepositTestUser",
                 Username = "Deposit",
                 Balance = balance,
@@ -135,10 +129,8 @@ namespace moofy.Backend.Tests {
         }
 
         [TestMethod]
-        public void PromotetoAdminTest()
-        {
-            User user = new User(0)
-            {
+        public void PromotetoAdminTest() {
+            User user = new User(0) {
                 Name = "AdminTestUser",
                 Username = "Admin",
                 Balance = 5,
@@ -159,10 +151,8 @@ namespace moofy.Backend.Tests {
         }
 
         [TestMethod]
-        public void DemoteAdminTest()
-        {
-            User user = new User(0)
-            {
+        public void DemoteAdminTest() {
+            User user = new User(0) {
                 Name = "AdminTestUser",
                 Username = "Admin",
                 Balance = 5,

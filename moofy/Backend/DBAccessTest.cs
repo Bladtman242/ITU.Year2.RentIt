@@ -10,8 +10,9 @@ namespace moofy.Backend {
             connection = new SqlConnection("user id=RentIt25db;" +
                                        "password=ZAQ12wsx;server=rentit.itu.dk;" +
                                        "Trusted_Connection=no;" +
-                                       "database=RENTIT25TEST; " +
-                                       "connection timeout=30");
+                                       "database=RENTIT25TEST;" +
+                                       "connection timeout=30;" +
+                                       "MultipleActiveResultSets=True");
         }
     }
 }
