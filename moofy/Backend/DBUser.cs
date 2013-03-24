@@ -49,7 +49,7 @@ namespace moofy.Backend {
         /// <returns>success flag</returns>
         public bool Deposit(int amount, int userId) {
             SqlCommand command = new SqlCommand("UPDATE Userz" +
-                                                "SET balance=balance+" + amount +
+                                                "SET balance=balance + " + amount +
                                                 "WHERE id=" + userId,
                                                 connection);
             return command.ExecuteNonQuery() > 0;
@@ -112,6 +112,7 @@ namespace moofy.Backend {
                     Password = reader["password"].ToString()
                 };
             }
+            reader.Close();
             //Return null if no user has the specified id
             return null;
         }
@@ -126,7 +127,9 @@ namespace moofy.Backend {
             SqlCommand command = new SqlCommand("SELECT * FROM admin WHERE id=" + userId,
                                                 connection);
             SqlDataReader reader = command.ExecuteReader();
-            return reader.Read();
+            bool exist = reader.Read();
+            reader.Close();
+            return exist;
         }
 
         /// <summary>
@@ -180,6 +183,7 @@ namespace moofy.Backend {
 
                 }
             }
+            reader.Close();
             return purchases;
         }
     }
