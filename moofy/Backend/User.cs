@@ -8,9 +8,11 @@ namespace moofy.Backend {
         private int id;
         private bool? isAdmin;
         private IList<Purchase> purchases;
+        private DBAccess db;
 
         public User(int id) {
             this.id = id;
+            db = new DBAccess();
         }
 
         /// <summary>
@@ -49,16 +51,28 @@ namespace moofy.Backend {
         /// Whether or not this user is an admin
         /// </summary>
         public bool IsAdmin {
-            get { return (bool)isAdmin; }
-            //get { return (bool)(isAdmin ?? (isAdmin= DBAccess.getIsAdmin(this.Id))); }
+            get {
+                if ((object)isAdmin == null) {
+                    db.Open();
+                    isAdmin = db.getIsAdmin(this.Id);
+                    db.Close();
+                }
+                return (bool)isAdmin;
+            }
         }
 
         /// <summary>
         /// The purchases of the User
         /// </summary>
         public IList<Purchase> Purchases {
-            get { return purchases; }
-            //get { return purchases ?? (purchases = DBAccess.getPurchases(this.Id)); }
+            get {
+                if ((object)purchases == null) {
+                    db.Open();
+                    purchases = db.getPurchases(this.Id);
+                    db.Close();
+                }
+                return purchases;
+            }
         }
 
         //Equals override according to http://msdn.microsoft.com/en-us/library/ms173147(v=vs.80).aspx
