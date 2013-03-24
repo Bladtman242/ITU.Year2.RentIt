@@ -15,5 +15,13 @@ namespace moofy.Backend {
                                        "database=RENTIT25; " +
                                        "connection timeout=30");
         }
+
+        public void Open() {
+            connection.Open();
+        }
+
+        public void Close() {
+            connection.Close();
+        }
     }
 }

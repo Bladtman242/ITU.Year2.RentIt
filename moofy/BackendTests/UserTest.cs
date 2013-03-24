@@ -10,9 +10,16 @@ namespace moofy.Backend.Tests {
     /// </summary>
     [TestClass]
     public class UserTest {
-        DBAccess db;
+        static DBAccess db;
+
         public UserTest() {
             db = new DBAccessTest();
+            db.Open();
+        }
+
+        [ClassCleanup()]
+        public static void CleanUp() {
+            db.Close();
         }
 
         /// <summary>
