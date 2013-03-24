@@ -5,12 +5,7 @@ using System.Text;
 
 namespace moofy.Backend {
     public abstract class File {
-        //A set of backing fields
         protected int id;
-        protected short year;
-        protected string title, description, uri;
-        protected float buyPrice, rentPrice;
-        protected IList<string> genres;
 
         public File(int id) {
             this.id = id;
@@ -26,58 +21,37 @@ namespace moofy.Backend {
         /// <summary>
         /// The Title of the File
         /// </summary>
-        public string Title {
-            get { return title; }
-            set { title = value; }
-        }
+        public string Title { get; set; }
 
         /// <summary>
         /// The Description of the File
         /// </summary>
-        public string Description {
-            get { return description; }
-            set { description = value; }
-        }
+        public string Description { get; set; }
 
         /// <summary>
         /// The Genre of the File
         /// </summary>
-        public IList<string> Genres {
-            get { return genres; }
-            set { genres = value; }
-        }
+        public IList<string> Genres { get; set; }
 
         /// <summary>
         /// The Year of the File
         /// </summary>
-        public short Year {
-            get { return year; }
-            set { year = value; }
-        }
+        public short Year { get; set; }
 
         /// <summary>
         /// The location of the File as a URI
         /// </summary>
-        public string Uri {
-            get { return uri; }
-            set { uri = value; }
-        }
+        public string Uri { get; set; }
 
         /// <summary>
         /// The cost of the File, when bought
         /// </summary>
-        public float BuyPrice {
-            get { return buyPrice; }
-            set { buyPrice = value; }
-        }
+        public float BuyPrice { get; set; }
 
         /// <summary>
         /// The cost of the File when rented
         /// </summary>
-        public float RentPrice {
-            get { return rentPrice; }
-            set { rentPrice = value; }
-        }
+        public float RentPrice { get; set; }
 
         //Equals override according to http://msdn.microsoft.com/en-us/library/ms173147(v=vs.80).aspx
         public override bool Equals(System.Object obj) {

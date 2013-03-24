@@ -97,11 +97,12 @@ namespace moofy.Backend.Tests {
             };
 
             int id = DBUser.AddUser(expectedUser);
+            Assert.AreNotEqual<int>(-1, id);
 
             //Test that the right ID of the user is returned
-            Assert.AreEqual(DBUser.Login("Login","test"), id);
+            Assert.AreEqual<int>(DBUser.Login("Login","test"), id);
             //Test that -1 is returned for a user which does not exist
-            Assert.AreEqual(DBUser.Login("XXXXXXXXOOOOOOllIIIlllIIaaaaAAAAaadd", "kkieklaklmcmmenns"), -1);
+            Assert.AreEqual<int>(DBUser.Login("XXXXXXXXOOOOOOllIIIlllIIaaaaAAAAaadd", "kkieklaklmcmmenns"), -1);
 
             //Cleanup
             DBUser.deleteUser(id);
