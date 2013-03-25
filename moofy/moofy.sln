@@ -1,18 +1,18 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonServices", "JsonServices\JsonServices.csproj", "{12FB6E92-77BA-42BD-9E69-EBA475DEDAE2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend", "Backend\Backend.csproj", "{C2018782-2598-4300-AA59-B755F5FD0771}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackendTests", "BackendTests\BackendTests.csproj", "{E72E6272-DA1B-4A10-A43C-C40AC982FFF6}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A5A906EA-30B9-462D-B4AA-E76049DE2378}"
 	ProjectSection(SolutionItems) = preProject
 		Local.testsettings = Local.testsettings
 		moofy.vsmdi = moofy.vsmdi
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonServices", "JsonServices\JsonServices.csproj", "{12FB6E92-77BA-42BD-9E69-EBA475DEDAE2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend", "Backend\Backend.csproj", "{C2018782-2598-4300-AA59-B755F5FD0771}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackendTests", "BackendTests\BackendTests.csproj", "{E72E6272-DA1B-4A10-A43C-C40AC982FFF6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonServicesTests", "JsonServicesTests\JsonServicesTests.csproj", "{A7629168-18CA-4B48-AF97-B878FE43734F}"
 EndProject
