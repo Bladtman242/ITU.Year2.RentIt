@@ -41,7 +41,7 @@ namespace moofy.JsonServices {
         [OperationContract]
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "filter/")]
+            UriTemplate = "filter")]
         MovieWrapper[] ListAllMovies();
 
         [OperationContract]

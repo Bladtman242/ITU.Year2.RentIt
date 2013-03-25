@@ -11,16 +11,15 @@ namespace moofy.JsonServices {
             int sid = Convert.ToInt32(id);
             if (sid > 0) {
                 return new SongWrapper() {
-                                title = "I Knew You Were Trouble",
-                                release = 2012,
-                                genres = new string[] { "Pop" },
-                                album = "Red",
-                                artist = "Taylor Swift",
-                                rentalPrice = 2,
-                                purchasePrice = 8
-                            };
-            }
-            else {
+                    title = "I Knew You Were Trouble",
+                    release = 2012,
+                    genres = new string[] { "Pop" },
+                    album = "Red",
+                    artist = "Taylor Swift",
+                    rentalPrice = 2,
+                    purchasePrice = 8
+                };
+            } else {
                 throw new ArgumentException("Invalid id");
             }
         }
@@ -61,8 +60,7 @@ namespace moofy.JsonServices {
                     success = true,
                     downloadLink = "http://ge.tt/api/1/files/2jRUQya/0/blob?download"
                 };
-            }
-            else {
+            } else {
                 return new SuccessFlagDownload() {
                     success = false,
                     downloadLink = ""
@@ -80,6 +78,51 @@ namespace moofy.JsonServices {
                     artist = "Taylor Swift",
                     rentalPrice = 2,
                     purchasePrice = 8
+                },
+                new SongWrapper() {
+                    title = "Fiskeengel",
+                    release = 2003,
+                    genres = new string[] { "Pop", "Rock" },
+                    album = "Vivaldi And Ven",
+                    artist = "Roben Og Knud",
+                    rentalPrice = 7,
+                    purchasePrice = 15
+                },
+                new SongWrapper() {
+                    title = "Shake That",
+                    release = 2005,
+                    genres = new string[] { "Hip Hop" },
+                    album = "Curtain Call",
+                    artist = "Eminem",
+                    rentalPrice = 12,
+                    purchasePrice = 30
+                },
+                new SongWrapper() {
+                    title = "7 Days",
+                    release = 2001,
+                    genres = new string[] { "Pop" },
+                    album = "Born To Do It",
+                    artist = "Craig David",
+                    rentalPrice = 5,
+                    purchasePrice = 18
+                },
+                new SongWrapper() {
+                    title = "Onani",
+                    release = 2004,
+                    genres = new string[] { "Disco" },
+                    album = "Ganz Geil",
+                    artist = "Dario Von Slutty",
+                    rentalPrice = 7,
+                    purchasePrice = 21
+                },
+                new SongWrapper() {
+                    title = "Pon de Replay",
+                    release = 2005,
+                    genres = new string[] { "Pop" },
+                    album = "Music Of The Sun",
+                    artist = "Rihanna",
+                    rentalPrice = 10,
+                    purchasePrice = 33
                 }
             };
         }

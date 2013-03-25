@@ -19,8 +19,7 @@ namespace moofy.JsonServices {
                     rentalPrice = 10,
                     purchasePrice = 30
                 };
-            }
-            else {
+            } else {
                 throw new ArgumentException("Invalid id");
             }
         }
@@ -61,8 +60,7 @@ namespace moofy.JsonServices {
                     success = true,
                     downloadLink = "http://ge.tt/api/1/files/2jRUQya/0/blob?download"
                 };
-            }
-            else {
+            } else {
                 return new SuccessFlagDownload() {
                     success = false,
                     downloadLink = ""
@@ -80,6 +78,51 @@ namespace moofy.JsonServices {
                     description = "When Simon, Rich, and Eva head out on an eagerly anticipated road trip, they bring along a video camera to record their journey. What starts out as a carefree adventure slowly becomes a descent into the ominous as unexplained events threaten to disrupt the balance between the three close friends. Each one of them must struggle with personal demons and paranoia as friendships are tested and gruesome realities are revealed...and recorded.",
                     rentalPrice = 10,
                     purchasePrice = 30
+                },
+                new MovieWrapper() {
+                    title = "Twilight",
+                    release = 2008,
+                    genres = new string[] { "Drama", "Fantasy", "Romance" },
+                    directors = new string[] { "Catherine Hardwicke" },
+                    description = "A teenage girl risks everything when she falls in love with a vampire.",
+                    rentalPrice = 1,
+                    purchasePrice = 2
+                },
+                new MovieWrapper() {
+                    title = "Teeth",
+                    release = 2007,
+                    genres = new string[] { "Comedy", "Horror", "Thriller" },
+                    directors = new string[] { "Mitchell Lichtenstein" },
+                    description = "Still a stranger to her own body, a high school student discovers she has a physical advantage when she becomes the object of male violence.",
+                    rentalPrice = 5,
+                    purchasePrice = 20
+                },
+                new MovieWrapper() {
+                    title = "Bride of Chucky",
+                    release = 1998,
+                    genres = new string[] { "Comedy", "Horror", "Romance" },
+                    directors = new string[] { "Ronny Yu" },
+                    description = "Chucky, the doll possessed by a serial killer, discovers the perfect mate to kill and revive into the body of another doll.",
+                    rentalPrice = 8,
+                    purchasePrice = 25
+                },
+                new MovieWrapper() {
+                    title = "The Avengers",
+                    release = 2012,
+                    genres = new string[] { "Action" },
+                    directors = new string[] { "Joss Whedon" },
+                    description = "Nick Fury of S.H.I.E.L.D. brings together a team of super humans to form The Avengers to help save the Earth from Loki and his army.",
+                    rentalPrice = 10,
+                    purchasePrice = 40
+                },
+                new MovieWrapper() {
+                    title = "Kung Pow: Enter the Fist",
+                    release = 2002,
+                    genres = new string[] { "Action", "Comedy" },
+                    directors = new string[] { "Steve Oedekerk" },
+                    description = "A rough-around-the-edges martial arts master seeks revenge for his parent's death.",
+                    rentalPrice = 12,
+                    purchasePrice = 35
                 }
             };
         }
@@ -136,7 +179,7 @@ namespace moofy.JsonServices {
 
         public SuccessFlag DeleteMovie(string id, int managerid) {
             int mid = Convert.ToInt32(id);
-            if(mid > 0 && managerid > 0)
+            if (mid > 0 && managerid > 0)
                 return new SuccessFlag() {
                     success = true,
                     message = "Both ids valid. This has not yet been implemented"
