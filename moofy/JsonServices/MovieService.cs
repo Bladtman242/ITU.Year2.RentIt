@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using moofy.Backend;
 
 namespace moofy.JsonServices {
     public partial class MoofyServices : IMovieService {
@@ -69,6 +70,26 @@ namespace moofy.JsonServices {
         }
 
         public MovieWrapper[] ListAllMovies() {
+            DBAccess db = new DBAccess();
+            db.Open();
+            Movie[] movs = db.FilterMovies("");
+            List<MovieWrapper> mws = new List<MovieWrapper>();
+            foreach (Movie mov in movs)
+            {
+                mws.Add(new MovieWrapper()
+                {
+                    title = mov.Title,
+                    release = mov.Year,
+                    genres = mov.Genres.ToArray(),
+                    directors = new string[] { mov.Director },
+                    description = mov.Description,
+                    rentalPrice = 1,
+                    purchasePrice = 2
+                });
+            }
+            
+            return mws.ToArray();
+            /*
             return new MovieWrapper[] {
                 new MovieWrapper() {
                     title = "Skew",
@@ -124,7 +145,7 @@ namespace moofy.JsonServices {
                     rentalPrice = 12,
                     purchasePrice = 35
                 }
-            };
+            };*/
         }
 
         public MovieWrapper[] FilterMovies(string filter) {

@@ -3,6 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.IO;
 
 namespace moofy.Backend.Tests
 {
@@ -23,8 +24,7 @@ namespace moofy.Backend.Tests
         public static void CleanUp() {
             db.Close();
         }
-
-        private TestContext testContextInstance;
+       
 
         [TestMethod]
         public void FilterMovieTest()
