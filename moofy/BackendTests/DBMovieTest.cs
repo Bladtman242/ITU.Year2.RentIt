@@ -29,9 +29,7 @@ namespace moofy.Backend.Tests
         [TestMethod]
         public void GetMovieTest()
         {
-            //
-            // TODO: Add test logic here
-            //
+            
         }
     }
 }

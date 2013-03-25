@@ -177,12 +177,34 @@ namespace moofy.Backend {
             List<int> ids = new List<int>();//Ids of all movies added to the return list, used to prevent duplicates later
 
             //First get all rows from the movie table where an attribute matches the filter
-            SqlCommand command = new SqlCommand("SELECT * FROM Movie " +
-                                                "WHERE director LIKE '%" + filter + "%'"
+            SqlCommand command = new SqlCommand("SELECT * FROM Movie , Filez " +
+                                                "WHERE Movie.id = Filez.id " +
+                                                "AND (director LIKE '%" + filter + "%' "+
+                                                "OR title LIKE '%" + filter + "%' " +
+                                                "OR description LIKE '%" + filter + "%' " +
+                                                "OR id IN (" +
+                                                    "SELECT fid FROM GenreFile " +
+                                                     "WHERE gid =(" +
+                                                        "SELECT id FROM Genre " +
+                                                        "WHERE name Like '%" + filter + "%' )))"
                                                 , connection);
             SqlDataReader reader = command.ExecuteReader();
 
-            //Get the rest of the info needed from the file table.
+            while (reader.Read())
+            {
+                
+                movies.Add(new Movie((int) reader["Movie.id"])
+                {
+                    Director = reader["director"].ToString(),
+                    RentPrice = (float)reader["rentPrice"],
+                    BuyPrice = (float)reader["buyPrice"],
+                    Uri = reader["URI"].ToString(),
+                    Title = reader["title"].ToString(),
+                    Description = reader["description"].ToString(),
+                    Year = (short)reader["year"]
+                });
+            }
+            /*Get the rest of the info needed from the file table.
             while (reader.Read()) {
                 int movieId = (int)reader["id"];
                 string director = reader["director"].ToString();
@@ -231,6 +253,7 @@ namespace moofy.Backend {
                     });
                 }
             }
+             * */
             reader.Close();
             return movies.ToArray();
         }
