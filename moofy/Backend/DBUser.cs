@@ -8,7 +8,11 @@ namespace moofy.Backend {
     public partial class DBAccess {
 
         public bool deleteUser(int userId) {
-            SqlCommand command = new SqlCommand("DELETE FROM Userz WHERE id =" + userId, connection);
+
+            SqlCommand command = new SqlCommand("DELETE FROM UserFile WHERE uid =" + userId, connection);
+            command.ExecuteNonQuery();
+
+            command.CommandText = "DELETE FROM Userz WHERE id=" + userId;
             return command.ExecuteNonQuery() > 0;
         }
         /// <summary>
