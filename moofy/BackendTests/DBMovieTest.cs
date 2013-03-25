@@ -27,7 +27,7 @@ namespace moofy.Backend.Tests
         private TestContext testContextInstance;
 
         [TestMethod]
-        public void TestMethod1()
+        public void GetMovieTest()
         {
             //
             // TODO: Add test logic here

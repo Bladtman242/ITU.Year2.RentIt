@@ -11,7 +11,7 @@ namespace moofy.Backend {
         /// </summary>
         /// <param name="movieId">The id of the movie to get</param>
         /// <returns>The movie with the given id, or null if no such movie exists</returns>
-        public Movie getMovie(int movieId) {
+        public Movie GetMovie(int movieId) {
             SqlCommand command = new SqlCommand("SELECT * FROM Movie WHERE id =" + movieId, connection);
             SqlDataReader reader = command.ExecuteReader();
 
@@ -187,19 +187,21 @@ namespace moofy.Backend {
                 int movieId = (int)reader["id"];
                 string director = reader["director"].ToString();
                 command.CommandText = "SELECT * FROM File WHERE id =" + movieId;
-                reader = command.ExecuteReader();
-                reader.Read();
+                SqlDataReader reader2 = command.ExecuteReader();
+                reader2.Read();
                 movies.Add(new Movie(movieId) {
                     Director = director,
-                    RentPrice = (float)reader["rentPrice"],
-                    BuyPrice = (float)reader["buyPrice"],
-                    Uri = reader["URI"].ToString(),
-                    Title = reader["title"].ToString(),
-                    Description = reader["description"].ToString(),
-                    Year = (short)reader["year"]
+                    RentPrice = (float)reader2["rentPrice"],
+                    BuyPrice = (float)reader2["buyPrice"],
+                    Uri = reader2["URI"].ToString(),
+                    Title = reader2["title"].ToString(),
+                    Description = reader2["description"].ToString(),
+                    Year = (short)reader2["year"]
                 });
+                reader2.Close();
                 ids.Add(movieId);
             }
+            reader.Close();
 
             //Now do the same for attributes in the filez table title
             // TILFØJ SØGNING PÅ GENRE ? :S
