@@ -70,6 +70,7 @@ namespace moofy.JsonServices {
         }
 
         public MovieWrapper[] ListAllMovies() {
+            /*
             DBAccess db = new DBAccess();
             db.Open();
             Movie[] movs = db.FilterMovies("");
@@ -89,7 +90,7 @@ namespace moofy.JsonServices {
             }
             
             return mws.ToArray();
-            /*
+            */
             return new MovieWrapper[] {
                 new MovieWrapper() {
                     title = "Skew",
@@ -145,7 +146,7 @@ namespace moofy.JsonServices {
                     rentalPrice = 12,
                     purchasePrice = 35
                 }
-            };*/
+            };
         }
 
         public MovieWrapper[] FilterMovies(string filter) {
