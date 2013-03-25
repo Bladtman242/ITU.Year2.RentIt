@@ -182,9 +182,9 @@ namespace moofy.Backend {
                                                 "AND (director LIKE '%" + filter + "%' "+
                                                 "OR title LIKE '%" + filter + "%' " +
                                                 "OR description LIKE '%" + filter + "%' " +
-                                                "OR id IN (" +
+                                                "OR Filez.id IN (" +
                                                     "SELECT fid FROM GenreFile " +
-                                                     "WHERE gid =(" +
+                                                    "WHERE gid =(" +
                                                         "SELECT id FROM Genre " +
                                                         "WHERE name Like '%" + filter + "%' )))"
                                                 , connection);
@@ -193,15 +193,15 @@ namespace moofy.Backend {
             while (reader.Read())
             {
                 
-                movies.Add(new Movie((int) reader["Movie.id"])
+                movies.Add(new Movie(Int32.Parse(reader["id"].ToString()))
                 {
                     Director = reader["director"].ToString(),
-                    RentPrice = (float)reader["rentPrice"],
-                    BuyPrice = (float)reader["buyPrice"],
+                    RentPrice = float.Parse(reader["rentPrice"].ToString()),
+                    BuyPrice = float.Parse(reader["buyPrice"].ToString()),
                     Uri = reader["URI"].ToString(),
                     Title = reader["title"].ToString(),
                     Description = reader["description"].ToString(),
-                    Year = (short)reader["year"]
+                    Year = short.Parse(reader["year"].ToString())
                 });
             }
             /*Get the rest of the info needed from the file table.

@@ -27,9 +27,15 @@ namespace moofy.Backend.Tests
         private TestContext testContextInstance;
 
         [TestMethod]
-        public void GetMovieTest()
+        public void FilterMovieTest()
         {
             
+            Movie[] movies = db.FilterMovies("niclas");
+            
+            Assert.IsTrue(movies.Length > 0);
+            Movie mov = movies[0];
+            Assert.AreEqual(1, mov.Id);
+            Assert.AreEqual("Life of a Small Son", mov.Title);
         }
     }
 }
