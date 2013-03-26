@@ -194,8 +194,9 @@ namespace moofy.Backend {
             }
             return -1;
         }
+
         /// <summary>
-        /// 
+        /// Gets all songs which matches the filter
         /// </summary>
         /// <param name="filter"></param>
         /// <returns></returns>
@@ -204,7 +205,7 @@ namespace moofy.Backend {
 
             //First get all rows from the song and file table joined, where an attribute matches the filter
             SqlCommand command = new SqlCommand("SELECT * FROM Song , Filez " +
-                                                "WHERE Movie.id = Filez.id " +
+                                                "WHERE Song.id = Filez.id " +
                                                 "AND (artist LIKE '%" + filter + "%' " +
                                                 "OR album LIKE '%" + filter + "%' " +
                                                 "OR title LIKE '%" + filter + "%' " +

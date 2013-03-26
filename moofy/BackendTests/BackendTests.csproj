@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DBMovieTest.cs" />
+    <Compile Include="DBSongTest.cs" />
     <Compile Include="DBUserTest.cs" />
     <Compile Include="FileTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
