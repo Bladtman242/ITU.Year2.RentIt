@@ -21,7 +21,7 @@ namespace moofy.Backend {
                                                 , connection);
 
             SqlDataReader reader = command.ExecuteReader();
-            List<string> genres = new List<string>();
+            IList<string> genres = new List<string>();
             while (reader.Read())
             {
                 genres.Add(reader["name"].ToString());

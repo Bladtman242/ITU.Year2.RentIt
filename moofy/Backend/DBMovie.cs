@@ -138,7 +138,7 @@ namespace moofy.Backend {
         /// <param name="description">A description of the movie</param>
         /// <returns>The id the movie is granted in the database or -1 if the movie could not be added to the database</returns>
         public int CreateMovie(int managerId, int tmpId, string title, short year, int buyPrice,
-                                        int rentPrice, string director, string[] genres, string description) {
+                                        int rentPrice, string director, IList<string> genres, string description) {
             SqlCommand command = new SqlCommand("SELECT * FROM Admin WHERE id =" + managerId, connection);
             if (command.ExecuteScalar() != null) {
                 //Get the uri from the StagedFile table
@@ -165,11 +165,9 @@ namespace moofy.Backend {
                     command.ExecuteNonQuery();
 
                     //Add genres to the file if any exist
-                    if (genres.Length > 0) {
-                        string sql = "SELECT id FROM Genre WHERE ";
-                        foreach (string genre in genres) {
-                            sql = sql + "name='" + genre + "' ";
-                        }
+                    if (genres.Count > 0) {
+                        string sql = "SELECT id FROM Genre WHERE name IN ('" +
+                                      string.Join<string>("', '", genres) + "')";
                         command.CommandText = sql;
                         SqlDataReader reader = command.ExecuteReader();
                         while (reader.Read()) {

@@ -6,9 +6,12 @@ using System.Text;
 namespace moofy.Backend {
     public abstract class File {
         protected int id;
+        private IList<string> genres;
+        private DBAccess db;
 
         public File(int id) {
             this.id = id;
+            db = new DBAccess();
         }
 
         /// <summary>
@@ -31,7 +34,16 @@ namespace moofy.Backend {
         /// <summary>
         /// The Genre of the File
         /// </summary>
-        public IList<string> Genres { get; set; }
+        public IList<string> Genres {
+            get {
+                if ((object)genres == null) {
+                    db.Open();
+                    genres = db.GetGenres(this.Id);
+                    db.Close();
+                }
+                return genres;
+            }
+        }
 
         /// <summary>
         /// The Year of the File
