@@ -194,5 +194,92 @@ namespace moofy.Backend {
             reader.Close();
             return purchases;
         }
+
+        /// <summary>
+        /// Returns all songs purchased by a given user 
+        /// </summary>
+        /// <param name="userId">The id of the user to return all purchased songs for</param>
+        /// <returns>All songs purchased by the user</returns>
+        public IList<Purchase> GetSongs(int userId) {
+            //Get information on which songs the user has purchased
+            IList<Purchase> purchases = new List<Purchase>();
+            SqlCommand command = new SqlCommand("SELECT * FROM UserFile WHERE uid=" + userId,
+                                                 connection);
+            using (SqlDataReader reader = command.ExecuteReader()) {
+                while (reader.Read()) {
+                    int fileId = Int32.Parse(reader["fid"].ToString());
+                    SqlCommand filequery = new SqlCommand("SELECT * FROM Filez WHERE id =" + fileId,
+                                                          connection);
+                    SqlCommand songquery = new SqlCommand("SELECT * FROM Song WHERE id =" + fileId,
+                                                       connection);
+                    SqlDataReader fr = filequery.ExecuteReader();
+                    SqlDataReader sr = songquery.ExecuteReader();
+
+                    if (fr.Read()) {
+                        if (sr.Read()) {
+                            Song song = new Song() {
+                                Id = fileId,
+                                BuyPrice = float.Parse(fr["buyPrice"].ToString()),
+                                Description = fr["description"].ToString(),
+                                Title = fr["title"].ToString(),
+                                Uri = fr["URI"].ToString(),
+                                Year = short.Parse(fr["year"].ToString()),
+                                RentPrice = float.Parse(fr["rentPrice"].ToString()),
+                                Album = sr["album"].ToString(),
+                                Artist = sr["artist"].ToString()
+                            };
+                            purchases.Add(new Purchase(song, (DateTime.Parse(reader["endTime"].ToString()))));
+                        }
+                    }
+                }
+            }
+            return purchases;
+        }
+
+
+
+
+        /// <summary>
+        /// Returns all movies purchased by a given user 
+        /// </summary>
+        /// <param name="userId">The id of the user to return all purchased movies for</param>
+        /// <returns>All movies purchased by the user</returns>
+        public IList<Purchase> GetMovies(int userId) {
+            //Get information on which movies the user has purchased
+            IList<Purchase> purchases = new List<Purchase>();
+            SqlCommand command = new SqlCommand("SELECT * FROM UserFile WHERE uid=" + userId,
+                                                 connection);
+            using (SqlDataReader reader = command.ExecuteReader()) {
+                while (reader.Read()) {
+                    int fileId = Int32.Parse(reader["fid"].ToString());
+                    SqlCommand filequery = new SqlCommand("SELECT * FROM Filez WHERE id =" + fileId,
+                                                          connection);
+                    SqlCommand moviequery = new SqlCommand("SELECT * FROM Movie WHERE id =" + fileId,
+                                                          connection);
+                    SqlDataReader fr = filequery.ExecuteReader();
+                    SqlDataReader mr = moviequery.ExecuteReader();
+
+                    if (fr.Read()) {
+                        if (mr.Read()) {
+                            Console.WriteLine(fr["description"].ToString());
+                            Movie mov = new Movie() {
+                                Id = fileId,
+                                BuyPrice = float.Parse(fr["buyPrice"].ToString()),
+                                Description = fr["description"].ToString(),
+                                Title = fr["title"].ToString(),
+                                Uri = fr["URI"].ToString(),
+                                Year = short.Parse(fr["year"].ToString()),
+                                RentPrice = float.Parse(fr["rentPrice"].ToString()),
+                                Director = mr["director"].ToString()
+                            };
+                            purchases.Add(new Purchase(mov, (DateTime)reader["endTime"]));
+                        }
+                    }
+                }
+            }
+            Console.WriteLine(purchases.Count);
+            Console.WriteLine(purchases.Count);
+            return purchases;
+        }
     }
 }

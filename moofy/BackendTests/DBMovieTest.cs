@@ -52,8 +52,8 @@ namespace moofy.Backend.Tests
             //Get the user from the database (required to be able to load the newly added file to his owned files)
             User actualUser = db.GetUser(userId);
             //Assert that the movie is added to movies owned by the user
-            Assert.IsTrue(actualUser.Purchases.ElementAt(0).File.Id == movieId);
-            TimeSpan ts = DateTime.Now.AddDays(3) - actualUser.Purchases.ElementAt(0).EndTime;
+            Assert.IsTrue(actualUser.Movies.ElementAt(0).File.Id == movieId);
+            TimeSpan ts = DateTime.Now.AddDays(3) - actualUser.Movies.ElementAt(0).EndTime;
             //Assert that the expiration time is within 3days and 10minutes, the 10minutes are added as a buffer for the time it takes to run the code inbetween the RentMovie call and the creation of ts.
             //A 10minute discrepency can be accepted in the system
             Assert.IsTrue(ts.TotalMinutes < 1);
@@ -89,9 +89,9 @@ namespace moofy.Backend.Tests
             //Get the user from the database (required to be able to load the newly added file to his owned files)
             User actualUser = db.GetUser(userId);
             //Assert that the movie is added to movies owned by the user
-            Assert.IsTrue(actualUser.Purchases.ElementAt(0).File.Id == movieId);
+            Assert.IsTrue(actualUser.Movies.ElementAt(0).File.Id == movieId);
             //Assert that the date of expiration is set to max, comparing strings as DateTimes compare is an reference equality
-            Assert.AreEqual(actualUser.Purchases.ElementAt(0).EndTime.ToString(), DateTime.MaxValue.ToString());
+            Assert.AreEqual(actualUser.Movies.ElementAt(0).EndTime.ToString(), DateTime.MaxValue.ToString());
 
             db.DeleteUser(userId);
             db.DeleteMovie(movieId, 1);

@@ -7,7 +7,7 @@ namespace moofy.Backend {
     public class User {
         private int id;
         private bool? isAdmin;
-        private IList<Purchase> purchases;
+        private IList<Purchase> purchases, songs, movies;
         private DBAccess db;
 
         public User() {
@@ -59,16 +59,30 @@ namespace moofy.Backend {
         }
 
         /// <summary>
-        /// The purchases of the User
+        /// The songs of the User
         /// </summary>
-        public IList<Purchase> Purchases {
+        public IList<Purchase> Songs {
             get {
-                if ((object)purchases == null) {
+                if ((object)songs == null) {
                     db.Open();
-                    purchases = db.GetPurchases(this.Id);
+                    songs = db.GetSongs(this.Id);
                     db.Close();
                 }
-                return purchases;
+                return songs;
+            }
+        }
+
+        /// <summary>
+        /// The movies of the User
+        /// </summary>
+        public IList<Purchase> Movies {
+            get {
+                if ((object)movies == null) {
+                    db.Open();
+                    movies = db.GetMovies(this.Id);
+                    db.Close();
+                }
+                return movies;
             }
         }
     }
