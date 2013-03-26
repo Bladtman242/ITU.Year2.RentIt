@@ -54,7 +54,7 @@ namespace moofy.Backend {
             get {
                 if ((object)isAdmin == null) {
                     db.Open();
-                    isAdmin = db.getIsAdmin(this.Id);
+                    isAdmin = db.GetIsAdmin(this.Id);
                     db.Close();
                 }
                 return (bool)isAdmin;
@@ -68,7 +68,7 @@ namespace moofy.Backend {
             get {
                 if ((object)purchases == null) {
                     db.Open();
-                    purchases = db.getPurchases(this.Id);
+                    purchases = db.GetPurchases(this.Id);
                     db.Close();
                 }
                 return purchases;

@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 namespace moofy.Backend {
     public partial class DBAccess {
 
-        public bool deleteUser(int userId) {
+        public bool DeleteUser(int userId) {
 
             SqlCommand command = new SqlCommand("DELETE FROM UserFile WHERE uid =" + userId, connection);
             command.ExecuteNonQuery();
@@ -112,7 +112,7 @@ namespace moofy.Backend {
                 return new User(userId) {
                     Name = reader["name"].ToString(),
                     Username = reader["userName"].ToString(),
-                    Balance = (int)reader["balance"],
+                    Balance = Int32.Parse(reader["balance"].ToString()),
                     Email = reader["email"].ToString(),
                     Password = reader["password"].ToString()
                 };
@@ -127,7 +127,7 @@ namespace moofy.Backend {
         /// </summary>
         /// <param name="userId">The id of the user to check if is admin</param>
         /// <returns>true if the user is admin else false</returns>
-        public bool getIsAdmin(int userId) {
+        public bool GetIsAdmin(int userId) {
             //Get information as to wether this is an admin and add this information
             SqlCommand command = new SqlCommand("SELECT * FROM admin WHERE id=" + userId,
                                                 connection);
@@ -142,14 +142,14 @@ namespace moofy.Backend {
         /// </summary>
         /// <param name="userId">The id of the user to return all purchased files for</param>
         /// <returns>All files purchased by the user</returns>
-        public IList<Purchase> getPurchases(int userId) {
+        public IList<Purchase> GetPurchases(int userId) {
             //Get information on which movies the user has purchased
             IList<Purchase> purchases = new List<Purchase>();
             SqlCommand command = new SqlCommand("SELECT * FROM UserFile WHERE uid=" + userId,
                                                  connection);
             SqlDataReader reader = command.ExecuteReader();
             while (reader.Read()) {
-                int fileId = (int)reader["fid"];
+                int fileId = Int32.Parse(reader["fid"].ToString());
                 SqlCommand filequery = new SqlCommand("SELECT * FROM Filez WHERE id =" + fileId,
                                                       connection);
                 SqlCommand moviequery = new SqlCommand("SELECT * FROM Movie WHERE id =" + fileId,
@@ -163,27 +163,27 @@ namespace moofy.Backend {
                 if (fr.Read()) {
                     if (mr.Read()) {
                         Movie mov = new Movie(fileId) {
-                            BuyPrice = (float)fr["buyPrice"],
+                            BuyPrice = float.Parse(fr["buyPrice"].ToString()),
                             Description = fr["description"].ToString(),
                             Title = fr["title"].ToString(),
                             Uri = fr["URI"].ToString(),
-                            Year = (short)fr["year"],
-                            RentPrice = (float)fr["rentPrice"],
+                            Year = short.Parse(fr["year"].ToString()),
+                            RentPrice = float.Parse(fr["rentPrice"].ToString()),
                             Director = mr["director"].ToString()
                         };
                         purchases.Add(new Purchase(mov, (DateTime)reader["endTime"]));
                     } else if (sr.Read()) {
                         Song song = new Song(fileId) {
-                            BuyPrice = (float)fr["buyPrice"],
+                            BuyPrice = float.Parse(fr["buyPrice"].ToString()),
                             Description = fr["description"].ToString(),
                             Title = fr["title"].ToString(),
                             Uri = fr["URI"].ToString(),
-                            Year = (short)fr["year"],
-                            RentPrice = (float)fr["rentPrice"],
+                            Year = short.Parse(fr["year"].ToString()),
+                            RentPrice = float.Parse(fr["rentPrice"].ToString()),
                             Album = sr["album"].ToString(),
                             Artist = sr["artist"].ToString()
                         };
-                        purchases.Add(new Purchase(song, (DateTime)reader["endTime"]));
+                        purchases.Add(new Purchase(song, (DateTime.Parse(reader["endTime"].ToString()))));
                     }
 
                 }

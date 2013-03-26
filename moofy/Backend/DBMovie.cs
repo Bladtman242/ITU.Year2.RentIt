@@ -6,6 +6,8 @@ using System.Data.SqlClient;
 
 namespace moofy.Backend {
     public partial class DBAccess {
+
+        
         /// <summary>
         /// Return the movie with a given id
         /// </summary>
@@ -61,7 +63,7 @@ namespace moofy.Backend {
                     command.CommandText = "INSERT INTO UserFile " +
                                           "VALUES(" + userId +
                                           ", " + movieId +
-                                          ", '" + DateTime.MaxValue.ToString("yyyy-MM-dd hh:mm:ss") + "' )";
+                                          ", '" + DateTime.MaxValue.ToString("yyyy-MM-dd HH:mm:ss") + "' )";
                     return command.ExecuteNonQuery() > 0;
                 }
             }
@@ -77,18 +79,22 @@ namespace moofy.Backend {
         /// <returns>true if the movie is rented, false if the movie could no be rented (i.e. due to insufficient funds), null if an error occurred</returns>
         public bool? RentMovie(int movieId, int userId) {
             //Get the rental price of the movie
-            SqlCommand command = new SqlCommand("SELECT rentPrice FROM File WHERE id =" + movieId, connection);
+            SqlCommand command = new SqlCommand("SELECT rentPrice FROM Filez WHERE id =" + movieId, connection);
             int price = (int)command.ExecuteScalar();
             //Get the balance of the user
             command.CommandText = "SELECT balance FROM Userz WHERE id =" + userId;
             int balance = (int)command.ExecuteScalar();
             if (balance - price >= 0) {
                 //Withdraw the amount from the users balance and only continue if it is successful
-                if (Deposit(-price, userId)) {
-                    command.CommandText = "INSERT INTO UserFile" +
+                command.CommandText = "UPDATE Userz " +
+                                      "SET balance = balance - " + price +
+                                      "WHERE id = " + userId;
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    command.CommandText = "INSERT INTO UserFile " +
                                           "VALUES(" + userId +
                                           ", " + movieId +
-                                          ", " + DateTime.Now.AddDays(3) + ")";
+                                          ", '" + DateTime.Now.AddDays(3).ToString("yyyy-MM-dd HH:mm:ss") + "' )";
                     return command.ExecuteNonQuery() > 0;
                 }
             }

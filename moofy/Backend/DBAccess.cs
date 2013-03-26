@@ -10,7 +10,7 @@ namespace moofy.Backend {
         protected SqlConnection connection;
        
         public DBAccess() {
-            connection = new SqlConnection(ConfigurationManager.AppSettings["DBConnectionString"]);
+            connection = new SqlConnection(ConfigurationManager.AppSettings["DBConnectionString"]);//Skal evt. ændres til WebConfigurationManager.AppSettings for at virke med webservicen deployed på rentit.itu.dk
         }
 
         public void Open() {

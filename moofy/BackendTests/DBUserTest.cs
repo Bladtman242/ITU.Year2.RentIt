@@ -80,7 +80,7 @@ namespace moofy.Backend.Tests {
             Assert.AreEqual<string>(expectedUser.Password, actualUser.Password);
 
             //Cleanup
-            db.deleteUser(givenId);
+            db.DeleteUser(givenId);
         }
 
         [TestMethod]
@@ -103,7 +103,7 @@ namespace moofy.Backend.Tests {
             Assert.AreEqual<int>(db.Login("XXXXXXXXOOOOOOllIIIlllIIaaaaAAAAaadd", "kkieklaklmcmmenns"), -1);
 
             //Cleanup
-            db.deleteUser(id);
+            db.DeleteUser(id);
         }
 
         [TestMethod]
@@ -125,7 +125,7 @@ namespace moofy.Backend.Tests {
             if (flag) Assert.AreEqual(balance + deposit, actualUser.Balance);
 
             //Cleanup
-            db.deleteUser(id);
+            db.DeleteUser(id);
         }
 
         [TestMethod]
@@ -143,11 +143,11 @@ namespace moofy.Backend.Tests {
 
             bool flag = db.PromotetoAdmin(promoterId, promoteeId);
 
-            Assert.IsTrue(db.getIsAdmin(promoteeId));
+            Assert.IsTrue(db.GetIsAdmin(promoteeId));
 
             //clean up
             db.DemoteAdmin(promoterId, promoteeId);
-            db.deleteUser(promoteeId);
+            db.DeleteUser(promoteeId);
         }
 
         [TestMethod]
@@ -169,10 +169,10 @@ namespace moofy.Backend.Tests {
             //Demote and assert
             db.DemoteAdmin(demoterId, demoteeId);
 
-            Assert.IsFalse(db.getIsAdmin(demoteeId));
+            Assert.IsFalse(db.GetIsAdmin(demoteeId));
 
             //Cleanup
-            db.deleteUser(demoteeId);
+            db.DeleteUser(demoteeId);
         }
     }
 }
