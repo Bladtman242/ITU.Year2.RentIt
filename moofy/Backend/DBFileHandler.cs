@@ -32,10 +32,13 @@ namespace moofy.Backend {
         /// Returns the URI of the file with a given id
         /// </summary>
         /// <param name="fileId">The id of the file to download</param>
-        /// <returns>The uri of the file or the empty string if the file does not exist in the database</returns>
-        public string DownloadFile(int fileId)
+        /// <returns>The uri of the file or the empty string if the file does not exist in the database, or null if the user does not have access to download this movie</returns>
+        public string DownloadFile(int fileId, int userId)
         {
-            SqlCommand command = new SqlCommand("SELECT uri FROM Filez WHERE id =" + fileId, connection);
+            SqlCommand command = new SqlCommand("SELECT fid FROM UserFile WHERE fid="+fileId+" AND uid="+userId , connection);
+            if (command.ExecuteScalar() == null) return null;
+
+            command.CommandText = "SELECT uri FROM Filez WHERE id =" + fileId;
             Object uri = command.ExecuteScalar();
 
             if (uri == null) return "";//No file with the given id exists in the database

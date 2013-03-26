@@ -61,6 +61,7 @@
     <Compile Include="DBAccess.cs" />
     <Compile Include="DBFileHandler.cs" />
     <Compile Include="DBMovie.cs" />
+    <Compile Include="DBSong.cs" />
     <Compile Include="DBUser.cs" />
     <Compile Include="File.cs" />
     <Compile Include="Movie.cs" />
