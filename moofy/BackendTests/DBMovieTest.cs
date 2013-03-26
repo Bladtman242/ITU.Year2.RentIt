@@ -47,7 +47,7 @@ namespace moofy.Backend.Tests
                 Password = "test"
             });
 
-            Assert.AreEqual(true, db.RentMovie(movieId, userId));
+            Assert.AreEqual(true, db.RentMovie(movieId, userId,3));
 
             //Get the user from the database (required to be able to load the newly added file to his owned files)
             User actualUser = db.GetUser(userId);
@@ -59,7 +59,7 @@ namespace moofy.Backend.Tests
             Assert.IsTrue(ts.TotalMinutes < 1);
 
             db.DeleteUser(userId);
-            db.DeleteMovie(movieId, 10);
+            db.DeleteMovie(movieId, 1);
 
 
         }
