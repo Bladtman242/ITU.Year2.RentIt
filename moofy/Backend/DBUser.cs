@@ -109,7 +109,8 @@ namespace moofy.Backend {
             SqlDataReader reader = command.ExecuteReader();
             if (reader.Read()) {
                 //Add user data to the object which will be returned
-                return new User(userId) {
+                return new User() {
+                    Id = userId,
                     Name = reader["name"].ToString(),
                     Username = reader["userName"].ToString(),
                     Balance = Int32.Parse(reader["balance"].ToString()),
@@ -162,7 +163,8 @@ namespace moofy.Backend {
 
                 if (fr.Read()) {
                     if (mr.Read()) {
-                        Movie mov = new Movie(fileId) {
+                        Movie mov = new Movie() {
+                            Id = fileId,
                             BuyPrice = float.Parse(fr["buyPrice"].ToString()),
                             Description = fr["description"].ToString(),
                             Title = fr["title"].ToString(),
@@ -173,7 +175,8 @@ namespace moofy.Backend {
                         };
                         purchases.Add(new Purchase(mov, (DateTime)reader["endTime"]));
                     } else if (sr.Read()) {
-                        Song song = new Song(fileId) {
+                        Song song = new Song() {
+                            Id = fileId,
                             BuyPrice = float.Parse(fr["buyPrice"].ToString()),
                             Description = fr["description"].ToString(),
                             Title = fr["title"].ToString(),

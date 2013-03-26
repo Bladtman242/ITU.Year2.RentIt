@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 namespace moofy.Backend {
     public partial class DBAccess {
 
-        
+
         /// <summary>
         /// Return the movie with a given id
         /// </summary>
@@ -23,10 +23,11 @@ namespace moofy.Backend {
                 command.CommandText = "SELECT * FROM Filez WHERE id =" + movieId;
                 reader = command.ExecuteReader();
                 reader.Read();
-                Movie mov = new Movie(movieId) {
+                Movie mov = new Movie() {
+                    Id = movieId,
                     Director = director,
                     RentPrice = float.Parse(reader["rentPrice"].ToString()),
-                    BuyPrice =float.Parse(reader["buyPrice"].ToString()),
+                    BuyPrice = float.Parse(reader["buyPrice"].ToString()),
                     Uri = reader["URI"].ToString(),
                     Title = reader["title"].ToString(),
                     Description = reader["description"].ToString(),
@@ -34,7 +35,7 @@ namespace moofy.Backend {
                 };
                 reader.Close();
                 return mov;
-                
+
             }
             reader.Close();
             return null;
@@ -62,8 +63,7 @@ namespace moofy.Backend {
                 command.CommandText = "UPDATE Userz " +
                                       "SET balance = balance - " + price +
                                       "WHERE id = " + userId;
-                if(command.ExecuteNonQuery() > 0)
-                {
+                if (command.ExecuteNonQuery() > 0) {
                     command.CommandText = "INSERT INTO UserFile " +
                                           "VALUES(" + userId +
                                           ", " + movieId +
@@ -85,7 +85,7 @@ namespace moofy.Backend {
             //Ensure that the id is valid for a movie
             SqlCommand command = new SqlCommand("SELECT id FROM Movie WHERE id=" + movieId, connection);
             if (command.ExecuteScalar() == null) return false;
-            
+
             //Get the rental price of the movie
             command.CommandText = "SELECT rentPrice FROM Filez WHERE id =" + movieId;
             int price = (int)command.ExecuteScalar();
@@ -97,8 +97,7 @@ namespace moofy.Backend {
                 command.CommandText = "UPDATE Userz " +
                                       "SET balance = balance - " + price +
                                       "WHERE id = " + userId;
-                if (command.ExecuteNonQuery() > 0)
-                {
+                if (command.ExecuteNonQuery() > 0) {
                     command.CommandText = "INSERT INTO UserFile " +
                                           "VALUES(" + userId +
                                           ", " + movieId +
@@ -122,8 +121,7 @@ namespace moofy.Backend {
                 command.CommandText = "DELETE FROM Movie WHERE id=" + movieId;
                 if (command.ExecuteNonQuery() > 0) {
                     command.CommandText = "DELETE FROM GenreFile WHERE fid=" + movieId;
-                    if (command.ExecuteNonQuery() > 0)
-                    {
+                    if (command.ExecuteNonQuery() > 0) {
                         command.CommandText = "DELETE FROM Filez WHERE id=" + movieId;
                         return command.ExecuteNonQuery() > 0;
                     }
@@ -207,7 +205,7 @@ namespace moofy.Backend {
             //First get all rows from the movie table where an attribute matches the filter
             SqlCommand command = new SqlCommand("SELECT * FROM Movie , Filez " +
                                                 "WHERE Movie.id = Filez.id " +
-                                                "AND (director LIKE '%" + filter + "%' "+
+                                                "AND (director LIKE '%" + filter + "%' " +
                                                 "OR title LIKE '%" + filter + "%' " +
                                                 "OR description LIKE '%" + filter + "%' " +
                                                 "OR Filez.id IN (" +
@@ -218,11 +216,10 @@ namespace moofy.Backend {
                                                 , connection);
             SqlDataReader reader = command.ExecuteReader();
 
-            while (reader.Read())
-            {
-                
-                movies.Add(new Movie(Int32.Parse(reader["id"].ToString()))
-                {
+            while (reader.Read()) {
+
+                movies.Add(new Movie() {
+                    Id = Int32.Parse(reader["id"].ToString()),
                     Director = reader["director"].ToString(),
                     RentPrice = float.Parse(reader["rentPrice"].ToString()),
                     BuyPrice = float.Parse(reader["buyPrice"].ToString()),
@@ -232,7 +229,7 @@ namespace moofy.Backend {
                     Year = short.Parse(reader["year"].ToString())
                 });
             }
-           
+
             reader.Close();
             return movies.ToArray();
         }

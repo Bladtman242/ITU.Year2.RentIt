@@ -10,17 +10,14 @@ namespace moofy.Backend {
         private IList<Purchase> purchases;
         private DBAccess db;
 
-        public User(int id) {
-            this.id = id;
+        public User() {
             db = new DBAccess();
         }
 
         /// <summary>
         /// The id of the User
         /// </summary>
-        public int Id {
-            get { return id; }
-        }
+        public int Id { get; set; }
 
         /// <summary>
         /// The username of the User
@@ -74,58 +71,5 @@ namespace moofy.Backend {
                 return purchases;
             }
         }
-
-        //Equals override according to http://msdn.microsoft.com/en-us/library/ms173147(v=vs.80).aspx
-        public override bool Equals(System.Object obj) {
-            // If parameter is null return false.
-            if (obj == null) {
-                return false;
-            }
-
-            // If parameter cannot be cast to User return false.
-            User u = obj as User;
-            if ((System.Object)u == null) {
-                return false;
-            }
-
-            // Return true if the fields match:
-            return (Id == u.Id)
-                    && (Username.Equals(u.Username))
-                    && (Password.Equals(u.Password))
-                    && (Name.Equals(u.Name))
-                    && (Email.Equals(u.Email))
-                    && (Balance == u.Balance)
-                    && (IsAdmin == u.IsAdmin)
-                    && (Purchases.Equals(u.Purchases));
-        }
-
-        /// <summary>
-        /// A supplement to the normal equals method, which takes a User parameter instead.
-        /// It is recommended by Microsoft, that in addition to implementing Equals(object), Equals(type) should also be implemented for the class's own type in order to enhance performance.
-        /// </summary>
-        /// <param name="u">The File to compare</param>
-        /// <returns>True if the two objects are equal</returns>
-        public bool Equals(User u) {
-            // If parameter is null return false:
-            if ((object)u == null) {
-                return false;
-            }
-
-            // Return true if the fields match:
-            return (Id == u.Id)
-                     && (Username.Equals(u.Username))
-                     && (Password.Equals(u.Password))
-                     && (Name.Equals(u.Name))
-                     && (Email.Equals(u.Email))
-                     && (Balance == u.Balance)
-                     && (IsAdmin == u.IsAdmin)
-                     && (Purchases.Equals(u.Purchases));
-        }
-
-        public override int GetHashCode() {
-            return Id;
-        }
-
-
     }
 }

@@ -38,7 +38,7 @@ namespace moofy.Backend.Tests
             int movieId = db.CreateMovie(1, tmpId, "test", 1900, 1000, rent, "testest", new string[] { "Horror" }, "description");
 
             //Create a user to buy the movie, who can afford it
-            int userId = db.AddUser(new User(0)
+            int userId = db.AddUser(new User()
             {
                 Name = "TestUser",
                 Username = "TestUser",
@@ -77,7 +77,7 @@ namespace moofy.Backend.Tests
             int movieId = db.CreateMovie(1, tmpId, "test", 1900, buy, 10, "testest", new string[] { "Horror" }, "description");
 
             //Create a user to buy the movie, who can afford it
-            int userId = db.AddUser(new User(0){
+            int userId = db.AddUser(new User(){
                     Name = "TestUser",
                     Username = "TestUser",
                     Balance = buy,
@@ -95,8 +95,6 @@ namespace moofy.Backend.Tests
 
             db.DeleteUser(userId);
             db.DeleteMovie(movieId, 1);
-            
-
         }
        
 

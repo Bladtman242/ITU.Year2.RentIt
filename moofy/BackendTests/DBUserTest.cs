@@ -26,7 +26,8 @@ namespace moofy.Backend.Tests {
         public void GetUserTest() {
             //Positive test
             //Expected user
-            User expectedUser = new User(1) {
+            User expectedUser = new User() {
+                Id = 1,
                 Name = "Niclas Benjamin Tollstorff",
                 Username = "SmallSon",
                 Balance = -500,
@@ -59,7 +60,7 @@ namespace moofy.Backend.Tests {
         [TestMethod]
         public void AddUserTest() {
             //User to add. Note Id is not given here but generated and returned in the AddUser method
-            User expectedUser = new User(0) {
+            User expectedUser = new User() {
                 Name = "AddTestUser",
                 Username = "AddTestUser",
                 Balance = 10,
@@ -86,7 +87,7 @@ namespace moofy.Backend.Tests {
         [TestMethod]
         public void LoginTest() {
             //Adding a user with easy testable login information.
-            User expectedUser = new User(0) {
+            User expectedUser = new User() {
                 Name = "LoginTestUser",
                 Username = "Login",
                 Balance = 100,
@@ -111,7 +112,7 @@ namespace moofy.Backend.Tests {
             //Adding a user with a known balance which is easy to test against.
             int balance = 100;
             int deposit = 50;
-            User expectedUser = new User(0) {
+            User expectedUser = new User() {
                 Name = "DepositTestUser",
                 Username = "Deposit",
                 Balance = balance,
@@ -130,7 +131,7 @@ namespace moofy.Backend.Tests {
 
         [TestMethod]
         public void PromotetoAdminTest() {
-            User user = new User(0) {
+            User user = new User() {
                 Name = "AdminTestUser",
                 Username = "Admin",
                 Balance = 5,
@@ -152,7 +153,7 @@ namespace moofy.Backend.Tests {
 
         [TestMethod]
         public void DemoteAdminTest() {
-            User user = new User(0) {
+            User user = new User() {
                 Name = "AdminTestUser",
                 Username = "Admin",
                 Balance = 5,

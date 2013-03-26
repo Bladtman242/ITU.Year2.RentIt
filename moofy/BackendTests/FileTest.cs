@@ -19,7 +19,7 @@ namespace moofy.Backend.Tests {
         }
 
         /// <summary>
-        /// Tests whether the Admin boolean is retrieved correctly in the user object
+        /// Tests whether the Genres are retrieved correctly in the File object
         /// </summary>
         [TestMethod]
         public void GenresTest() {
