@@ -166,24 +166,24 @@ namespace moofy.Backend {
                     if (mr.Read()) {
                         Movie mov = new Movie() {
                             Id = fileId,
-                            BuyPrice = float.Parse(fr["buyPrice"].ToString()),
+                            BuyPrice = int.Parse(fr["buyPrice"].ToString()),
                             Description = fr["description"].ToString(),
                             Title = fr["title"].ToString(),
                             Uri = fr["URI"].ToString(),
                             Year = short.Parse(fr["year"].ToString()),
-                            RentPrice = float.Parse(fr["rentPrice"].ToString()),
+                            RentPrice = int.Parse(fr["rentPrice"].ToString()),
                             Director = mr["director"].ToString()
                         };
                         purchases.Add(new Purchase(mov, (DateTime)reader["endTime"]));
                     } else if (sr.Read()) {
                         Song song = new Song() {
                             Id = fileId,
-                            BuyPrice = float.Parse(fr["buyPrice"].ToString()),
+                            BuyPrice = int.Parse(fr["buyPrice"].ToString()),
                             Description = fr["description"].ToString(),
                             Title = fr["title"].ToString(),
                             Uri = fr["URI"].ToString(),
                             Year = short.Parse(fr["year"].ToString()),
-                            RentPrice = float.Parse(fr["rentPrice"].ToString()),
+                            RentPrice = int.Parse(fr["rentPrice"].ToString()),
                             Album = sr["album"].ToString(),
                             Artist = sr["artist"].ToString()
                         };
@@ -220,12 +220,12 @@ namespace moofy.Backend {
                         if (sr.Read()) {
                             Song song = new Song() {
                                 Id = fileId,
-                                BuyPrice = float.Parse(fr["buyPrice"].ToString()),
+                                BuyPrice = int.Parse(fr["buyPrice"].ToString()),
                                 Description = fr["description"].ToString(),
                                 Title = fr["title"].ToString(),
                                 Uri = fr["URI"].ToString(),
                                 Year = short.Parse(fr["year"].ToString()),
-                                RentPrice = float.Parse(fr["rentPrice"].ToString()),
+                                RentPrice = int.Parse(fr["rentPrice"].ToString()),
                                 Album = sr["album"].ToString(),
                                 Artist = sr["artist"].ToString()
                             };
@@ -265,12 +265,12 @@ namespace moofy.Backend {
                             Console.WriteLine(fr["description"].ToString());
                             Movie mov = new Movie() {
                                 Id = fileId,
-                                BuyPrice = float.Parse(fr["buyPrice"].ToString()),
+                                BuyPrice = int.Parse(fr["buyPrice"].ToString()),
                                 Description = fr["description"].ToString(),
                                 Title = fr["title"].ToString(),
                                 Uri = fr["URI"].ToString(),
                                 Year = short.Parse(fr["year"].ToString()),
-                                RentPrice = float.Parse(fr["rentPrice"].ToString()),
+                                RentPrice = int.Parse(fr["rentPrice"].ToString()),
                                 Director = mr["director"].ToString()
                             };
                             purchases.Add(new Purchase(mov, (DateTime)reader["endTime"]));
