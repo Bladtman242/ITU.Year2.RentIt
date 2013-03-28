@@ -55,12 +55,12 @@ namespace moofy.Backend {
         /// <summary>
         /// The cost of the File, when bought
         /// </summary>
-        public float BuyPrice { get; set; }
+        public int BuyPrice { get; set; }
 
         /// <summary>
         /// The cost of the File when rented
         /// </summary>
-        public float RentPrice { get; set; }
+        public int RentPrice { get; set; }
 
     }
 }

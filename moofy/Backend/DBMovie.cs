@@ -26,8 +26,8 @@ namespace moofy.Backend {
                 Movie mov = new Movie() {
                     Id = movieId,
                     Director = director,
-                    RentPrice = float.Parse(reader["rentPrice"].ToString()),
-                    BuyPrice = float.Parse(reader["buyPrice"].ToString()),
+                    RentPrice = int.Parse(reader["rentPrice"].ToString()),
+                    BuyPrice = int.Parse(reader["buyPrice"].ToString()),
                     Uri = reader["URI"].ToString(),
                     Title = reader["title"].ToString(),
                     Description = reader["description"].ToString(),
@@ -221,8 +221,8 @@ namespace moofy.Backend {
                 movies.Add(new Movie() {
                     Id = Int32.Parse(reader["id"].ToString()),
                     Director = reader["director"].ToString(),
-                    RentPrice = float.Parse(reader["rentPrice"].ToString()),
-                    BuyPrice = float.Parse(reader["buyPrice"].ToString()),
+                    RentPrice = int.Parse(reader["rentPrice"].ToString()),
+                    BuyPrice = int.Parse(reader["buyPrice"].ToString()),
                     Uri = reader["URI"].ToString(),
                     Title = reader["title"].ToString(),
                     Description = reader["description"].ToString(),
