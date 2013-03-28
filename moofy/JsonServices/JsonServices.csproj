@@ -69,6 +69,7 @@
     <Compile Include="ListOfMovies.cs" />
     <Compile Include="ListOfSongs.cs" />
     <Compile Include="ManagerService.cs" />
+    <Compile Include="MoofyServices.cs" />
     <Compile Include="MovieService.cs" />
     <Compile Include="MovieWrapper.cs" />
     <Compile Include="ObjectToWrapperExtensions.cs" />
