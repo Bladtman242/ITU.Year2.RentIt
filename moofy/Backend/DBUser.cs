@@ -80,8 +80,8 @@ namespace moofy.Backend {
         /// Add a new user to the database
         /// </summary>
         /// <param name="user">The user to add</param>
-        /// <returns>the id of the user, or -1 if the user could not be added</returns>
-        public int AddUser(User user) {
+        /// <returns>Returns the user including the id of the user, or null if the user could not be added</returns>
+        public User AddUser(User user) {
             SqlCommand command = new SqlCommand("INSERT INTO Userz(userName, password, name, email, balance)" +
                                                     "VALUES ('" +
                                                     user.Username + "', '" +
@@ -92,9 +92,10 @@ namespace moofy.Backend {
                                                     connection);
             if (command.ExecuteNonQuery() > 0) {
                 command.CommandText = "SELECT IDENT_CURRENT('Userz')";
-                return Int32.Parse(command.ExecuteScalar().ToString());
+                user.Id = Int32.Parse(command.ExecuteScalar().ToString());
+                return user;
             }
-            return -1;
+            return null;
         }
 
         /// <summary>

@@ -45,19 +45,35 @@ namespace moofy.Backend.Tests {
             s.WriteByte(5);
             int tmpId = db.UploadFile(s);
             //Create a movie
-            int firstMovieId = db.CreateMovie(1, tmpId, "testmovie1", 1950, 100, 10, "testdirector", new string[] { "Horror" }, "description1");
-            Movie firstMovie = db.GetMovie(firstMovieId);
+            Movie mo1 = new Movie()
+            {
+                Title = "testmovie1",
+                Year = 1950,
+                BuyPrice = 100,
+                RentPrice = 10,
+                Director = "testdirector",
+                Description = "description1"
+            };
+            Movie firstMovie = db.CreateMovie(1, tmpId, new string[] { "Horror" }, mo1);
 
             //Upload another movie
             s = new MemoryStream();
             s.WriteByte(5);
             tmpId = db.UploadFile(s);
             //Create another movie to buy with price 100
-            int secondMovieId = db.CreateMovie(1, tmpId, "testmovie2", 1980, 200, 30, "testdirector2", new string[] { "Action" }, "description2");
-            Movie secondMovie = db.GetMovie(secondMovieId);
+            Movie mo2 = new Movie()
+            {
+                Title = "testmovie2",
+                Year = 1980,
+                BuyPrice = 200,
+                RentPrice = 30,
+                Director = "testdirector2",
+                Description = "description2"
+            };
+            Movie secondMovie = db.CreateMovie(1, tmpId, new string[] { "Action" }, mo2);
 
             //Create a user to purchase the movies
-            int userId = db.AddUser(new User() {
+            User user = db.AddUser(new User() {
                 Name = "TestUser",
                 Username = "TestUser",
                 Balance = 300,
@@ -66,21 +82,21 @@ namespace moofy.Backend.Tests {
             });
 
             //Purchase the movies
-            db.PurchaseMovie(firstMovieId, userId);
-            db.PurchaseMovie(secondMovieId, userId);
+            db.PurchaseMovie(firstMovie.Id, user.Id);
+            db.PurchaseMovie(secondMovie.Id, user.Id);
 
             //Get the user movies from the database
-            IList<Purchase> actualUserMovies = db.GetUser(userId).Movies;
+            IList<Purchase> actualUserMovies = db.GetUser(user.Id).Movies;
 
             Assert.IsTrue(actualUserMovies.Count == 2);
             
             //check which order they are in
             Movie actualFirstMovie = null;
             Movie actualSecondMovie = null;
-            if (actualUserMovies.ElementAt(0).File.Id == firstMovieId) {
+            if (actualUserMovies.ElementAt(0).File.Id == firstMovie.Id) {
                 actualFirstMovie = (Movie)actualUserMovies.ElementAt(0).File;
                 actualSecondMovie = (Movie)actualUserMovies.ElementAt(1).File;
-            } else if (actualUserMovies.ElementAt(1).File.Id == firstMovieId) {
+            } else if (actualUserMovies.ElementAt(1).File.Id == firstMovie.Id) {
                 actualSecondMovie = (Movie)actualUserMovies.ElementAt(0).File;
                 actualFirstMovie = (Movie)actualUserMovies.ElementAt(1).File;
             } else {
@@ -105,9 +121,9 @@ namespace moofy.Backend.Tests {
             Assert.AreEqual(secondMovie.Description, actualSecondMovie.Description);
             
             //clean-up
-            db.DeleteUser(userId);
-            db.DeleteMovie(firstMovieId, 1);
-            db.DeleteMovie(secondMovieId, 1);
+            db.DeleteUser(user.Id);
+            db.DeleteMovie(firstMovie.Id, 1);
+            db.DeleteMovie(secondMovie.Id, 1);
         }
 
         /// <summary>
@@ -120,19 +136,38 @@ namespace moofy.Backend.Tests {
             s.WriteByte(5);
             int tmpId = db.UploadFile(s);
             //Create a song
-            int firstSongId = db.CreateSong(1, tmpId, "testsong1", 1950, 100, 10, "testalbum1", "testartist1", new string[] { "Horror" }, "description1");
-            Song firstSong = db.GetSong(firstSongId);
+            Song song1 = new Song()
+            {
+                Title = "testsong1",
+                Year = 1950,
+                BuyPrice = 100,
+                RentPrice = 10,
+                Album = "testalbum1",
+                Artist = "testartist1",
+                Description = "description1"
+            };
+            Song firstSong = db.CreateSong(1, tmpId,  new string[] { "Horror" }, song1);
+            
 
             //Upload another song
             s = new MemoryStream();
             s.WriteByte(5);
             tmpId = db.UploadFile(s);
             //Create another song to buy with price 100
-            int secondSongId = db.CreateSong(1, tmpId, "testsong2", 1980, 200, 30, "testalbum2", "testartist2", new string[] { "Action" }, "description2");
-            Song secondSong = db.GetSong(secondSongId);
+            Song song2 = new Song()
+            {
+                Title = "testsong2",
+                Year = 1980,
+                BuyPrice = 200,
+                RentPrice = 30,
+                Album = "testalbum2",
+                Artist = "testartist2",
+                Description = "description2"
+            };
+            Song secondSong = db.CreateSong(1, tmpId, new string[] { "Action" },song2);
 
             //Create a user to purchase the songs
-            int userId = db.AddUser(new User() {
+            User user = db.AddUser(new User() {
                 Name = "TestUser",
                 Username = "TestUser",
                 Balance = 300,
@@ -141,21 +176,21 @@ namespace moofy.Backend.Tests {
             });
 
             //Purchase the songs
-            db.PurchaseSong(firstSongId, userId);
-            db.PurchaseSong(secondSongId, userId);
+            db.PurchaseSong(firstSong.Id, user.Id);
+            db.PurchaseSong(secondSong.Id, user.Id);
 
             //Get the user songs from the database
-            IList<Purchase> actualUserSongs = db.GetUser(userId).Songs;
+            IList<Purchase> actualUserSongs = db.GetUser(user.Id).Songs;
 
             Assert.IsTrue(actualUserSongs.Count == 2);
 
             //check which order they are in
             Song actualFirstSong = null;
             Song actualSecondSong = null;
-            if (actualUserSongs.ElementAt(0).File.Id == firstSongId) {
+            if (actualUserSongs.ElementAt(0).File.Id == firstSong.Id) {
                 actualFirstSong = (Song)actualUserSongs.ElementAt(0).File;
                 actualSecondSong = (Song)actualUserSongs.ElementAt(1).File;
-            } else if (actualUserSongs.ElementAt(1).File.Id == firstSongId) {
+            } else if (actualUserSongs.ElementAt(1).File.Id == firstSong.Id) {
                 actualSecondSong = (Song)actualUserSongs.ElementAt(0).File;
                 actualFirstSong = (Song)actualUserSongs.ElementAt(1).File;
             } else {
@@ -182,9 +217,9 @@ namespace moofy.Backend.Tests {
             Assert.AreEqual(secondSong.Description, actualSecondSong.Description);
 
             //clean-up
-            db.DeleteUser(userId);
-            db.DeleteSong(firstSongId, 1);
-            db.DeleteSong(secondSongId, 1);
+            db.DeleteUser(user.Id);
+            db.DeleteSong(firstSong.Id, 1);
+            db.DeleteSong(secondSong.Id, 1);
         }
     }
 }

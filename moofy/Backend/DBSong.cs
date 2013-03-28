@@ -143,37 +143,36 @@ namespace moofy.Backend {
         /// <param name="artist">The artist who made the song</param>
         /// <param name="genres">The genres the song fits into</param>
         /// <param name="description">The description of the song</param>
-        /// <returns>The id the song is granted, or -1 if the song could not be added to the database</returns>
-        public int CreateSong(int managerId, int tmpId, string title, short year, int buyPrice,
-                                       int rentPrice, string album, string artist, IList<string> genres, string description) {
+        /// <returns>The Song object including id and uri , or null if the song could not be added to the database</returns>
+        public Song CreateSong(int managerId, int tmpId, String[] genres, Song song) {
             SqlCommand command = new SqlCommand("SELECT * FROM Admin WHERE id =" + managerId, connection);
             if (command.ExecuteScalar() != null) {
                 //Get the uri from the StagedFile table
                 command.CommandText = "SELECT path FROM StagedFile WHERE id =" + tmpId;
                 object tmpUri = command.ExecuteScalar();
-                if (tmpUri == null) return -1;
+                if (tmpUri == null) return null;
                 string uri = tmpUri.ToString();
                 //Add the file information into to Filez table
                 command.CommandText = "INSERT INTO Filez" +
                                       "(title, rentPrice, buyPrice, URI, year, description) " +
                                       "VALUES('" +
-                                      title + "', " +
-                                      rentPrice + ", " +
-                                      buyPrice + ", '" +
+                                      song.Title + "', " +
+                                      song.RentPrice + ", " +
+                                      song.BuyPrice + ", '" +
                                       uri + "', " +
-                                      year + ", '" +
-                                      description + "')";
+                                      song.Year + ", '" +
+                                      song.Description + "')";
 
                 //If the information is successfully added continue to add info to the Movie table and GenreFile table
                 if (command.ExecuteNonQuery() > 0) {
                     command.CommandText = "SELECT IDENT_CURRENT('Filez')";
                     int fileId = Int32.Parse(command.ExecuteScalar().ToString());
 
-                    command.CommandText = "INSERT INTO Song VALUES(" + fileId + ", '" + artist + "', '" + album + "')";
+                    command.CommandText = "INSERT INTO Song VALUES(" + fileId + ", '" + song.Artist + "', '" + song.Album + "')";
                     command.ExecuteNonQuery();
 
                     //Add genres to the file if any exist
-                    if (genres.Count > 0) {
+                    if (genres.Count() > 0) {
                         string sql = "SELECT id FROM Genre WHERE name IN ('" +
                                       string.Join<string>("', '", genres) + "')";
                         command.CommandText = sql;
@@ -187,10 +186,12 @@ namespace moofy.Backend {
                     }
                     command.CommandText = "DELETE FROM StagedFile WHERE id=" + tmpId;
                     command.ExecuteNonQuery();
-                    return fileId;
+                    song.Uri = uri;
+                    song.Id = fileId;
+                    return song;
                 }
             }
-            return -1;
+            return null;
         }
 
         /// <summary>

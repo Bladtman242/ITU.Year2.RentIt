@@ -33,10 +33,19 @@ namespace moofy.Backend.Tests
 
             //Create a movie to buy with price 100
             int rent = 100;
-            int songId = db.CreateSong(1, tmpId, "test", 1900, 1000, rent, "testalbum", "testartist", new string[] { "Horror" }, "description");
+            Song song = new Song(){
+                Title = "test",
+                Year = 1900,
+                BuyPrice = 1000,
+                RentPrice = rent,
+                Album = "testalbum",
+                Artist = "testartist",
+                Description = "description"
+            };
+            Song song1 = db.CreateSong(1, tmpId, new string[] { "Horror" }, song);
 
             //Create a user to buy the movie, who can afford it
-            int userId = db.AddUser(new User()
+            User user = db.AddUser(new User()
             {
                 Name = "TestUser",
                 Username = "TestUser",
@@ -45,19 +54,19 @@ namespace moofy.Backend.Tests
                 Password = "test"
             });
 
-            Assert.IsTrue(db.RentSong(songId, userId,3));
+            Assert.IsTrue(db.RentSong(song1.Id, user.Id, 3));
 
             //Get the user from the database (required to be able to load the newly added file to his owned files)
-            User actualUser = db.GetUser(userId);
+            User actualUser = db.GetUser(user.Id);
             //Assert that the movie is added to movies owned by the user
-            Assert.IsTrue(actualUser.Songs.ElementAt(0).File.Id == songId);
+            Assert.IsTrue(actualUser.Songs.ElementAt(0).File.Id == song1.Id);
             TimeSpan ts = DateTime.Now.AddDays(3) - actualUser.Songs.ElementAt(0).EndTime;
             //Assert that the expiration time is within 3days and 10minutes, the 10minutes are added as a buffer for the time it takes to run the code inbetween the RentMovie call and the creation of ts.
             //A 10minute discrepency can be accepted in the system
             Assert.IsTrue(ts.TotalMinutes < 1);
 
-            db.DeleteUser(userId);
-            db.DeleteSong(songId, 1);
+            db.DeleteUser(user.Id);
+            db.DeleteSong(song.Id, 1);
 
 
         }
@@ -72,10 +81,20 @@ namespace moofy.Backend.Tests
             
             //Create a movie to buy with price 100
             int buy = 100;
-            int songId = db.CreateSong(1, tmpId, "test", 1900, buy, 10, "tesalbum", "testartist", new string[] { "Horror" }, "description");
+            Song song = new Song()
+            {
+                Title = "test",
+                Year = 1900,
+                BuyPrice = buy,
+                RentPrice = 10,
+                Album = "testalbum",
+                Artist = "testartist",
+                Description = "description"
+            };
+            Song actSong = db.CreateSong(1, tmpId, new string[] { "Horror" },song);
 
             //Create a user to buy the movie, who can afford it
-            int userId = db.AddUser(new User(){
+            User user = db.AddUser(new User(){
                     Name = "TestUser",
                     Username = "TestUser",
                     Balance = buy,
@@ -83,16 +102,16 @@ namespace moofy.Backend.Tests
                     Password = "test"
             });
 
-            Assert.IsTrue(db.PurchaseSong(songId, userId));
+            Assert.IsTrue(db.PurchaseSong(actSong.Id, user.Id));
             //Get the user from the database (required to be able to load the newly added file to his owned files)
-            User actualUser = db.GetUser(userId);
+            User actualUser = db.GetUser(user.Id);
             //Assert that the movie is added to movies owned by the user
-            Assert.IsTrue(actualUser.Songs.ElementAt(0).File.Id == songId);
+            Assert.IsTrue(actualUser.Songs.ElementAt(0).File.Id == actSong.Id);
             //Assert that the date of expiration is set to max, comparing strings as DateTimes compare is an reference equality
             Assert.AreEqual(actualUser.Songs.ElementAt(0).EndTime.ToString(), DateTime.MaxValue.ToString());
 
-            db.DeleteUser(userId);
-            db.DeleteSong(songId, 1);
+            db.DeleteUser(user.Id);
+            db.DeleteSong(actSong.Id, 1);
             
 
         }
@@ -107,30 +126,33 @@ namespace moofy.Backend.Tests
             int tmpId = db.UploadFile(s);
 
             //Values that will be given to the CreateMovie method
-            string title = "test";
-            short year = 2000;
-            int buy = 10;
-            int rent = 1;
-            string album = "test album";
-            string artist = "test artist";
+            Song song = new Song()
+            {
+                Title = "test",
+                Year = 2000,
+                BuyPrice = 10,
+                RentPrice = 1,
+                Album = "test album",
+                Artist = "test artist",
+                Description = "test song description"
+            };
             string[] genres = new string[] { "Horror" };
-            string description = "test movie description";
 
-            int id = db.CreateSong(1, tmpId, title, year, buy, rent, album, artist, genres, description);
+            Song expected = db.CreateSong(1, tmpId,  genres, song);
             
             //The actual values in the database
-            Song actual = db.GetSong(id);
+            Song actual = db.GetSong(expected.Id);
 
-            Assert.AreEqual(actual.Id, id);
-            Assert.AreEqual(actual.Year, year);
-            Assert.AreEqual(actual.Title, title);
-            Assert.AreEqual(actual.BuyPrice, buy);
-            Assert.AreEqual(actual.RentPrice, rent);
-            Assert.AreEqual(actual.Album, album);
-            Assert.AreEqual(actual.Artist, artist);
-            Assert.AreEqual(actual.Description, description);
+            Assert.AreEqual(actual.Id, expected.Id);
+            Assert.AreEqual(actual.Year, expected.Year);
+            Assert.AreEqual(actual.Title, expected.Title);
+            Assert.AreEqual(actual.BuyPrice, expected.BuyPrice);
+            Assert.AreEqual(actual.RentPrice, expected.RentPrice);
+            Assert.AreEqual(actual.Album, expected.Album);
+            Assert.AreEqual(actual.Artist, expected.Artist);
+            Assert.AreEqual(actual.Description, expected.Description);
 
-            db.DeleteSong(id, 1);
+            db.DeleteSong(song.Id, 1);
         }
         
         [TestMethod]
@@ -141,57 +163,65 @@ namespace moofy.Backend.Tests
             int tmpId1 = db.UploadFile(s);
             int tmpId2 = db.UploadFile(s);
 
-            string title1 = "test1";
-            short year1 = 2000;
-            int buy1 = 10;
-            int rent1 = 1;
-            string album1 = "test album";
-            string artist1 = "test artist";
+            Song s1 = new Song()
+            {
+                Title = "test1",
+                Year = 2000,
+                BuyPrice = 10,
+                RentPrice = 1,
+                Album = "test album",
+                Artist = "test artist",
+                Description = "test song description"
+            };
             string[] genres1 = new string[] { "Horror" };
-            string description1 = "test movie description";
 
-            int id1 = db.CreateSong(1, tmpId1, title1, year1, buy1, rent1, album1, artist1, genres1, description1);
+            Song song1 = db.CreateSong(1, tmpId1, genres1, s1);
 
-            string title2 = "test album";
-            short year2 = 2040;
-            int buy2 = 1022;
-            int rent2 = 100;
-            string album2 = "test albummmmmmm";
-            string artist2 = "test artist";
+            Song s2 = new Song()
+            {
+                Title = "test album",
+                Year = 2040,
+                BuyPrice = 1022,
+                RentPrice = 100,
+                Album = "test albummmmmmmmm",
+                Artist = "test artist",
+                Description = "test song description2"
+            };
+            
             string[] genres2 = new string[] { "Comedy" };
-            string description2 = "test movie description22";
 
-            int id2 = db.CreateSong(1, tmpId2, title2, year2, buy2, rent2, album2, artist2, genres2, description2);
+            Song song2 = db.CreateSong(1, tmpId2, genres2, s2);
             
             Song[] songs = db.FilterSongs("test album");
 
             Assert.AreEqual(2, songs.Length);
 
-            Song song1 = songs[0];
-            Song song2 = songs[1];
+            Song filtSong1 = songs[0];
+            Song filtSong2 = songs[1];
 
             //Ensure that the first movie is equal to the first movie returned by the filter method (the movies are not returned in a specific order, but the first movie will always be returned first, insider knowledge)
-            Assert.AreEqual(id1, song1.Id);
-            Assert.AreEqual(title1, song1.Title);
-            Assert.AreEqual(year1, song1.Year);
-            Assert.AreEqual(buy1, song1.BuyPrice);
-            Assert.AreEqual(rent1, song1.RentPrice);
-            Assert.AreEqual(album1, song1.Album);
-            Assert.AreEqual(artist1, song1.Artist);
-            Assert.AreEqual(description1, song1.Description);
+            Assert.AreEqual(song1.Id, filtSong1.Id);
+            Assert.AreEqual(song1.Title, filtSong1.Title);
+            Assert.AreEqual(song1.Year, filtSong1.Year);
+            Assert.AreEqual(song1.BuyPrice, filtSong1.BuyPrice);
+            Assert.AreEqual(song1.RentPrice, filtSong1.RentPrice);
+            Assert.AreEqual(song1.Album, filtSong1.Album);
+            Assert.AreEqual(song1.Artist, filtSong1.Artist);
+            Assert.AreEqual(song1.Description, filtSong1.Description);
 
             //Ensure that the second movie is equal to the second movie returned by the filter method
-            Assert.AreEqual(id2, song2.Id);
-            Assert.AreEqual(title2, song2.Title);
-            Assert.AreEqual(year2, song2.Year);
-            Assert.AreEqual(buy2, song2.BuyPrice);
-            Assert.AreEqual(rent2, song2.RentPrice);
-            Assert.AreEqual(album2, song2.Album);
-            Assert.AreEqual(artist2, song2.Artist);
-            Assert.AreEqual(description2, song2.Description);
+            Assert.AreEqual(song2.Id, filtSong2.Id);
+            Assert.AreEqual(song2.Title, filtSong2.Title);
+            Assert.AreEqual(song2.Year, filtSong2.Year);
+            Assert.AreEqual(song2.BuyPrice, filtSong2.BuyPrice);
+            Assert.AreEqual(song2.RentPrice, filtSong2.RentPrice);
+            Assert.AreEqual(song2.Album, filtSong2.Album);
+            Assert.AreEqual(song2.Artist, filtSong2.Artist);
+            Assert.AreEqual(song2.Description, filtSong2.Description);
+            
 
-            db.DeleteSong(id1, 1);
-            db.DeleteSong(id2, 1);
+            db.DeleteSong(song1.Id, 1);
+            db.DeleteSong(song2.Id, 1);
         }
     }
 }

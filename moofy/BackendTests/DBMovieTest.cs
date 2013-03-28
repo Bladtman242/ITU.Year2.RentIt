@@ -35,10 +35,19 @@ namespace moofy.Backend.Tests
 
             //Create a movie to buy with price 100
             int rent = 100;
-            int movieId = db.CreateMovie(1, tmpId, "test", 1900, 1000, rent, "testest", new string[] { "Horror" }, "description");
+            Movie mov = new Movie()
+            {
+                Title = "test",
+                Year = 1900,
+                BuyPrice = 1000,
+                RentPrice = rent,
+                Director = "testest",
+                Description = "description"
+            };
+            Movie movie = db.CreateMovie(1, tmpId, new string[] { "Horror" }, mov);
 
             //Create a user to buy the movie, who can afford it
-            int userId = db.AddUser(new User()
+            User user = db.AddUser(new User()
             {
                 Name = "TestUser",
                 Username = "TestUser",
@@ -47,19 +56,19 @@ namespace moofy.Backend.Tests
                 Password = "test"
             });
 
-            Assert.AreEqual(true, db.RentMovie(movieId, userId,3));
+            Assert.AreEqual(true, db.RentMovie(movie.Id, user.Id,3));
 
             //Get the user from the database (required to be able to load the newly added file to his owned files)
-            User actualUser = db.GetUser(userId);
+            User actualUser = db.GetUser(user.Id);
             //Assert that the movie is added to movies owned by the user
-            Assert.IsTrue(actualUser.Movies.ElementAt(0).File.Id == movieId);
+            Assert.IsTrue(actualUser.Movies.ElementAt(0).File.Id == movie.Id);
             TimeSpan ts = DateTime.Now.AddDays(3) - actualUser.Movies.ElementAt(0).EndTime;
             //Assert that the expiration time is within 3days and 10minutes, the 10minutes are added as a buffer for the time it takes to run the code inbetween the RentMovie call and the creation of ts.
             //A 10minute discrepency can be accepted in the system
             Assert.IsTrue(ts.TotalMinutes < 1);
 
-            db.DeleteUser(userId);
-            db.DeleteMovie(movieId, 1);
+            db.DeleteUser(user.Id);
+            db.DeleteMovie(movie.Id, 1);
 
 
         }
@@ -74,10 +83,19 @@ namespace moofy.Backend.Tests
             
             //Create a movie to buy with price 100
             int buy = 100;
-            int movieId = db.CreateMovie(1, tmpId, "test", 1900, buy, 10, "testest", new string[] { "Horror" }, "description");
+            Movie mov = new Movie()
+            {
+                Title = "test",
+                Year = 1900,
+                BuyPrice = buy,
+                RentPrice = 10,
+                Director = "testest",
+                Description = "description"
+            };
+            Movie movie = db.CreateMovie(1, tmpId,new string[] { "Horror" }, mov);
 
             //Create a user to buy the movie, who can afford it
-            int userId = db.AddUser(new User(){
+            User user = db.AddUser(new User(){
                     Name = "TestUser",
                     Username = "TestUser",
                     Balance = buy,
@@ -85,16 +103,16 @@ namespace moofy.Backend.Tests
                     Password = "test"
             });
 
-            Assert.AreEqual(true, db.PurchaseMovie(movieId, userId));
+            Assert.AreEqual(true, db.PurchaseMovie(movie.Id, user.Id));
             //Get the user from the database (required to be able to load the newly added file to his owned files)
-            User actualUser = db.GetUser(userId);
+            User actualUser = db.GetUser(user.Id);
             //Assert that the movie is added to movies owned by the user
-            Assert.IsTrue(actualUser.Movies.ElementAt(0).File.Id == movieId);
+            Assert.IsTrue(actualUser.Movies.ElementAt(0).File.Id == movie.Id);
             //Assert that the date of expiration is set to max, comparing strings as DateTimes compare is an reference equality
             Assert.AreEqual(actualUser.Movies.ElementAt(0).EndTime.ToString(), DateTime.MaxValue.ToString());
 
-            db.DeleteUser(userId);
-            db.DeleteMovie(movieId, 1);
+            db.DeleteUser(user.Id);
+            db.DeleteMovie(movie.Id, 1);
         }
        
 
@@ -107,28 +125,32 @@ namespace moofy.Backend.Tests
             int tmpId = db.UploadFile(s);
 
             //Values that will be given to the CreateMovie method
-            string title = "test";
-            short year = 2000;
-            int buy = 10;
-            int rent = 1;
-            string director = "test director";
+            Movie mov = new Movie()
+            {
+                Title = "test",
+                Year = 2000,
+                BuyPrice = 10,
+                RentPrice = 1,
+                Director = "test director",
+                Description = "test movie description"
+            };
+            
             string[] genres = new string[] { "Horror" };
-            string description = "test movie description";
 
-            int id = db.CreateMovie(1, tmpId, title, year, buy, rent, director, genres, description);
+            Movie movie = db.CreateMovie(1, tmpId, genres, mov);
             
             //The actual values in the database
-            Movie actual = db.GetMovie(id);
+            Movie actual = db.GetMovie(movie.Id);
 
-            Assert.AreEqual(actual.Id, id);
-            Assert.AreEqual(actual.Year, year);
-            Assert.AreEqual(actual.Title, title);
-            Assert.AreEqual(actual.BuyPrice, buy);
-            Assert.AreEqual(actual.RentPrice, rent);
-            Assert.AreEqual(actual.Director, director);
-            Assert.AreEqual(actual.Description, description);
+            Assert.AreEqual(actual.Id, movie.Id);
+            Assert.AreEqual(actual.Year, movie.Year);
+            Assert.AreEqual(actual.Title, movie.Title);
+            Assert.AreEqual(actual.BuyPrice, movie.BuyPrice);
+            Assert.AreEqual(actual.RentPrice, movie.RentPrice);
+            Assert.AreEqual(actual.Director, movie.Director);
+            Assert.AreEqual(actual.Description, movie.Description);
 
-            db.DeleteMovie(id, 1);
+            db.DeleteMovie(movie.Id, 1);
         }
 
         [TestMethod]
@@ -139,25 +161,33 @@ namespace moofy.Backend.Tests
             int tmpId1 = db.UploadFile(s);
             int tmpId2 = db.UploadFile(s);
 
-            string title1 = "test1";
-            short year1 = 2000;
-            int buy1 = 10;
-            int rent1 = 1;
-            string director1 = "test director";
+            Movie mo1 = new Movie()
+            {
+                Title = "test1",
+                Year = 2000,
+                BuyPrice = 10,
+                RentPrice = 1,
+                Director = "test director",
+                Description = "test movie description"
+            };
+            
             string[] genres1 = new string[] { "Horror" };
-            string description1 = "test movie description";
+            
+            Movie movie1 = db.CreateMovie(1, tmpId1, genres1, mo1);
 
-            int id1 = db.CreateMovie(1, tmpId1, title1, year1, buy1, rent1, director1, genres1, description1);
-
-            string title2 = "test director";
-            short year2 = 2040;
-            int buy2 = 1022;
-            int rent2 = 100;
-            string director2 = "test idid";
+            Movie mo2 = new Movie()
+            {
+                Title = "test director",
+                Year = 2040,
+                BuyPrice = 1022,
+                RentPrice = 100,
+                Director = "test idid",
+                Description = "test movie description22"
+            };
+            
             string[] genres2 = new string[] { "Romance" };
-            string description2 = "test movie description22";
 
-            int id2 = db.CreateMovie(1, tmpId2, title2, year2, buy2, rent2, director2, genres2, description2);
+            Movie movie2 = db.CreateMovie(1, tmpId2, genres2, mo2);
             
             Movie[] movies = db.FilterMovies("test director");
             
@@ -167,25 +197,25 @@ namespace moofy.Backend.Tests
             Movie mov2 = movies[1];
 
             //Ensure that the first movie is equal to the first movie returned by the filter method (the movies are not returned in a specific order, but the first movie will always be returned first, insider knowledge)
-            Assert.AreEqual(id1, mov1.Id);
-            Assert.AreEqual(title1, mov1.Title);
-            Assert.AreEqual(year1, mov1.Year);
-            Assert.AreEqual(buy1, mov1.BuyPrice);
-            Assert.AreEqual(rent1, mov1.RentPrice);
-            Assert.AreEqual(director1, mov1.Director);
-            Assert.AreEqual(description1, mov1.Description);
+            Assert.AreEqual(movie1.Id, mov1.Id);
+            Assert.AreEqual(movie1.Title, mov1.Title);
+            Assert.AreEqual(movie1.Year, mov1.Year);
+            Assert.AreEqual(movie1.BuyPrice, mov1.BuyPrice);
+            Assert.AreEqual(movie1.RentPrice, mov1.RentPrice);
+            Assert.AreEqual(movie1.Director, mov1.Director);
+            Assert.AreEqual(movie1.Description, mov1.Description);
 
             //Ensure that the second movie is equal to the second movie returned by the filter method
-            Assert.AreEqual(id2, mov2.Id);
-            Assert.AreEqual(title2, mov2.Title);
-            Assert.AreEqual(year2, mov2.Year);
-            Assert.AreEqual(buy2, mov2.BuyPrice);
-            Assert.AreEqual(rent2, mov2.RentPrice);
-            Assert.AreEqual(director2, mov2.Director);
-            Assert.AreEqual(description2, mov2.Description);
+            Assert.AreEqual(movie2.Id, mov2.Id);
+            Assert.AreEqual(movie2.Title, mov2.Title);
+            Assert.AreEqual(movie2.Year, mov2.Year);
+            Assert.AreEqual(movie2.BuyPrice, mov2.BuyPrice);
+            Assert.AreEqual(movie2.RentPrice, mov2.RentPrice);
+            Assert.AreEqual(movie2.Director, mov2.Director);
+            Assert.AreEqual(movie2.Description, mov2.Description);
 
-            db.DeleteMovie(id1, 1);
-            db.DeleteMovie(id2, 1);
+            db.DeleteMovie(movie1.Id, 1);
+            db.DeleteMovie(movie2.Id, 1);
         }
     }
 }

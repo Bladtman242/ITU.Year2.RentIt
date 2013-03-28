@@ -142,15 +142,14 @@ namespace moofy.Backend {
         /// <param name="director">The director of the movie</param>
         /// <param name="genres">The genres the movie fit into</param>
         /// <param name="description">A description of the movie</param>
-        /// <returns>The id the movie is granted or -1 if the movie could not be added to the database</returns>
-        public int CreateMovie(int managerId, int tmpId, string title, short year, int buyPrice,
-                                        int rentPrice, string director, IList<string> genres, string description) {
+        /// <returns>The movie including id and uri or null if the movie could not be added to the database</returns>
+        public Movie CreateMovie(int managerId, int tmpId, IList<string> genres, Movie movie) {
             SqlCommand command = new SqlCommand("SELECT * FROM Admin WHERE id =" + managerId, connection);
             if (command.ExecuteScalar() != null) {
                 //Get the uri from the StagedFile table
                 command.CommandText = "SELECT path FROM StagedFile WHERE id =" + tmpId;
                 object tmpUri = command.ExecuteScalar();
-                if (tmpUri == null) return -1;
+                if (tmpUri == null) return null;
 
                 string uri = tmpUri.ToString();
 
@@ -158,19 +157,19 @@ namespace moofy.Backend {
                 command.CommandText = "INSERT INTO Filez" +
                                       "(title, rentPrice, buyPrice, URI, year, description) " +
                                       "VALUES('" +
-                                      title + "', " +
-                                      rentPrice + ", " +
-                                      buyPrice + ", '" +
+                                      movie.Title + "', " +
+                                      movie.RentPrice + ", " +
+                                      movie.BuyPrice + ", '" +
                                       uri + "', " +
-                                      year + ", '" +
-                                      description + "')";
+                                      movie.Year + ", '" +
+                                      movie.Description + "')";
 
                 //If the information is successfully added continue to add info to the Movie table and GenreFile table
                 if (command.ExecuteNonQuery() > 0) {
                     command.CommandText = "SELECT IDENT_CURRENT('Filez')";
                     int fileId = Int32.Parse(command.ExecuteScalar().ToString());
 
-                    command.CommandText = "INSERT INTO Movie VALUES(" + fileId + ", '" + director + "')";
+                    command.CommandText = "INSERT INTO Movie VALUES(" + fileId + ", '" + movie.Director + "')";
                     command.ExecuteNonQuery();
 
                     //Add genres to the file if any exist
@@ -188,10 +187,12 @@ namespace moofy.Backend {
                     }
                     command.CommandText = "DELETE FROM StagedFile WHERE id=" + tmpId;
                     command.ExecuteNonQuery();
-                    return fileId;
+                    movie.Id = fileId;
+                    movie.Uri = uri;
+                    return movie;
                 }
             }
-            return -1;
+            return null;
 
         }
         /// <summary>
