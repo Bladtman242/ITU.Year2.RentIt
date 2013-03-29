@@ -10,15 +10,7 @@ namespace moofy.JsonServices {
         public SongWrapper GetSong(string id) {
             int sid = Convert.ToInt32(id);
             if (sid > 0) {
-                return new SongWrapper() {
-                    title = "I Knew You Were Trouble",
-                    release = 2012,
-                    genres = new string[] { "Pop" },
-                    album = "Red",
-                    artist = "Taylor Swift",
-                    rentalPrice = 2,
-                    purchasePrice = 8
-                };
+                return db.GetSong(sid).ToWrapper();
             } else {
                 throw new ArgumentException("Invalid id");
             }
@@ -26,30 +18,34 @@ namespace moofy.JsonServices {
 
         public SuccessFlag PurchaseSong(string id, int userId) {
             int sid = Convert.ToInt32(id);
-            if (sid > 0 && userId > 0)
+            if (sid > 0 && userId > 0) {
+                db.PurchaseSong(sid, userId);
                 return new SuccessFlag() {
                     success = true,
-                    message = "Song and user ids valid. This has not been implemented yet."
+                    message = "Song Purchased"
                 };
-            else
+            } else {
                 return new SuccessFlag() {
                     success = false,
-                    message = "Must be valid ids."
+                    message = "Id's must be positive (non-zero) integers"
                 };
+            }
         }
 
         public SuccessFlag RentSong(string id, int userId) {
             int sid = Convert.ToInt32(id);
-            if (sid > 0 && userId > 0)
+            if (sid > 0 && userId > 0) {
+                db.RentSong(sid, userId, 42); //TODO period
                 return new SuccessFlag() {
                     success = true,
-                    message = "Song and user ids valid. This has not been implemented yet."
+                    message = "Song rented"
                 };
-            else
+            } else {
                 return new SuccessFlag() {
                     success = false,
-                    message = "Must be valid ids."
+                    message = "Id's must be positive (non-zero) integers"
                 };
+            }
         }
 
         public SuccessFlagDownload DownloadSong(string id, string userId) {
@@ -58,7 +54,7 @@ namespace moofy.JsonServices {
             if (sid > 0 && uid > 0) {
                 return new SuccessFlagDownload() {
                     success = true,
-                    downloadLink = "http://ge.tt/api/1/files/2jRUQya/0/blob?download"
+                    downloadLink = db.GetSong(sid).Uri
                 };
             } else {
                 return new SuccessFlagDownload() {
@@ -69,62 +65,7 @@ namespace moofy.JsonServices {
         }
 
         public SongWrapper[] ListAllSongs() {
-            return new SongWrapper[] {
-                new SongWrapper() {
-                    title = "I Knew You Were Trouble",
-                    release = 2012,
-                    genres = new string[] { "Pop" },
-                    album = "Red",
-                    artist = "Taylor Swift",
-                    rentalPrice = 2,
-                    purchasePrice = 8
-                },
-                new SongWrapper() {
-                    title = "Fiskeengel",
-                    release = 2003,
-                    genres = new string[] { "Pop", "Rock" },
-                    album = "Vivaldi And Ven",
-                    artist = "Roben Og Knud",
-                    rentalPrice = 7,
-                    purchasePrice = 15
-                },
-                new SongWrapper() {
-                    title = "Shake That",
-                    release = 2005,
-                    genres = new string[] { "Hip Hop" },
-                    album = "Curtain Call",
-                    artist = "Eminem",
-                    rentalPrice = 12,
-                    purchasePrice = 30
-                },
-                new SongWrapper() {
-                    title = "7 Days",
-                    release = 2001,
-                    genres = new string[] { "Pop" },
-                    album = "Born To Do It",
-                    artist = "Craig David",
-                    rentalPrice = 5,
-                    purchasePrice = 18
-                },
-                new SongWrapper() {
-                    title = "Onani",
-                    release = 2004,
-                    genres = new string[] { "Disco" },
-                    album = "Ganz Geil",
-                    artist = "Dario Von Slutty",
-                    rentalPrice = 7,
-                    purchasePrice = 21
-                },
-                new SongWrapper() {
-                    title = "Pon de Replay",
-                    release = 2005,
-                    genres = new string[] { "Pop" },
-                    album = "Music Of The Sun",
-                    artist = "Rihanna",
-                    rentalPrice = 10,
-                    purchasePrice = 33
-                }
-            };
+              return db.FilterSongs("").ToWrapper();
         }
 
         public SongWrapper[] FilterSongs(string filter) {
