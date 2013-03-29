@@ -8,9 +8,12 @@ namespace moofy.JsonServices {
 
         public SuccessFlag PromoteUserToManager(int managerid, int userid) {
             if (managerid > 0 && userid > 0) {
+                db.Open();
+                bool suc = db.PromotetoAdmin(managerid, userid);
+                db.Close();
                 return new SuccessFlag() {
-                    success = true,
-                    message = "Both ids are valid. This has not yet been implemented."
+                    success = suc,
+                    message = suc ? "" : "Couldn't promote user, is " + managerid +" a manager?"
                 };
             }
             else {
@@ -22,11 +25,19 @@ namespace moofy.JsonServices {
         }
 
         public SuccessFlag DemoteManagerToUser(string id, int managerid) {
-            int userid = Convert.ToInt32(id);
+            int userid;
+            try {
+                userid = Convert.ToInt32(id);
+            } catch (FormatException e) {
+                return new SuccessFlag() { success = false, message = id + " is a weird number" };
+            }
             if (managerid > 0 && userid > 0) {
+                db.Open();
+                bool suc = db.DemoteAdmin(managerid, userid);
+                db.Close();
                 return new SuccessFlag() {
-                    success = true,
-                    message = "Both ids are valid. This has not yet been implemented."
+                    success = suc,
+                    message = suc ? "" : "Couldn't promote user, are both users managers?"
                 };
             }
             else {

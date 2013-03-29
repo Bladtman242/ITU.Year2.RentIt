@@ -26,6 +26,7 @@ namespace moofy.Backend {
             {
                 genres.Add(reader["name"].ToString());
             }
+            
             return genres;
         }
         /// <summary>

@@ -1,21 +1,26 @@
 ﻿using System;
 using System.Net;
 using System.ServiceModel.Web;
+using moofy.Backend;
 
 namespace moofy.JsonServices {
     public partial class MoofyServices : IUserService {
 
         public SuccessFlag CreateUser(string name, string username, string email, string password) {
-            if (name != "" && username != "" && email != "" && password != "")
+            if (name != "" && username != "" && email != "" && password != "") {
+                db.Open();
+                User res = db.AddUser(new User(){ Name=name, Username=username, Email=email, Password=password});
+                db.Close();
                 return new SuccessFlag() {
-                    success = true,
-                    message = "Fields have correct data. This has not yet been implemented."
+                    success = res.Id>0,
+                    message = res.Id>0 ? "assigned id: " +res.Id : "An error occured on the server. Could not register user"
                 };
-            else
+            }else{
                 return new SuccessFlag() {
                     success = false,
-                    message = "Not all fields have values non-empty."
+                    message = "One or more fields are empty"
                 };
+            }
         }
 
         public UserWrapper GetUser(string id) {
@@ -23,52 +28,73 @@ namespace moofy.JsonServices {
             try {
                 uid = Convert.ToInt32(id);
             } catch (FormatException e) {
-                WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.NotFound;
+                WebOperationContext.Current.OutgoingResponse.SetStatusAsNotFound();
+                WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.NotFound; //this does something intelligent, but it doesn't look like a 404 in the tests.
                 WebOperationContext.Current.OutgoingResponse.StatusDescription = id + " does not seem to be a number";
                 return null;
             }
-            if (uid > 0)
-                return new UserWrapper() {
-                    name = "John Doe",
-                    username = "johnd0",
-                    email = "john.doe@doecorp.com",
-                    balance = 1337
-                };
-            else
-                throw new ArgumentException("The specified user does not exist");
+            if (uid > 0){
+                db.Open();
+                UserWrapper s = db.GetUser(uid).ToWrapper();
+                db.Close();
+                return s;
+            }else{
+                return null; //better than crashing the service
+            }
         }
 
         public SuccessFlagId Login(string username, string password) {
-            if (username != "" && password != "")
+            if (username != "" && password != "") {
+                db.Open();
+                int suc = db.Login(username, password);
+                db.Close();
                 return new SuccessFlagId() {
-                    success = true,
-                    id = 1
+                    success = suc > 0,
+                    id = suc > 0 ? suc : -1
                 };
-            else
+            } else {
                 return new SuccessFlagId() {
                     success = false,
                     id = 0
                 };
+            }
         }
 
         public SuccessFlag DepositMoney(string id, int moneyAmount) {
-            int uid = Convert.ToInt32(id);
-            if (uid > 0 && moneyAmount > 0)
+            int uid;
+            try {
+                uid = Convert.ToInt32(id);
+            } catch (FormatException e) {
+                return new SuccessFlag() { success = false, message = id + " ? If that is a number, I'm john wayne" };
+            }
+            if (uid > 0 && moneyAmount > 0) { //not sure deposit of 0 makes more sense than negative ones
+                db.Open();
+                db.Deposit(moneyAmount, uid);
+                db.Close();
                 return new SuccessFlag() {
                     success = true,
-                    message = "Id and money amount valid. This has not been implemented yet."
+                    message = "Yay, deposit successful"
                 };
-            else
+            } else {
                 return new SuccessFlag() {
                     success = false,
                     message = "Must be valid id and deposit positive amount of money."
                 };
+            }
         }
 
         public MovieWrapper[] GetMoviesFromUser(string id) {
-            int uid = Convert.ToInt32(id);
-            
-            if (uid > 0)
+            int uid;
+            try {
+                uid = Convert.ToInt32(id);
+            } catch (FormatException e) {
+                return null;
+            }
+
+            if (uid > 0) {
+                db.Open();
+                db.GetMovies(uid);
+                db.Close();
                 return new MovieWrapper[] {
                     new MovieWrapper() {
                         title = "Skew",
@@ -80,7 +106,9 @@ namespace moofy.JsonServices {
                         purchasePrice = 30
                     }
                 };
-            else throw new ArgumentException("Illegal id");
+            } else {
+                return null;
+            }
         }
 
         public MovieWrapper[] GetCurrentMoviesFromUser(string id) {

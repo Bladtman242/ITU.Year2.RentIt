@@ -14,7 +14,6 @@ namespace moofy.Backend.Tests
     public class DBMovieTest
     {
         static DBAccess db;
-
         public DBMovieTest() {
             db = new DBAccess();
             db.Open();

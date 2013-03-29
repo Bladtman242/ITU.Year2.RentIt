@@ -9,24 +9,36 @@ namespace moofy.JsonServices {
     public partial class MoofyServices : IMovieService {
 
         public MovieWrapper GetMovie(string id) {
-            int mid = Convert.ToInt32(id);
+            int mid;
+            try {
+                mid = Convert.ToInt32(id);
+            } catch (FormatException e) {
+                return null;
+            }
             if (mid > 0) {
                 db.Open();
                 MovieWrapper movie = db.GetMovie(mid).ToWrapper();
                 db.Close();
                 return movie;
             } else {
-                throw new ArgumentException("Invalid id");
+                return null;
             }
         }
 
         public SuccessFlag PurchaseMovie(string id, int userId) {
-            int mid = Convert.ToInt32(id);
+            int mid;
+            try {
+                mid = Convert.ToInt32(id);
+            } catch (FormatException e) {
+                return null;
+            }
             if (mid > 0 && userId > 0) {
-                db.PurchaseMovie(mid, userId);
+                db.Open();
+                bool suc = db.PurchaseMovie(mid, userId);
+                db.Close();
                 return new SuccessFlag() {
-                    success = true,
-                    message = "Movie puchased"
+                    success = suc,
+                    message = suc ? "Movie puchased" : "Could not buy te movie"
                 };
             } else {
                 return new SuccessFlag() {
@@ -45,10 +57,12 @@ namespace moofy.JsonServices {
             }
 
             if (mid > 0 && userId > 0) {
-                db.RentMovie(mid, userId, 42); //yes, forty-two. Why are you looking at me like that?
+                db.Open();
+                bool suc = db.RentMovie(mid, userId, 42); //yes, forty-two. Why are you looking at me like that?
+                db.Close();
                 return new SuccessFlag() {
-                    success = true,
-                    message = "Movie rented"
+                    success = suc,
+                    message = suc ? "Movie rented" : "Couldn't rent movie"
                 };
             } else {
                 return new SuccessFlag() {
@@ -62,10 +76,13 @@ namespace moofy.JsonServices {
             int mid = Convert.ToInt32(id);
             int uid = Convert.ToInt32(userId);
             if (mid > 0 && uid > 0) {
-                return new SuccessFlagDownload() {
+                db.Open();
+                SuccessFlagDownload ret = new SuccessFlagDownload() {
                     success = true,
-                    downloadLink = db.GetMovie(mid).Uri //shouldn't I check if the user has paid for this?
+                    downloadLink = db.GetMovie(mid).Uri //has the user paid for this?
                 };
+                db.Close();
+                return ret;
             } else {
                 return new SuccessFlagDownload() {
                     success = false,
@@ -83,8 +100,10 @@ namespace moofy.JsonServices {
 
         public MovieWrapper[] FilterMovies(string filter) {
             if (filter != "emptyList") {//Why the hell would someone use that for a filter?
-                return db.FilterMovies(filter).ToWrapper();
-
+                db.Open();
+                MovieWrapper[] mw = db.FilterMovies(filter).ToWrapper();
+                db.Close();
+                return mw;
             } else {
                 return new MovieWrapper[0];
             }
@@ -93,13 +112,16 @@ namespace moofy.JsonServices {
 
         public MovieWrapper[] FilterAndSortMovies(string filter, string sortBy) {
             if (filter != "emptyList") {
+                db.Open();
                 Movie[] movs= db.FilterMovies(filter);
                 try {
-                    Movie.SortBy(movs, sortBy);
+                    Sorter.SortBy(movs, sortBy);
                 } catch (ArgumentException e) {
                     //sortby property invalid
                     return new MovieWrapper[0];
                 }
+                finally { db.Close(); }
+
                 return movs.ToWrapper();
             } else {
                 return new MovieWrapper[0];
@@ -107,6 +129,18 @@ namespace moofy.JsonServices {
         }
 
         public SuccessFlagUpload UploadMovie(Stream fileStream) {
+            FileStream fileOut = System.IO.File.Create(@"C:\TEST\t");
+            byte[] b = new byte[1024];
+            int bytesRead = 0;
+            do {
+                bytesRead = fileStream.Read(b, 0, b.Length);
+                if (bytesRead != 0) {
+                    fileOut.Write(b, 0, b.Length);
+                }
+            } while (bytesRead > 0);
+
+            fileOut.Close();
+            fileOut.Dispose();
             return new SuccessFlagUpload() {
                 success = true,
                 tmpid = "h35fflk9"
@@ -123,12 +157,19 @@ namespace moofy.JsonServices {
         }
 
         public SuccessFlag DeleteMovie(string id, int managerid) {
-            int mid = Convert.ToInt32(id);
+            int mid;
+            try {
+                mid = Convert.ToInt32(id);
+            } catch (FormatException e) {
+                return new SuccessFlag() { success = false, message = id + " is not a number" };
+            }
             if (mid > 0 && managerid > 0){
-                db.DeleteMovie(mid, managerid);
+                db.Open();
+                bool suc = db.DeleteMovie(mid, managerid);
+                db.Close();
                 return new SuccessFlag() {
-                    success = true,
-                    message = "Movie deleted"
+                    success = suc,
+                    message = suc ? "Movie deleted" : "Couldn't delete movie"
                 };
         }else{
                 return new SuccessFlag() {
