@@ -24,7 +24,7 @@ namespace moofy.Backend {
         /// <returns>A bool indicating wether the rating was successfully added to the database</returns>
         public bool RateFile(int userId, int fileId, int rating)
         {
-            SqlCommand command
+            SqlCommand command;
             if (GetRating(userId, fileId) >= 0)
             {
                 command = new SqlCommand("INSERT INTO UserFileRating(fid, uid, rating) " +
