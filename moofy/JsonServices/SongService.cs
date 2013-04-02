@@ -17,9 +17,10 @@ namespace moofy.JsonServices {
             }
             if (sid > 0) {
                 db.Open();
-                SongWrapper s = db.GetSong(sid).ToWrapper();
+                Song s = db.GetSong(sid);
+                if (s == null) return null;
                 db.Close();
-                return s;
+                return s.ToWrapper();
             } else {
                 return new SongWrapper();
             }

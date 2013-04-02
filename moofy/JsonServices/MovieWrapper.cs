@@ -6,6 +6,11 @@ using System.Text;
 namespace moofy.JsonServices {
     public class MovieWrapper {
 
+        public int id {
+            get;
+            set;
+        }
+
         public string title {
             get;
             set;

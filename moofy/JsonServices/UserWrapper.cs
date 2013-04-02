@@ -5,6 +5,11 @@ using System.Text;
 
 namespace moofy.JsonServices {
     public class UserWrapper {
+        
+        public int id {
+            get;
+            set;
+        }
 
         public string username {
             get;

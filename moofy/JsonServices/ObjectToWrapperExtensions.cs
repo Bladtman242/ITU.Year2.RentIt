@@ -9,6 +9,7 @@ namespace moofy.JsonServices {
 
         public static MovieWrapper ToWrapper(this Movie movie) {
             return new MovieWrapper() {
+                id = movie.Id,
                 title = movie.Title,
                 release = movie.Year,
                 genres = movie.Genres.ToArray<string>(),
@@ -29,6 +30,7 @@ namespace moofy.JsonServices {
 
         public static SongWrapper ToWrapper(this Song song) {
             return new SongWrapper() {
+                id = song.Id,
                 title = song.Title,
                 release = song.Year,
                 genres = song.Genres.ToArray<string>(),
@@ -49,6 +51,7 @@ namespace moofy.JsonServices {
 
         public static UserWrapper ToWrapper(this User user) {
             return new UserWrapper() {
+                id = user.Id,
                 name = user.Name,
                 username = user.Username,
                 email = user.Email,

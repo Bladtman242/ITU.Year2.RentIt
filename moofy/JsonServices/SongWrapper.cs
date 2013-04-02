@@ -5,6 +5,10 @@ using System.Text;
 
 namespace moofy.JsonServices {
     public class SongWrapper {
+        public int id {
+            get;
+            set;
+        }
 
         public string title {
             get;
