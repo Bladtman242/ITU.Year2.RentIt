@@ -16,7 +16,9 @@ namespace moofy.JsonServices {
                 directors = new string[] { movie.Director },
                 description = movie.Description,
                 rentalPrice = movie.RentPrice,
-                purchasePrice = movie.BuyPrice
+                purchasePrice = movie.BuyPrice,
+                avgRating = movie.AverageRating,
+                numberOfVotes = movie.NumberOfRatings
             };
         }
 
@@ -37,7 +39,9 @@ namespace moofy.JsonServices {
                 album = song.Album,
                 artist = song.Artist,
                 rentalPrice = song.RentPrice,
-                purchasePrice = song.BuyPrice
+                purchasePrice = song.BuyPrice,
+                avgRating = song.AverageRating,
+                numberOfVotes = song.NumberOfRatings
             };
         }
 

@@ -6,6 +6,9 @@ using System.Text;
 namespace moofy.Backend {
     public abstract class File {
         protected int id;
+
+        private float? averageRating;
+        private int? numberOfRatings;
         private IList<string> genres;
         private DBAccess db;
 
@@ -29,11 +32,40 @@ namespace moofy.Backend {
         public string Description { get; set; }
 
         /// <summary>
+        /// The Average rating of the File
+        /// </summary>
+        public float AverageRating {
+            get {
+                if (averageRating == null) {
+                    db.Open();
+                    averageRating = db.GetRating(this.Id);
+                    db.Close();
+                }
+                return (float)averageRating;
+            }
+        }
+
+        /// <summary>
+        /// The number of ratings of the File
+        /// </summary>
+        public int NumberOfRatings {
+            get {
+                if (numberOfRatings == null) {
+                    db.Open();
+                    numberOfRatings = db.GetNumberOfRatings(this.Id);
+                    db.Close();
+                }
+                return (int)numberOfRatings;
+            }
+        }
+
+
+        /// <summary>
         /// The Genre of the File
         /// </summary>
         public IList<string> Genres {
             get {
-                if ((object)genres == null) {
+                if (genres == null) {
                     db.Open();
                     genres = db.GetGenres(this.Id);
                     List<string> l = (List<string>)genres;
