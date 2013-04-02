@@ -9,6 +9,39 @@ namespace moofy.Backend {
     public partial class DBAccess {
 
         /// <summary>
+        /// Gets the number of users who have rated this file
+        /// </summary>
+        /// <param name="fileId">The file to get the number for</param>
+        /// <returns>The number of users who have rated this file</returns>
+        public int GetNumberOfRatings(int fileId)
+        {
+            SqlCommand command = new SqlCommand("SELECT COUNT(*) "+
+                                                "FROM UserFileRating " +
+                                                "WHERE fid=" + fileId ,
+                                                connection);
+            Object result = command.ExecuteScalar();
+            return int.Parse(result.ToString());
+
+        }
+        /// <summary>
+        /// Get the average rating of a file
+        /// </summary>
+        /// <param name="fileId">the id of the file</param>
+        /// <returns>returns the average rating granted to this file, or 0 if no rating is recorded for this movie</returns>
+        public float GetRating(int fileId)
+        {
+            SqlCommand command = new SqlCommand("SELECT AVG(rating) " +
+                                                "FROM UserFileRating " +
+                                                "WHERE fid=" + fileId +
+                                                " GROUP BY fid"
+                                                , connection);
+            Object result = command.ExecuteScalar();
+            if(result != null )
+                return float.Parse(result.ToString());
+
+            return 0;
+        }
+        /// <summary>
         /// Gets all genres for a file
         /// </summary>
         /// <param name="fileId">id of the file to get</param>

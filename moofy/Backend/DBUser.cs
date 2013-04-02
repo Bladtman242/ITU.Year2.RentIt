@@ -16,6 +16,42 @@ namespace moofy.Backend {
             return command.ExecuteNonQuery() > 0;
         }
         /// <summary>
+        /// Adds a rating to a file 
+        /// </summary>
+        /// <param name="userId">The user who rates the file</param>
+        /// <param name="fileId">The file being rated</param>
+        /// <param name="rating">The rating</param>
+        /// <returns>A bool indicating wether the rating was successfully added to the database</returns>
+        public bool RateFile(int userId, int fileId, int rating)
+        {
+            SqlCommand command = new SqlCommand("INSERT INTO UserFileRating(fid, uid, rating) " +
+                                                "VALUES(" +
+                                                fileId + ", " +
+                                                userId + ", " +
+                                                rating + ")",
+                                                connection);
+
+            return command.ExecuteNonQuery() > 0;
+        }
+        /// <summary>
+        /// gets the rating a user has given a file
+        /// </summary>
+        /// <param name="userId">the users id</param>
+        /// <param name="fileId">the files id</param>
+        /// <returns>the rating given by this user to this file, or -1 if the user have not yet rated this movie</returns>
+        public int GetRating(int userId, int fileId)
+        {
+            SqlCommand command = new SqlCommand("SELECT rating FROM UserFileRating " +
+                                                "WHERE fid = " + fileId +
+                                                " AND uid = " + userId,
+                                                connection);
+            Object result = command.ExecuteScalar();
+            if (result != null)
+                return int.Parse(result.ToString());
+
+            return -1;
+        }
+        /// <summary>
         /// Demote a current admin to be just a regular user again
         /// </summary>
         /// <param name="demoterId">The ID of an who agrees to this demotion</param>
