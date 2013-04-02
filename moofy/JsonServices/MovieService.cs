@@ -179,5 +179,13 @@ namespace moofy.JsonServices {
     }
         }
 
+        public SuccessFlag RateMovie(string id, int userId, int rating) {
+            throw new NotImplementedException("Flerptiderp");
+        }
+
+        public RatingWrapper GetMovieRatings(string id, string userId) {
+            throw new NotImplementedException("Flerptiderp");
+        }
+
     }
 }

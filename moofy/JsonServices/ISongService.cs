@@ -78,5 +78,19 @@ namespace moofy.JsonServices {
             UriTemplate = "{id}")]
         SuccessFlag DeleteSong(string id, int managerid);
 
+        [OperationContract]
+        [WebInvoke(Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.WrappedRequest,
+            UriTemplate = "{id}/rate")]
+        SuccessFlag RateSong(string id, int userId, int rating);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "{id}/ratings?userId={userId}")]
+        RatingWrapper GetSongRatings(string id, string userId);
+
     }
 }

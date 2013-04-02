@@ -45,5 +45,17 @@ namespace moofy.JsonServices {
             set;
         }
 
+        /// Song ratings stuff
+
+        public double avgRating {
+            get;
+            set;
+        }
+
+        public int numberOfVotes {
+            get;
+            set;
+        }
+
     }
 }
