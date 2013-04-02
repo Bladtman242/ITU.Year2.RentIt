@@ -24,13 +24,24 @@ namespace moofy.Backend {
         /// <returns>A bool indicating wether the rating was successfully added to the database</returns>
         public bool RateFile(int userId, int fileId, int rating)
         {
-            SqlCommand command = new SqlCommand("INSERT INTO UserFileRating(fid, uid, rating) " +
-                                                "VALUES(" +
-                                                fileId + ", " +
-                                                userId + ", " +
-                                                rating + ")",
-                                                connection);
-
+            SqlCommand command
+            if (GetRating(userId, fileId) >= 0)
+            {
+                command = new SqlCommand("INSERT INTO UserFileRating(fid, uid, rating) " +
+                                         "VALUES(" +
+                                          fileId + ", " +
+                                          userId + ", " +
+                                          rating + ")",
+                                          connection);
+            }
+            else
+            {
+                command = new SqlCommand("UPDATE UserFileRating "+
+                                         "SET rating = "+rating+
+                                         "WHERE uid = " +userId+
+                                         " AND fid = " + fileId,
+                                         connection);
+            }
             return command.ExecuteNonQuery() > 0;
         }
         /// <summary>
