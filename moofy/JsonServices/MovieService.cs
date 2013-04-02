@@ -180,11 +180,64 @@ namespace moofy.JsonServices {
         }
 
         public SuccessFlag RateMovie(string id, int userId, int rating) {
-            throw new NotImplementedException("Flerptiderp");
+            int mid;
+            try
+            {
+                mid = Convert.ToInt32(id);
+            }
+            catch (FormatException e)
+            {
+                return new SuccessFlag() { success = false, message = id + " nach uimhir?" };
+            }
+            if (mid > 0 && userId > 0)
+            {
+                db.Open();
+                bool suc = db.RateFile(userId, mid, rating);
+                db.Close();
+
+                return new SuccessFlag()
+                {
+                    success = suc, //actual confimation? the 
+                    message = suc ? "" : "Rating could not be added."
+                };
+            }
+            else
+            {
+                return new SuccessFlag()
+                {
+                    success = false,
+                    message = "Invalid ids"
+                };
+            }
         }
 
         public RatingWrapper GetMovieRatings(string id, string userId) {
-            throw new NotImplementedException("Flerptiderp");
+            int mid;
+            int uid;
+            try
+            {
+                mid = Convert.ToInt32(id);
+                uid = Convert.ToInt32(userId);
+            }
+            catch (FormatException e)
+            {
+                return null;
+            }
+            if (mid > 0 && uid > 0)
+            {
+                db.Open();
+                int rat = db.GetRating(uid, mid);
+                db.Close();
+
+                return new RatingWrapper()
+                {
+                    userId= uid,
+                    itemId= mid,
+                    rating= rat
+                };
+            }
+
+            return null;
         }
 
     }
