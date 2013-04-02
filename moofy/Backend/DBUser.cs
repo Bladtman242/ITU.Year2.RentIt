@@ -27,6 +27,14 @@ namespace moofy.Backend {
             SqlCommand command;
             if (GetRating(userId, fileId) >= 0)
             {
+                command = new SqlCommand("UPDATE UserFileRating "+
+                                         "SET rating = "+rating+
+                                         "WHERE uid = " +userId+
+                                         " AND fid = " + fileId,
+                                         connection);
+            }
+            else
+            {
                 command = new SqlCommand("INSERT INTO UserFileRating(fid, uid, rating) " +
                                          "VALUES(" +
                                           fileId + ", " +
@@ -34,14 +42,7 @@ namespace moofy.Backend {
                                           rating + ")",
                                           connection);
             }
-            else
-            {
-                command = new SqlCommand("UPDATE UserFileRating "+
-                                         "SET rating = "+rating+
-                                         "WHERE uid = " +userId+
-                                         " AND fid = " + fileId,
-                                         connection);
-            }
+            
             return command.ExecuteNonQuery() > 0;
         }
         /// <summary>
