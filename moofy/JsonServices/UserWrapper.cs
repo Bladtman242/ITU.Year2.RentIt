@@ -31,5 +31,11 @@ namespace moofy.JsonServices {
             set;
         }
 
+        public bool admin
+        {
+            get;
+            set;
+        }
+
     }
 }

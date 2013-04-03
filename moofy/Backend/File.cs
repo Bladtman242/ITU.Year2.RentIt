@@ -73,6 +73,7 @@ namespace moofy.Backend {
         /// </summary>
         public int RentPrice { get; set; }
 
+        public int ViewCount { get; set; }
         /// <summary>
         /// The Average rating of the File
         /// </summary>

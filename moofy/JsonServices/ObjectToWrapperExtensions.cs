@@ -18,7 +18,9 @@ namespace moofy.JsonServices {
                 rentalPrice = movie.RentPrice,
                 purchasePrice = movie.BuyPrice,
                 avgRating = movie.AverageRating,
-                numberOfVotes = movie.NumberOfRatings
+                numberOfVotes = movie.NumberOfRatings,
+                coverUri = movie.CoverUri,
+                viewCount = movie.ViewCount
             };
         }
 
@@ -41,7 +43,9 @@ namespace moofy.JsonServices {
                 rentalPrice = song.RentPrice,
                 purchasePrice = song.BuyPrice,
                 avgRating = song.AverageRating,
-                numberOfVotes = song.NumberOfRatings
+                numberOfVotes = song.NumberOfRatings,
+                coverUri = song.CoverUri,
+                viewCount = song.ViewCount
             };
         }
 
@@ -59,7 +63,8 @@ namespace moofy.JsonServices {
                 name = user.Name,
                 username = user.Username,
                 email = user.Email,
-                balance = user.Balance
+                balance = user.Balance,
+                admin = user.IsAdmin
             };
         }
 

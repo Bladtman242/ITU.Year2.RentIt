@@ -31,7 +31,9 @@ namespace moofy.Backend {
                     Uri = reader["URI"].ToString(),
                     Title = reader["title"].ToString(),
                     Description = reader["description"].ToString(),
-                    Year = short.Parse(reader["year"].ToString())
+                    Year = short.Parse(reader["year"].ToString()),
+                    CoverUri = reader["coverURI"].ToString(),
+                    ViewCount = int.Parse(reader["viewCount"].ToString())
                 };
                 reader.Close();
                 return song;
@@ -121,8 +123,12 @@ namespace moofy.Backend {
                 if (command.ExecuteNonQuery() > 0) {
                     command.CommandText = "DELETE FROM GenreFile WHERE fid=" + songId;
                     if (command.ExecuteNonQuery() > 0) {
-                        command.CommandText = "DELETE FROM Filez WHERE id=" + songId;
-                        return command.ExecuteNonQuery() > 0;
+                        command.CommandText = "DELETE FROM UserFileRating WHERE fid=" + songId;
+                        if (command.ExecuteNonQuery() > 0)
+                        {
+                            command.CommandText = "DELETE FROM Filez WHERE id=" + songId;
+                            return command.ExecuteNonQuery() > 0;
+                        }
                     }
                 }
 
@@ -154,14 +160,16 @@ namespace moofy.Backend {
                 string uri = tmpUri.ToString();
                 //Add the file information into to Filez table
                 command.CommandText = "INSERT INTO Filez" +
-                                      "(title, rentPrice, buyPrice, URI, year, description) " +
+                                      "(title, rentPrice, buyPrice, URI, year, description, coverURI, viewCount) " +
                                       "VALUES('" +
                                       song.Title + "', " +
                                       song.RentPrice + ", " +
                                       song.BuyPrice + ", '" +
                                       uri + "', " +
                                       song.Year + ", '" +
-                                      song.Description + "')";
+                                      song.Description + "', '"+
+                                      song.CoverUri + "', " +
+                                      "0)";
 
                 //If the information is successfully added continue to add info to the Movie table and GenreFile table
                 if (command.ExecuteNonQuery() > 0) {

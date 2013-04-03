@@ -58,5 +58,17 @@ namespace moofy.JsonServices {
             set;
         }
 
+        public string coverUri
+        {
+            get;
+            set;
+        }
+
+        public int viewCount
+        {
+            get;
+            set;
+        }
+
     }
 }
