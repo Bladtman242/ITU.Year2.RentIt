@@ -129,7 +129,7 @@ namespace moofy.JsonServices {
         }
 
         public SuccessFlagUpload UploadMovie(Stream fileStream) {
-            FileStream fileOut = System.IO.File.Create(@"C:\TEST\t");
+/*            FileStream fileOut = System.IO.File.Create(@"C:\TEST\t");
             byte[] b = new byte[1024];
             int bytesRead = 0;
             do {
@@ -140,7 +140,7 @@ namespace moofy.JsonServices {
             } while (bytesRead > 0);
 
             fileOut.Close();
-            fileOut.Dispose();
+            fileOut.Dispose();*/
             return new SuccessFlagUpload() {
                 success = true,
                 tmpid = "h35fflk9"
