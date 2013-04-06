@@ -236,7 +236,9 @@ namespace moofy.Backend {
                     Uri = reader["URI"].ToString(),
                     Title = reader["title"].ToString(),
                     Description = reader["description"].ToString(),
-                    Year = short.Parse(reader["year"].ToString())
+                    Year = short.Parse(reader["year"].ToString()),
+                    CoverUri = reader["coverURI"].ToString(),
+                    ViewCount = int.Parse(reader["viewCount"].ToString())
                 });
             }
 
