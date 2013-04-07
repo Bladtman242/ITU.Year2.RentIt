@@ -11,6 +11,14 @@ namespace moofy.JsonServices {
                 db.Open();
                 User res = db.AddUser(new User(){ Name=name, Username=username, Email=email, Password=password});
                 db.Close();
+                if (res == null)
+                {
+                    return new SuccessFlag()
+                    {
+                        success = false,
+                        message = "The chosen username is already registered in the system. Please choose another."
+                    };
+                }
                 return new SuccessFlag() {
                     success = res.Id>0,
                     message = res.Id>0 ? "assigned id: " +res.Id : "An error occured on the server. Could not register user"
