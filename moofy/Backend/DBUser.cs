@@ -130,8 +130,8 @@ namespace moofy.Backend {
         /// <param name="user">The user to add</param>
         /// <returns>Returns the user including the id of the user, or null if the user could not be added</returns>
         public User AddUser(User user) {
-            SqlCommand command = new SqlCommand("SELECT * FROM Userz " +
-                                                "WHERE userName = " + user.Username,
+            SqlCommand command = new SqlCommand("SELECT id FROM Userz " +
+                                                "WHERE userName = '" + user.Username+"'",
                                                 connection);
             if (command.ExecuteScalar() != null) return null;
 
