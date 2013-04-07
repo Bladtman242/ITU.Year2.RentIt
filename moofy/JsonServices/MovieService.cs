@@ -12,14 +12,15 @@ namespace moofy.JsonServices {
             int mid;
             try {
                 mid = Convert.ToInt32(id);
-            } catch (FormatException e) {
+            } catch (FormatException) {
                 return null;
             }
             if (mid > 0) {
                 db.Open();
-                MovieWrapper movie = db.GetMovie(mid).ToWrapper();
+                Movie movie = db.GetMovie(mid);
+                if (movie == null) return null;
                 db.Close();
-                return movie;
+                return movie.ToWrapper();
             } else {
                 return null;
             }
