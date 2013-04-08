@@ -118,10 +118,25 @@ namespace moofy.JsonServices {
         }
 
         public SuccessFlagUpload UploadSong(Stream fileStream) {
-            return new SuccessFlagUpload() {
-                success = true,
-                tmpid = "f1337a12"
-            };
+            try
+            {
+                db.Open();
+                int id = db.UploadFile(fileStream);
+                db.Close();
+                return new SuccessFlagUpload()
+                {
+                    success = true,
+                    tmpid = id.ToString()
+                };
+            }
+            catch (Exception)
+            {
+                return new SuccessFlagUpload()
+                {
+                    success = false,
+                    tmpid = null
+                };
+            }
         }
 
         public SuccessFlagId CreateSong(int managerid, string tmpid, string title, int release, string artist, string album, string[] genres, int rentalPrice, int purchasePrice) {

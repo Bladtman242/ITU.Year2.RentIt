@@ -130,22 +130,26 @@ namespace moofy.JsonServices {
         }
 
         public SuccessFlagUpload UploadMovie(Stream fileStream) {
-/*            FileStream fileOut = System.IO.File.Create(@"C:\TEST\t");
-            byte[] b = new byte[1024];
-            int bytesRead = 0;
-            do {
-                bytesRead = fileStream.Read(b, 0, b.Length);
-                if (bytesRead != 0) {
-                    fileOut.Write(b, 0, b.Length);
-                }
-            } while (bytesRead > 0);
 
-            fileOut.Close();
-            fileOut.Dispose();*/
-            return new SuccessFlagUpload() {
-                success = true,
-                tmpid = "h35fflk9"
-            };
+            try
+            {
+                db.Open();
+                int id = db.UploadFile(fileStream);
+                db.Close();
+                return new SuccessFlagUpload()
+                {
+                    success = true,
+                    tmpid = id.ToString()
+                };
+            }
+            catch (Exception)
+            {
+                return new SuccessFlagUpload()
+                {
+                    success = false,
+                    tmpid = null
+                };
+            }
         }
 
         public SuccessFlagId CreateMovie(int managerid, string tmpid, string title, int release, string[] directors, string[] genres, string description, int rentalPrice, int purchasePrice) {
