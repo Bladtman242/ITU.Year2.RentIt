@@ -155,13 +155,28 @@ namespace moofy.JsonServices {
             }
         }
 
-        public SuccessFlagId CreateMovie(int managerid, string tmpid, string title, int release, string[] directors, string[] genres, string description, int rentalPrice, int purchasePrice) {
-            if (tmpid == "h35fflk9")
-                return new SuccessFlagId() {
-                    success = true,
-                    id = 1
+        public SuccessFlagId CreateMovie(int managerid, int tmpid, string title, int release, string[] directors, string[] genres, string description, int rentalPrice, int purchasePrice) {
+
+            Movie mov = new Movie()
+            {
+                Title = title,
+                Year = (short)release,
+                Director = String.Join(" , ", directors),
+                Description = description,
+                RentPrice = rentalPrice,
+                BuyPrice = purchasePrice
+            };
+            db.Open();
+            IList<string> genr = new List<string>(genres);
+            Movie mov1 = db.CreateMovie(managerid, tmpid, genr, mov);
+            if (mov1 == null)
+                throw new ArgumentException("Ensure you entered a valid tmpId and a valid admin id");
+            else
+                return new SuccessFlagId()
+                {
+                    id = mov1.Id,
+                    success = true
                 };
-            else throw new ArgumentException("Invalid tmpid - get it by uploading a movie.");
         }
 
         public SuccessFlag DeleteMovie(string id, int managerid) {

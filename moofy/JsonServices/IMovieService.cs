@@ -68,7 +68,7 @@ namespace moofy.JsonServices {
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.WrappedRequest,
             UriTemplate = "create")]
-        SuccessFlagId CreateMovie(int managerid, string tmpid, string title, int release, string[] directors, string[] genres, string description, int rentalPrice, int purchasePrice);
+        SuccessFlagId CreateMovie(int managerid, int tmpid, string title, int release, string[] directors, string[] genres, string description, int rentalPrice, int purchasePrice);
 
         [OperationContract]
         [WebInvoke(Method = "DELETE",
