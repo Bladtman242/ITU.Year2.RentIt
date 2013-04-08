@@ -57,6 +57,12 @@ namespace moofy.JsonServices {
             set;
         }
 
+        public string Uri
+        {
+            get;
+            set;
+        }
+
         public string coverUri
         {
             get;
