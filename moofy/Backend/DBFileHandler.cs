@@ -86,7 +86,7 @@ namespace moofy.Backend {
         /// <returns>The id of the tmp file added in the database</returns>
         public int UploadFile(Stream file) {
             int hash = file.GetHashCode();
-            string pathLocal = "C:\\RentItServices\\Rentit25\\Files" + hash;
+            string pathLocal = "C:\\RentItServices\\Rentit25\\Files\\" + hash;
             string pathHttp = "http://rentit.itu.dk/RentIt25/Files/" + hash;
             Random rand = new Random();
 
