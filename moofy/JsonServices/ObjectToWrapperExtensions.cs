@@ -20,7 +20,6 @@ namespace moofy.JsonServices {
                 avgRating = movie.AverageRating,
                 numberOfVotes = movie.NumberOfRatings,
                 coverUri = movie.CoverUri,
-                Uri = movie.Uri,
                 viewCount = movie.ViewCount
             };
         }
@@ -46,7 +45,6 @@ namespace moofy.JsonServices {
                 avgRating = song.AverageRating,
                 numberOfVotes = song.NumberOfRatings,
                 coverUri = song.CoverUri,
-                Uri = song.Uri,
                 viewCount = song.ViewCount
             };
         }
