@@ -85,22 +85,26 @@ namespace moofy.Backend {
         /// <param name="file">A stream with the info to be put in the file</param>
         /// <returns>The id of the tmp file added in the database</returns>
         public int UploadFile(Stream file) {
-            string path = "C:\\RENTIT25\\" + file.GetHashCode();
+            int hash = file.GetHashCode();
+            string pathLocal = "C:\\RentItServices\\Rentit25\\Files" + hash;
+            string pathHttp = "http://rentit.itu.dk/RentIt25/Files/" + hash;
             Random rand = new Random();
 
             //Ensure that no other file exists with this name
-            while (new FileInfo(path).Exists)
+            while (new FileInfo(pathLocal).Exists)
             {
-                path = path + rand.Next();
+                int add = rand.Next();
+                pathLocal = pathLocal + add;
+                pathHttp = pathHttp + add;
             }
 
             //Create a filestream to the wanted path and copy the contents of the input stream to this 
-            using (var fileStream = System.IO.File.Create(path))
+            using (var fileStream = System.IO.File.Create(pathLocal))
             {
                 file.CopyTo(fileStream);
             }
 
-            SqlCommand command = new SqlCommand("INSERT INTO StagedFile(path) VALUES('" + path + "')", connection);
+            SqlCommand command = new SqlCommand("INSERT INTO StagedFile(path) VALUES('" + pathHttp + "')", connection);
 
             if (command.ExecuteNonQuery() > 0)
             {
