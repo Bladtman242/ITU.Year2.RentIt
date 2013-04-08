@@ -74,9 +74,15 @@ namespace moofy.JsonServices {
         }
 
         public SuccessFlagDownload DownloadMovie(string id, string userId) {
-            int mid = Convert.ToInt32(id);
-            int uid = Convert.ToInt32(userId);
-            if (mid > 0 && uid > 0) {
+            int mid/*, uid*/;
+            try {
+                mid = Convert.ToInt32(id);
+                //uid = Convert.ToInt32(userId);
+            } catch (FormatException e) {
+                return new SuccessFlagDownload { downloadLink = "", success = false };
+            }
+
+            if (mid > 0 /*&& uid > 0*/) {
                 db.Open();
                 SuccessFlagDownload ret = new SuccessFlagDownload() {
                     success = true,
@@ -85,10 +91,7 @@ namespace moofy.JsonServices {
                 db.Close();
                 return ret;
             } else {
-                return new SuccessFlagDownload() {
-                    success = false,
-                    downloadLink = "Id's must be positive (non-zero) integers"
-                };
+                return new SuccessFlagDownload() { success = false, downloadLink = "" };
             }
         }
 

@@ -73,13 +73,21 @@ namespace moofy.JsonServices {
         }
 
         public SuccessFlagDownload DownloadSong(string id, string userId) {
-            int sid = Convert.ToInt32(id);
-            int uid = Convert.ToInt32(userId);
+            int sid;
+            int uid =1;// = Convert.ToInt32(userId);
+            try {
+                sid = Convert.ToInt32(id);
+            } catch (FormatException e) {
+                return new SuccessFlagDownload { success = false, downloadLink = "" };
+            }
             if (sid > 0 && uid > 0) {
-                return new SuccessFlagDownload() {
+                db.Open();
+                SuccessFlagDownload ret = new SuccessFlagDownload{
                     success = true,
                     downloadLink = db.GetSong(sid).Uri
                 };
+                db.Close();
+                return ret;
             } else {
                 return new SuccessFlagDownload() {
                     success = false,
