@@ -31,7 +31,7 @@ namespace moofy.Backend {
         }
 
         protected static void ByYear(File[] files) {
-            Array.Sort(files, (f1, f2) => f1.Year.CompareTo(f2.Year));
+            Array.Sort(files, (f1, f2) => {System.Diagnostics.Debug.WriteLine(f1.Year + ", " + f2.Year + " : " + f1.Year.CompareTo(f2.Year)); return f1.Year.CompareTo(f2.Year);});
         }
 
         protected static void ByBuyPrice(File[] files) {

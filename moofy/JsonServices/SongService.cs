@@ -118,8 +118,15 @@ namespace moofy.JsonServices {
             if (filter != "emptyList") {
                 db.Open();
                 Song[] s = db.FilterSongs(filter);
-                Sorter.SortBy(db.FilterSongs(filter), sortBy);
-                return s.ToWrapper();
+                try {
+                    
+                    Sorter.SortBy(s, sortBy);
+                    return s.ToWrapper();
+                } catch (ArgumentException e){
+                    return new SongWrapper[0];
+                } finally{
+                    db.Close();
+                }
             } else {
                 return new SongWrapper[0];
             }
