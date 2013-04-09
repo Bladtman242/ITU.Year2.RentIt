@@ -273,7 +273,7 @@ namespace moofy.JsonServices {
         }
 
         public SuccessFlag UpdateMovie(string id, int managerId, string title = null, string description = null, int rentalPrice = -1, int purchasePrice = -1, int release = -1, string coverUri = null, string[] genres = null, string[] directors = null) {
-            if (id == "" || id == null) throw new ArgumentNullException("Must give a valid move id");
+            if (id == "" || id == null) throw new ArgumentNullException("Must give a valid movie id");
 
             int mid;
             try {
@@ -284,8 +284,8 @@ namespace moofy.JsonServices {
             }
 
             return new SuccessFlag() {
-                message = "User updated succesfully.",
-                success = true
+                message = "This has not yet been implemented.",
+                success = false
             };
 
         }

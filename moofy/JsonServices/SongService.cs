@@ -273,5 +273,23 @@ namespace moofy.JsonServices {
             return null;
         }
 
+        public SuccessFlag UpdateSong(string id, int managerId, string artist = null, string album = null, string title = null, string description = null, int rentalPrice = -1, int purchasePrice = -1, int release = -1, string coverUri = null, string[] genres = null) {
+            if (id == "" || id == null) throw new ArgumentNullException("Must give a valid song id");
+
+            int sid;
+            try {
+                sid = Convert.ToInt32(id);
+            }
+            catch (Exception e) {
+                throw new ArgumentException("id must be a number", e);
+            }
+
+            return new SuccessFlag() {
+                message = "This has not yet been implemented.",
+                success = false
+            };
+
+        }
+
     }
 }
