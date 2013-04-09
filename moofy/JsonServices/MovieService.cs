@@ -140,7 +140,7 @@ namespace moofy.JsonServices {
             }
         }
 
-        public SuccessFlagUpload UploadMovie(Stream fileStream) {
+        public SuccessFlagUpload UploadMovie(string ext, Stream fileStream) {
 
             try
             {
