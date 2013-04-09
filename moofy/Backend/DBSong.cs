@@ -7,6 +7,35 @@ using System.Data.SqlClient;
 namespace moofy.Backend {
     partial class DBAccess {
         /// <summary>
+        /// Updates a song to contain new values
+        /// </summary>
+        /// <param name="song">The song object containing the new information</param>
+        /// <returns>true if the new values are succesfully added, false otherwise.</returns>
+        public bool UpdateSong(Song song)
+        {
+            SqlCommand command = new SqlCommand("UPDATE Filez " +
+                                                "SET title = '" + song.Title + "', " +
+                                                "SET description = '" + song.Description + "', " +
+                                                "SET rentPrice = " + song.RentPrice + ", " +
+                                                "SET buyPrice = " + song.BuyPrice + ", " +
+                                                "SET year = " + song.Year + ", " +
+                                                "SET coverURI = '" + song.CoverUri + "'" +
+                                                "WHERE id =" + song.Id +
+                                                "UPDATE Song SET album = '" + song.Album + "', " +
+                                                "SET artist = '" + song.Artist + "' " +
+                                                "WHERE id = " + song.Id
+                                                , connection);
+            /*if (command.ExecuteNonQuery() > 0)
+            {
+                command.CommandText = "UPDATE Song SET album = '" + song.Album + "', " +
+                                      "SET artist = '" + song.Artist + "' " +
+                                      "WHERE id = " + song.Id;
+                return command.ExecuteNonQuery() > 0;
+            }*/
+            return command.ExecuteNonQuery() > 0;
+        }
+
+        /// <summary>
         /// Return the song with a given id
         /// </summary>
         /// <param name="songId">The id of the song to get</param>
