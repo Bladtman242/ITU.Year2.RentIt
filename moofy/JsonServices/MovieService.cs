@@ -283,9 +283,24 @@ namespace moofy.JsonServices {
                 throw new ArgumentException("id must be a number", e);
             }
 
+            db.Open();
+            Movie m = db.GetMovie(mid);
+
+            if (title != null) m.Title = title;
+            if (description != null) m.Description = description;
+            if (rentalPrice >= 0) m.RentPrice = rentalPrice;
+            if (purchasePrice >= 0) m.BuyPrice = purchasePrice;
+            if (release != null) m.Year = (short)release;
+            if (coverUri != null) m.CoverUri = coverUri;
+            //if(genres != null) ????
+            if (directors != null) m.Director = string.Join(",", directors);
+
+            bool success = db.UpdateMovie(m, managerId);
+            db.Close();
+
             return new SuccessFlag() {
-                message = "This has not yet been implemented.",
-                success = false
+                message = success ? "Movie data updated succesfully." : "Update of movie data failed. You must be manager to update movie data.",
+                success = success
             };
 
         }
