@@ -92,5 +92,13 @@ namespace moofy.JsonServices {
             UriTemplate = "{id}/ratings?userId={userId}")]
         RatingWrapper GetMovieRatings(string id, string userId);
 
+        [OperationContract]
+        [WebInvoke(Method = "POST",
+            ResponseFormat = WebMessageFormat.Json,
+            RequestFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.WrappedRequest,
+            UriTemplate = "{id}/update")]
+        SuccessFlag UpdateMovie(string id, int managerId, string title = null, string description = null, int rentalPrice = -1, int purchasePrice = -1, int release = -1, string coverUri = null, string[] genres = null, string[] directors = null);
+
     }
 }

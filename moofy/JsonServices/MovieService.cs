@@ -272,5 +272,23 @@ namespace moofy.JsonServices {
             return null;
         }
 
+        public SuccessFlag UpdateMovie(string id, int managerId, string title = null, string description = null, int rentalPrice = -1, int purchasePrice = -1, int release = -1, string coverUri = null, string[] genres = null, string[] directors = null) {
+            if (id == "" || id == null) throw new ArgumentNullException("Must give a valid move id");
+
+            int mid;
+            try {
+                mid = Convert.ToInt32(id);
+            }
+            catch (Exception e) {
+                throw new ArgumentException("id must be a number", e);
+            }
+
+            return new SuccessFlag() {
+                message = "User updated succesfully.",
+                success = true
+            };
+
+        }
+
     }
 }
