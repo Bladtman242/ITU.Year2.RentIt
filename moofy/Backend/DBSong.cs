@@ -11,27 +11,24 @@ namespace moofy.Backend {
         /// </summary>
         /// <param name="song">The song object containing the new information</param>
         /// <returns>true if the new values are succesfully added, false otherwise.</returns>
-        public bool UpdateSong(Song song)
+        public bool UpdateSong(Song song, int adminId)
         {
-            SqlCommand command = new SqlCommand("UPDATE Filez " +
-                                                "SET title = '" + song.Title + "', " +
-                                                "SET description = '" + song.Description + "', " +
-                                                "SET rentPrice = " + song.RentPrice + ", " +
-                                                "SET buyPrice = " + song.BuyPrice + ", " +
-                                                "SET year = " + song.Year + ", " +
-                                                "SET coverURI = '" + song.CoverUri + "'" +
-                                                "WHERE id =" + song.Id +
-                                                "UPDATE Song SET album = '" + song.Album + "', " +
-                                                "SET artist = '" + song.Artist + "' " +
-                                                "WHERE id = " + song.Id
-                                                , connection);
-            /*if (command.ExecuteNonQuery() > 0)
-            {
-                command.CommandText = "UPDATE Song SET album = '" + song.Album + "', " +
-                                      "SET artist = '" + song.Artist + "' " +
-                                      "WHERE id = " + song.Id;
-                return command.ExecuteNonQuery() > 0;
-            }*/
+            //Ensure that the admin id does infact belong to an admin
+            SqlCommand command = new SqlCommand("SELECT id FROM Admin WHERE id =" + adminId, connection);
+            if (command.ExecuteScalar() == null) return false;
+
+            command = new SqlCommand("UPDATE Filez " +
+                                     "SET title = '" + song.Title + "', " +
+                                     "description = '" + song.Description + "', " +
+                                     "rentPrice = " + song.RentPrice + ", " +
+                                     "buyPrice = " + song.BuyPrice + ", " +
+                                     "year = " + song.Year + ", " +
+                                     "coverURI = '" + song.CoverUri + "'" +
+                                     "WHERE id =" + song.Id +
+                                     "UPDATE Song SET album = '" + song.Album + "', " +
+                                     "artist = '" + song.Artist + "' " +
+                                     "WHERE id = " + song.Id;
+            
             return command.ExecuteNonQuery() > 0;
         }
 
