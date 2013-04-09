@@ -74,24 +74,32 @@ namespace moofy.JsonServices {
         }
 
         public SuccessFlagDownload DownloadMovie(string id, string userId) {
-            int mid/*, uid*/;
+            if (userId == "" || id == "" || userId == null || id == null) throw new ArgumentException("Invalid value for id or userId, must supply both.");
+
+            int mid, uid;
             try {
                 mid = Convert.ToInt32(id);
-                //uid = Convert.ToInt32(userId);
+                uid = Convert.ToInt32(userId);
             } catch (FormatException e) {
-                return new SuccessFlagDownload { downloadLink = "", success = false };
+                throw new ArgumentException("Invalid format of movie id or user id - must be integer!", e);
             }
 
-            if (mid > 0 /*&& uid > 0*/) {
+            if (mid > 0 && uid > 0) {
                 db.Open();
-                SuccessFlagDownload ret = new SuccessFlagDownload() {
-                    success = true,
-                    downloadLink = db.GetMovie(mid).Uri //has the user paid for this?
-                };
+                string downloadLink = db.DownloadFile(mid, uid);
                 db.Close();
-                return ret;
+
+                if (downloadLink != null) {
+                    return new SuccessFlagDownload() {
+                        success = true,
+                        downloadLink = downloadLink
+                    };
+                }
+                else {
+                    throw new AccessViolationException("You do not have the permission to download this movie.");
+                }
             } else {
-                return new SuccessFlagDownload() { success = false, downloadLink = "" };
+                throw new ArgumentException("Movie and user ids must both be greater than 0.");
             }
         }
 
