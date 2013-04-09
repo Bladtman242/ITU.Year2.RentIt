@@ -59,8 +59,8 @@ namespace moofy.JsonServices {
         [OperationContract]
         [WebInvoke(Method = "POST",
             ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "upload")]
-        SuccessFlagUpload UploadMovie(Stream fileStream);
+            UriTemplate = "upload?extension={ext}")]
+        SuccessFlagUpload UploadMovie(string ext, Stream fileStream);
 
         [OperationContract]
         [WebInvoke(Method = "POST",
