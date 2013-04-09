@@ -24,6 +24,45 @@ namespace moofy.Backend.Tests
             db.Close();
         }
         [TestMethod]
+        public void UpdateSongTest()
+        {
+            //Upload a file
+            MemoryStream s = new MemoryStream();
+            s.WriteByte(5);
+            int tmpId = db.UploadFile(s);
+
+            //Create a movie to buy with price 100
+            int rent = 100;
+            Song song = new Song()
+            {
+                Title = "test",
+                Year = 1900,
+                BuyPrice = 1000,
+                RentPrice = rent,
+                Album = "testalbum",
+                Artist = "testartist",
+                Description = "description"
+            };
+            Song song1 = db.CreateSong(1, tmpId, new string[] { "Horror" }, song);
+
+            Song newSong = new Song()
+            {
+                Id = song1.Id,
+                Title = "NEWTITLE",
+                Year = 1909,
+                BuyPrice = 1000,
+                RentPrice = rent,
+                Album = "NEWALBUM",
+                Artist = "testartist",
+                Description = "description"
+            };
+            bool isUpdated = db.UpdateSong(newSong);
+            Assert.IsTrue(isUpdated);
+            Song actual = db.GetSong(newSong.Id);
+            Assert.AreEqual(newSong.Title, actual.Title);
+            Assert.AreEqual(newSong.Album, actual.Album);
+        }
+        [TestMethod]
         public void RentSongTest()
         {
             //Upload a file
@@ -34,7 +73,7 @@ namespace moofy.Backend.Tests
             //Create a movie to buy with price 100
             int rent = 100;
             Song song = new Song(){
-                Title = "test",
+                Title = "test0000",
                 Year = 1900,
                 BuyPrice = 1000,
                 RentPrice = rent,
