@@ -154,13 +154,29 @@ namespace moofy.JsonServices {
             }
         }
 
-        public SuccessFlagId CreateSong(int managerid, string tmpid, string title, int release, string artist, string album, string[] genres, int rentalPrice, int purchasePrice) {
-            if (tmpid == "f1337a12")
-                return new SuccessFlagId() {
-                    success = true,
-                    id = 1
+        public SuccessFlagId CreateSong(int managerid, int tmpid, string title, string description, int release, string artist, string album, string[] genres, int rentalPrice, int purchasePrice, string coverUri) {
+             Song song = new Song()
+            {
+                Title = title,
+                Year = (short)release,
+                Description = description,
+                Album = album,
+                Artist = artist,
+                RentPrice = rentalPrice,
+                BuyPrice = purchasePrice,
+                CoverUri = coverUri
+            };
+            db.Open();
+            IList<string> genr = new List<string>(genres);
+            Song song1 = db.CreateSong(managerid, tmpid, genr, song);
+            if (song1 == null)
+                throw new ArgumentException("Ensure you entered a valid tmpId and a valid admin id");
+            else
+                return new SuccessFlagId()
+                {
+                    id = song1.Id,
+                    success = true
                 };
-            else throw new ArgumentException("Invalid tmpid - get it by uploading a song.");
         }
 
         public SuccessFlag DeleteSong(string id, int managerid) {

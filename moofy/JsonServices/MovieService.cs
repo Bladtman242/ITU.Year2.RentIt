@@ -155,7 +155,7 @@ namespace moofy.JsonServices {
             }
         }
 
-        public SuccessFlagId CreateMovie(int managerid, int tmpid, string title, int release, string[] directors, string[] genres, string description, int rentalPrice, int purchasePrice) {
+        public SuccessFlagId CreateMovie(int managerid, int tmpid, string title, int release, string[] directors, string[] genres, string description, int rentalPrice, int purchasePrice, string coverUri) {
 
             Movie mov = new Movie()
             {
@@ -164,7 +164,8 @@ namespace moofy.JsonServices {
                 Director = String.Join(" , ", directors),
                 Description = description,
                 RentPrice = rentalPrice,
-                BuyPrice = purchasePrice
+                BuyPrice = purchasePrice,
+                CoverUri = coverUri
             };
             db.Open();
             IList<string> genr = new List<string>(genres);

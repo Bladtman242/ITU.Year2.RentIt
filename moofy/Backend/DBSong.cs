@@ -150,7 +150,7 @@ namespace moofy.Backend {
         /// <param name="genres">The genres the song fits into</param>
         /// <param name="description">The description of the song</param>
         /// <returns>The Song object including id and uri , or null if the song could not be added to the database</returns>
-        public Song CreateSong(int managerId, int tmpId, String[] genres, Song song) {
+        public Song CreateSong(int managerId, int tmpId, IList<String> genres, Song song) {
             SqlCommand command = new SqlCommand("SELECT * FROM Admin WHERE id =" + managerId, connection);
             if (command.ExecuteScalar() != null) {
                 //Get the uri from the StagedFile table
