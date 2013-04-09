@@ -25,9 +25,9 @@ namespace moofy.Backend {
                                   "rentPrice = " + movie.RentPrice + ", " +
                                   "buyPrice = " + movie.BuyPrice + ", " +
                                   "year = " + movie.Year + ", " +
-                                  "coverURI = '" + movie.CoverUri + "'" +
+                                  "coverURI = '" + movie.CoverUri + "' " +
                                   "WHERE id =" + movie.Id +
-                                  "UPDATE Movie SET director = '" + movie.Director +
+                                  "UPDATE Movie SET director = '" + movie.Director +"' "+
                                   "WHERE id = " + movie.Id;
 
             return command.ExecuteNonQuery() > 0;

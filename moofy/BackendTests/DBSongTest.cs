@@ -55,7 +55,7 @@ namespace moofy.Backend.Tests
                 Artist = "testartist",
                 Description = "description"
             };
-            bool isUpdated = db.UpdateSong(newSong);
+            bool isUpdated = db.UpdateSong(newSong,1);
             Assert.IsTrue(isUpdated);
             Song actual = db.GetSong(newSong.Id);
             Assert.AreEqual(newSong.Title, actual.Title);
