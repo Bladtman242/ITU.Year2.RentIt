@@ -56,11 +56,19 @@ namespace moofy.Backend.Tests
                 Director = "IFIGAST",
                 Description = "descriptio1111n"
             };
-            bool isUpdated = db.UpdateMovie(newMov);
+            bool isUpdated = db.UpdateMovie(newMov,1);
+            bool cleared = db.ClearFileGenres(newMov.Id);
+            bool genreGood = db.AddAllGenres(newMov.Id, new string[] { "Romance", "Funky", "Pop" });
             Assert.IsTrue(isUpdated);
+            Assert.IsTrue(genreGood);
+            Assert.IsTrue(cleared);
             Movie actual = db.GetMovie(newMov.Id);
             Assert.AreEqual(newMov.Title, actual.Title);
             Assert.AreEqual(newMov.Director, actual.Director);
+            Assert.IsTrue(newMov.Genres.Count == 3);
+            Assert.IsTrue(newMov.Genres.Contains("Romance"));
+            Assert.IsTrue(newMov.Genres.Contains("Funky"));
+            Assert.IsTrue(newMov.Genres.Contains("Pop"));
             //Cleanup
             db.DeleteMovie(newMov.Id, 1);
         }

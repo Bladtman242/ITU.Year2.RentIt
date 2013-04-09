@@ -27,7 +27,7 @@ namespace moofy.Backend {
                                      "WHERE id =" + song.Id +
                                      "UPDATE Song SET album = '" + song.Album + "', " +
                                      "artist = '" + song.Artist + "' " +
-                                     "WHERE id = " + song.Id;
+                                     "WHERE id = " + song.Id);
             
             return command.ExecuteNonQuery() > 0;
         }
