@@ -170,5 +170,13 @@ namespace moofy.JsonServices {
             else throw new ArgumentException("Illegal id");
         }
 
+        public SuccessFlag UpdateUser(string id, string name, string email, string password) {
+            //temp implementation
+            return new SuccessFlag() {
+                message = "This has not yet been implemented.",
+                success = false
+            };
+        }
+
     }
 }
