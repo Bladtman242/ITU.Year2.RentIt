@@ -290,7 +290,7 @@ namespace moofy.JsonServices {
             if (description != null) m.Description = description;
             if (rentalPrice >= 0) m.RentPrice = rentalPrice;
             if (purchasePrice >= 0) m.BuyPrice = purchasePrice;
-            if (release != null) m.Year = (short)release;
+            if (release >= 0) m.Year = (short)release;
             if (coverUri != null) m.CoverUri = coverUri;
             //if(genres != null) ????
             if (directors != null) m.Director = string.Join(",", directors);
