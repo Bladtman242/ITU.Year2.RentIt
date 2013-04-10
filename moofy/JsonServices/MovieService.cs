@@ -292,7 +292,10 @@ namespace moofy.JsonServices {
             if (purchasePrice >= 0) m.BuyPrice = purchasePrice;
             if (release >= 0) m.Year = (short)release;
             if (coverUri != null) m.CoverUri = coverUri;
-            //if(genres != null) ????
+            if (genres != null) {
+                db.ClearFileGenres(m.Id);
+                db.AddAllGenres(m.Id, genres);
+            }
             if (directors != null) m.Director = string.Join(",", directors);
 
             bool success = db.UpdateMovie(m, managerId);

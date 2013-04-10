@@ -293,9 +293,12 @@ namespace moofy.JsonServices {
             if (description != null) s.Description = description;
             if (rentalPrice >= 0) s.RentPrice = rentalPrice;
             if (purchasePrice >= 0) s.BuyPrice = purchasePrice;
-            if (release >= null) s.Year = (short)release;
+            if (release >= 0) s.Year = (short)release;
             if (coverUri != null) s.CoverUri = coverUri;
-            //if(genres != null) ????
+            if (genres != null) {
+                db.ClearFileGenres(s.Id);
+                db.AddAllGenres(s.Id, genres);
+            }
 
             bool success = db.UpdateSong(s, managerId);
             db.Close();

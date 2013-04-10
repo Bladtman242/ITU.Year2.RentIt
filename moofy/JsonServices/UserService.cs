@@ -188,12 +188,12 @@ namespace moofy.JsonServices {
             if (email != null) u.Email = email;
             if (password != null) u.Password = password;
 
-            db.UpdateUser(u);
+            bool success = db.UpdateUser(u);
             db.Close();
 
             return new SuccessFlag() {
-                success = true,
-                message = "Succesfully updated user."
+                success = success,
+                message = success ? "Succesfully updated user." : "Failed to update user info!"
             };
         }
 
