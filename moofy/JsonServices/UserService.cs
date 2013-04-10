@@ -171,10 +171,29 @@ namespace moofy.JsonServices {
         }
 
         public SuccessFlag UpdateUser(string id, string name, string email, string password) {
-            //temp implementation
+            if (id == null || id == "") throw new ArgumentException("Must supply an id.");
+            
+            int uid;
+            try {
+                uid = Convert.ToInt32(id);
+            }
+            catch (Exception e) {
+                throw new ArgumentException("User id must be an integer!", e);
+            }
+
+            db.Open();
+            User u = db.GetUser(uid);
+
+            if (name != null) u.Name = name;
+            if (email != null) u.Email = email;
+            if (password != null) u.Password = password;
+
+            db.UpdateUser(u);
+            db.Close();
+
             return new SuccessFlag() {
-                message = "This has not yet been implemented.",
-                success = false
+                success = true,
+                message = "Succesfully updated user."
             };
         }
 
