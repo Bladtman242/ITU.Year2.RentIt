@@ -146,15 +146,13 @@ namespace moofy.Backend {
                 //Delete the movie record first as it has a reference to the file record.
                 command.CommandText = "DELETE FROM Movie WHERE id=" + movieId;
                 if (command.ExecuteNonQuery() > 0) {
-                    command.CommandText = "DELETE FROM GenreFile WHERE fid=" + movieId;
-                    if (command.ExecuteNonQuery() > 0) {
-                        command.CommandText = "DELETE FROM UserFileRating WHERE fid=" + movieId;
-                        if (command.ExecuteNonQuery() > 0)
-                        {
-                            command.CommandText = "DELETE FROM Filez WHERE id=" + movieId;
-                            return command.ExecuteNonQuery() > 0;
-                        }
-                    }
+                    command.CommandText = "DELETE FROM GenreFile WHERE fid=" + movieId +
+                                          " DELETE FROM UserFile WHERE fid=" + movieId +
+                                          " DELETE FROM UserFileRating WHERE fid=" + movieId +
+                                          " DELETE FROM Filez WHERE id=" + movieId;
+                    
+                    return command.ExecuteNonQuery() > 0;
+                  
                 }
 
             }
