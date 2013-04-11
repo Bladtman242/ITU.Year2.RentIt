@@ -81,6 +81,7 @@ namespace moofy.Backend {
                 command.CommandText = "UPDATE Filez " +
                                       "SET viewCount = viewCount + 1 " +
                                       "WHERE id = " + fileId;
+                command.ExecuteNonQuery();
                 return uri.ToString();
             }
         }
