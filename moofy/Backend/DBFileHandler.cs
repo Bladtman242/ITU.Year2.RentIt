@@ -76,7 +76,13 @@ namespace moofy.Backend {
             Object uri = command.ExecuteScalar();
 
             if (uri == null) return "";//No file with the given id exists in the database
-            else return uri.ToString();
+            else
+            {
+                command.CommandText = "UPDATE Filez " +
+                                      "SET viewCount = viewCount + 1 " +
+                                      "WHERE id = " + fileId;
+                return uri.ToString();
+            }
         }
 
         /// <summary>
