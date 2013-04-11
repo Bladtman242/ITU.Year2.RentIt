@@ -286,6 +286,14 @@ namespace moofy.JsonServices {
             db.Open();
             Movie m = db.GetMovie(mid);
 
+            if (m == null) {
+                db.Close();
+                return new SuccessFlag() {
+                    success = false,
+                    message = "The movie you tried to update does not exit"
+                };
+            }
+
             if (title != null) m.Title = title;
             if (description != null) m.Description = description;
             if (rentalPrice >= 0) m.RentPrice = rentalPrice;
