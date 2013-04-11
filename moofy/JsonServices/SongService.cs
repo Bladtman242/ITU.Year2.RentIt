@@ -140,7 +140,7 @@ namespace moofy.JsonServices {
             }
         }
 
-        public SuccessFlagUpload UploadSong(string ext, Stream fileStream) {
+        public SuccessFlagUpload UploadSong(Stream fileStream) {
             try
             {
                 db.Open();

@@ -140,7 +140,7 @@ namespace moofy.JsonServices {
             }
         }
 
-        public SuccessFlagUpload UploadMovie(string ext, Stream fileStream) {
+        public SuccessFlagUpload UploadMovie(Stream fileStream) {
 
             try
             {
@@ -203,12 +203,12 @@ namespace moofy.JsonServices {
                     success = suc,
                     message = suc ? "Movie deleted" : "Couldn't delete movie"
                 };
-        }else{
+            }else{
                 return new SuccessFlag() {
                     success = false,
                     message = "Id's must be positive (non-zero) integers"
                 };
-    }
+            }
         }
 
         public SuccessFlag RateMovie(string id, int userId, int rating) {
