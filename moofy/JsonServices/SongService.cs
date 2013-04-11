@@ -287,6 +287,14 @@ namespace moofy.JsonServices {
             db.Open();
             Song s = db.GetSong(sid);
 
+            if (s == null) {
+                db.Close();
+                return new SuccessFlag() {
+                    success = false,
+                    message = "The song you tried to update does not exit"
+                };
+            }
+
             if (artist != null) s.Artist = artist;
             if (album != null) s.Album = album;
             if (title != null) s.Title = title;
