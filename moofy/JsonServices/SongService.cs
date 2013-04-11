@@ -303,12 +303,14 @@ namespace moofy.JsonServices {
             if (purchasePrice >= 0) s.BuyPrice = purchasePrice;
             if (release >= 0) s.Year = (short)release;
             if (coverUri != null) s.CoverUri = coverUri;
-            if (genres != null) {
-                db.ClearFileGenres(s.Id);
-                db.AddAllGenres(s.Id, genres);
-            }
 
             bool success = db.UpdateSong(s, managerId);
+            if (success) {
+                if (genres != null) {
+                    db.ClearFileGenres(s.Id);
+                    db.AddAllGenres(s.Id, genres);
+                }
+            }
             db.Close();
 
             return new SuccessFlag() {
