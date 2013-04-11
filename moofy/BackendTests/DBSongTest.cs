@@ -31,7 +31,6 @@ namespace moofy.Backend.Tests
             s.WriteByte(5);
             int tmpId = db.UploadFile(s);
 
-            //Create a movie to buy with price 100
             int rent = 100;
             Song song = new Song()
             {
@@ -56,11 +55,13 @@ namespace moofy.Backend.Tests
                 Artist = "testartist",
                 Description = "description"
             };
-            bool isUpdated = db.UpdateSong(newSong);
+            bool isUpdated = db.UpdateSong(newSong,1);
             Assert.IsTrue(isUpdated);
             Song actual = db.GetSong(newSong.Id);
             Assert.AreEqual(newSong.Title, actual.Title);
             Assert.AreEqual(newSong.Album, actual.Album);
+            //Cleanup
+            db.DeleteSong(newSong.Id,1);
         }
         [TestMethod]
         public void RentSongTest()

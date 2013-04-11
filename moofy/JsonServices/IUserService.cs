@@ -62,5 +62,13 @@ namespace moofy.JsonServices {
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "{id}/songs/current")]
         SongWrapper[] GetCurrentSongsFromUser(string id);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST",
+            ResponseFormat = WebMessageFormat.Json,
+            RequestFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.WrappedRequest,
+            UriTemplate = "{id}/update")]
+        SuccessFlag UpdateUser(string id, string name = null, string email = null, string password = null);
     }
 }

@@ -25,6 +25,54 @@ namespace moofy.Backend.Tests
             db.Close();
         }
         [TestMethod]
+        public void UpdateMovieTest()
+        {
+            //Upload a file
+            MemoryStream s = new MemoryStream();
+            s.WriteByte(5);
+            int tmpId = db.UploadFile(s);
+
+            //Create a movie to edit
+            int rent = 100;
+            Movie mov = new Movie()
+            {
+                Title = "test",
+                Year = 1900,
+                BuyPrice = 1000,
+                RentPrice = rent,
+                Director = "testest",
+                Description = "description"
+            };
+            Movie movie = db.CreateMovie(1, tmpId, new string[] { "Horror" }, mov);
+
+            //Create u new movie with the updated information
+            Movie newMov = new Movie()
+            {
+                Id = movie.Id,
+                Title = "NEWTITLE",
+                Year = 1900,
+                BuyPrice = 1000,
+                RentPrice = rent,
+                Director = "IFIGAST",
+                Description = "descriptio1111n"
+            };
+            bool isUpdated = db.UpdateMovie(newMov,1);
+            bool cleared = db.ClearFileGenres(newMov.Id);
+            bool genreGood = db.AddAllGenres(newMov.Id, new string[] { "Romance", "Funky", "Pop" });
+            Assert.IsTrue(isUpdated);
+            Assert.IsTrue(genreGood);
+            Assert.IsTrue(cleared);
+            Movie actual = db.GetMovie(newMov.Id);
+            Assert.AreEqual(newMov.Title, actual.Title);
+            Assert.AreEqual(newMov.Director, actual.Director);
+            Assert.IsTrue(newMov.Genres.Count == 3);
+            Assert.IsTrue(newMov.Genres.Contains("Romance"));
+            Assert.IsTrue(newMov.Genres.Contains("Funky"));
+            Assert.IsTrue(newMov.Genres.Contains("Pop"));
+            //Cleanup
+            db.DeleteMovie(newMov.Id, 1);
+        }
+        [TestMethod]
         public void RentMovieTest()
         {
             //Upload a file

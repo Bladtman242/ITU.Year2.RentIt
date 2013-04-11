@@ -73,26 +73,34 @@ namespace moofy.JsonServices {
         }
 
         public SuccessFlagDownload DownloadSong(string id, string userId) {
-            int sid;
-            int uid =1;// = Convert.ToInt32(userId);
+            if (userId == "" || id == "" || userId == null || id == null) throw new ArgumentException("Invalid value for id or userId, must supply both.");
+
+            int sid, uid;
             try {
                 sid = Convert.ToInt32(id);
-            } catch (FormatException e) {
-                return new SuccessFlagDownload { success = false, downloadLink = "" };
+                uid = Convert.ToInt32(userId);
             }
+            catch (FormatException e) {
+                throw new ArgumentException("Invalid format of song id or user id - must be integer!", e);
+            }
+
             if (sid > 0 && uid > 0) {
                 db.Open();
-                SuccessFlagDownload ret = new SuccessFlagDownload{
-                    success = true,
-                    downloadLink = db.GetSong(sid).Uri
-                };
+                string downloadLink = db.DownloadFile(sid, uid);
                 db.Close();
-                return ret;
-            } else {
-                return new SuccessFlagDownload() {
-                    success = false,
-                    downloadLink = ""
-                };
+
+                if (downloadLink != null) {
+                    return new SuccessFlagDownload() {
+                        success = true,
+                        downloadLink = downloadLink
+                    };
+                }
+                else {
+                    throw new AccessViolationException("You do not have the permission to download this song.");
+                }
+            }
+            else {
+                throw new ArgumentException("Song and user ids must both be greater than 0.");
             }
         }
 
@@ -132,7 +140,7 @@ namespace moofy.JsonServices {
             }
         }
 
-        public SuccessFlagUpload UploadSong(Stream fileStream) {
+        public SuccessFlagUpload UploadSong(string ext, Stream fileStream) {
             try
             {
                 db.Open();
@@ -263,6 +271,43 @@ namespace moofy.JsonServices {
             }
 
             return null;
+        }
+
+        public SuccessFlag UpdateSong(string id, int managerId, string artist = null, string album = null, string title = null, string description = null, int rentalPrice = -1, int purchasePrice = -1, int release = -1, string coverUri = null, string[] genres = null) {
+            if (id == "" || id == null) throw new ArgumentNullException("Must give a valid song id");
+
+            int sid;
+            try {
+                sid = Convert.ToInt32(id);
+            }
+            catch (Exception e) {
+                throw new ArgumentException("id must be a number", e);
+            }
+
+            db.Open();
+            Song s = db.GetSong(sid);
+
+            if (artist != null) s.Artist = artist;
+            if (album != null) s.Album = album;
+            if (title != null) s.Title = title;
+            if (description != null) s.Description = description;
+            if (rentalPrice >= 0) s.RentPrice = rentalPrice;
+            if (purchasePrice >= 0) s.BuyPrice = purchasePrice;
+            if (release >= 0) s.Year = (short)release;
+            if (coverUri != null) s.CoverUri = coverUri;
+            if (genres != null) {
+                db.ClearFileGenres(s.Id);
+                db.AddAllGenres(s.Id, genres);
+            }
+
+            bool success = db.UpdateSong(s, managerId);
+            db.Close();
+
+            return new SuccessFlag() {
+                message = success ? "Song data updated succesfully." : "Update of song data failed. You must be manager to update song data.",
+                success = success
+            };
+
         }
 
     }

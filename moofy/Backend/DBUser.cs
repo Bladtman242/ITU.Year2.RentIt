@@ -6,10 +6,27 @@ using System.Data.SqlClient;
 
 namespace moofy.Backend {
     public partial class DBAccess {
+        /// <summary>
+        /// Updates a user to have specified information
+        /// </summary>
+        /// <param name="user">a user object with the new information</param>
+        /// <returns>true if the update is sucessful, false otherwise</returns>
+        public bool UpdateUser(User user)
+        {
+            SqlCommand command = new SqlCommand("UPDATE Userz "+
+                                                "SET name ='"+ user.Name + "', "+
+                                                "password ='" + user.Password + "', " +
+                                                "email = '" + user.Email + "'",
+                                                connection);
 
+            return command.ExecuteNonQuery() > 0;
+        }
+        
         public bool DeleteUser(int userId) {
 
-            SqlCommand command = new SqlCommand("DELETE FROM UserFile WHERE uid =" + userId, connection);
+            SqlCommand command = new SqlCommand("DELETE FROM UserFile WHERE uid =" + userId +
+                                                "DELETE FROM UserFileRating WHERE uid=" + userId
+                                                , connection);
             command.ExecuteNonQuery();
 
             command.CommandText = "DELETE FROM Userz WHERE id=" + userId;

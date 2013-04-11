@@ -170,5 +170,32 @@ namespace moofy.JsonServices {
             else throw new ArgumentException("Illegal id");
         }
 
+        public SuccessFlag UpdateUser(string id, string name, string email, string password) {
+            if (id == null || id == "") throw new ArgumentException("Must supply an id.");
+            
+            int uid;
+            try {
+                uid = Convert.ToInt32(id);
+            }
+            catch (Exception e) {
+                throw new ArgumentException("User id must be an integer!", e);
+            }
+
+            db.Open();
+            User u = db.GetUser(uid);
+
+            if (name != null) u.Name = name;
+            if (email != null) u.Email = email;
+            if (password != null) u.Password = password;
+
+            bool success = db.UpdateUser(u);
+            db.Close();
+
+            return new SuccessFlag() {
+                success = success,
+                message = success ? "Succesfully updated user." : "Failed to update user info!"
+            };
+        }
+
     }
 }

@@ -7,7 +7,31 @@ using System.Data.SqlClient;
 namespace moofy.Backend {
     public partial class DBAccess {
 
+        /// <summary>
+        /// Updates a movie to contain the given values 
+        /// </summary>
+        /// <param name="movie">A movie object which contains the new values of the movie</param>
+        /// <param name="adminId">The id of the admin who authorises </param>
+        /// <returns>True if the update is sucessful, false otherwise </returns>
+        public bool UpdateMovie(Movie movie, int adminId)
+        {
+            //Ensure that the admin id does infact belong to an admin
+            SqlCommand command = new SqlCommand("SELECT id FROM Admin WHERE id =" + adminId, connection);
+            if (command.ExecuteScalar() == null) return false;
 
+            command.CommandText = "UPDATE Filez " +
+                                  "SET title = '" + movie.Title + "', " +
+                                  "description = '" + movie.Description + "', " +
+                                  "rentPrice = " + movie.RentPrice + ", " +
+                                  "buyPrice = " + movie.BuyPrice + ", " +
+                                  "year = " + movie.Year + ", " +
+                                  "coverURI = '" + movie.CoverUri + "' " +
+                                  "WHERE id =" + movie.Id +
+                                  "UPDATE Movie SET director = '" + movie.Director +"' "+
+                                  "WHERE id = " + movie.Id;
+
+            return command.ExecuteNonQuery() > 0;
+        }
         /// <summary>
         /// Return the movie with a given id
         /// </summary>

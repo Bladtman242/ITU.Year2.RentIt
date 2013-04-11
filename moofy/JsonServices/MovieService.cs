@@ -74,24 +74,32 @@ namespace moofy.JsonServices {
         }
 
         public SuccessFlagDownload DownloadMovie(string id, string userId) {
-            int mid/*, uid*/;
+            if (userId == "" || id == "" || userId == null || id == null) throw new ArgumentException("Invalid value for id or userId, must supply both.");
+
+            int mid, uid;
             try {
                 mid = Convert.ToInt32(id);
-                //uid = Convert.ToInt32(userId);
+                uid = Convert.ToInt32(userId);
             } catch (FormatException e) {
-                return new SuccessFlagDownload { downloadLink = "", success = false };
+                throw new ArgumentException("Invalid format of movie id or user id - must be integer!", e);
             }
 
-            if (mid > 0 /*&& uid > 0*/) {
+            if (mid > 0 && uid > 0) {
                 db.Open();
-                SuccessFlagDownload ret = new SuccessFlagDownload() {
-                    success = true,
-                    downloadLink = db.GetMovie(mid).Uri //has the user paid for this?
-                };
+                string downloadLink = db.DownloadFile(mid, uid);
                 db.Close();
-                return ret;
+
+                if (downloadLink != null) {
+                    return new SuccessFlagDownload() {
+                        success = true,
+                        downloadLink = downloadLink
+                    };
+                }
+                else {
+                    throw new AccessViolationException("You do not have the permission to download this movie.");
+                }
             } else {
-                return new SuccessFlagDownload() { success = false, downloadLink = "" };
+                throw new ArgumentException("Movie and user ids must both be greater than 0.");
             }
         }
 
@@ -132,7 +140,7 @@ namespace moofy.JsonServices {
             }
         }
 
-        public SuccessFlagUpload UploadMovie(Stream fileStream) {
+        public SuccessFlagUpload UploadMovie(string ext, Stream fileStream) {
 
             try
             {
@@ -262,6 +270,42 @@ namespace moofy.JsonServices {
             }
 
             return null;
+        }
+
+        public SuccessFlag UpdateMovie(string id, int managerId, string title = null, string description = null, int rentalPrice = -1, int purchasePrice = -1, int release = -1, string coverUri = null, string[] genres = null, string[] directors = null) {
+            if (id == "" || id == null) throw new ArgumentNullException("Must give a valid movie id");
+
+            int mid;
+            try {
+                mid = Convert.ToInt32(id);
+            }
+            catch (Exception e) {
+                throw new ArgumentException("id must be a number", e);
+            }
+
+            db.Open();
+            Movie m = db.GetMovie(mid);
+
+            if (title != null) m.Title = title;
+            if (description != null) m.Description = description;
+            if (rentalPrice >= 0) m.RentPrice = rentalPrice;
+            if (purchasePrice >= 0) m.BuyPrice = purchasePrice;
+            if (release >= 0) m.Year = (short)release;
+            if (coverUri != null) m.CoverUri = coverUri;
+            if (genres != null) {
+                db.ClearFileGenres(m.Id);
+                db.AddAllGenres(m.Id, genres);
+            }
+            if (directors != null) m.Director = string.Join(",", directors);
+
+            bool success = db.UpdateMovie(m, managerId);
+            db.Close();
+
+            return new SuccessFlag() {
+                message = success ? "Movie data updated succesfully." : "Update of movie data failed. You must be manager to update movie data.",
+                success = success
+            };
+
         }
 
     }
