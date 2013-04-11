@@ -17,7 +17,7 @@ namespace moofy.Backend {
             SqlCommand command = new SqlCommand("SELECT id FROM Admin WHERE id =" + adminId, connection);
             if (command.ExecuteScalar() == null) return false;
 
-            command = new SqlCommand("UPDATE Filez " +
+            command.CommandText =   ("UPDATE Filez " +
                                      "SET title = '" + song.Title + "', " +
                                      "description = '" + song.Description + "', " +
                                      "rentPrice = " + song.RentPrice + ", " +
