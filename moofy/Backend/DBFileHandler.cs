@@ -39,25 +39,7 @@ namespace moofy.Backend {
 
             return 0;
         }
-        /// <summary>
-        /// Gets all genres for a file
-        /// </summary>
-        /// <param name="fileId">id of the file to get</param>
-        /// <returns>a list of all the genre names</returns>
-        public IList<string> GetGenres(int fileId) {
-            SqlCommand command = new SqlCommand("SELECT name FROM Genre, GenreFile " +
-                                                "WHERE GenreFile.fid =" + fileId + " " +
-                                                "AND GenreFile.gid = Genre.id"
-                                                , connection);
-
-            SqlDataReader reader = command.ExecuteReader();
-            IList<string> genres = new List<string>();
-            while (reader.Read()) {
-                genres.Add(reader["name"].ToString());
-            }
-
-            return genres;
-        }
+       
         /// <summary>
         /// Returns the URI of the file with a given id
         /// </summary>
