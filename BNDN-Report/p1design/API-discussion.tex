@@ -1,4 +1,4 @@
-\section{Deciding on the API format}
+\subsection{Deciding on the API format}
 
 The two teams quickly agreed on using a RESTful JSON-based API as interface between
 frontend (client) and backend (server). This, however, still left a lot to design.
@@ -34,9 +34,9 @@ In this case, the files-service would have a return-type of "Object", whereas th
 and songs-services would have "Movie" and "Song".
 
 The high abstraction level works like a dynamically typed language (PHP, Javascript) would
-work, wheras the low abstraction level works like a type-strong language like C# or Java.
+work, wheras the low abstraction level works like a type-strong language like C\# or Java.
 
-\subsection{Cost of Change}
+\subsubsection{Cost of Change}
 In the high abstraction level service it is easy to expand the range of datatypes we offer,
 as they will be using the same API. This can with great advantage be paired with a discovery
 service that lets clients discover the supported data-types in real-time. The cost of change
@@ -62,7 +62,7 @@ whenever we want to support a new datatype. In turn, adding new services to the 
 them accessible from the clients. In order to fully roll out an update, {\bf all clients},
 including third-party ones, must be updated. This all adds up, so the cost of change is massive.
 
-\subsection{Conclusion}
+\subsubsection{Conclusion}
 In our application we consider the support of a new datatype to be somewhat a rare occasion. In our
 business, which is centered around a very specific set of products - movies and songs - and it is with
 this line of products that our business will be known.
