@@ -8,7 +8,7 @@ Notation : http://pages.cs.wisc.edu/~dbbook/
 
 \subsection{Reading the ER-model (lol.. vildt ligegyldigt)}
 \label{sec:readingdatamodel}
-Our design follows a naming scheme, where each table is named after the real domain object it represents, with junction tables following the structure<table1><table2><optional own name>.
+Our design follows a naming scheme, where each table is named after the real domain object it represents, with junction tables following the structure\linebreak <table1><table2><optional own name>.
 This structure caused a problem with the “User” and “File” tables, since these names are reserved keywords in MS SQL. We updated said tables by appending a ‘z’ to the name, but we did not update the junction tables.
 
 \subsection{Normalization}
@@ -24,8 +24,8 @@ During the design of our entity relationship model, we took time to brainstorm h
 \end{itemize}
 In the following we will explain how we designed for extendability in the context of the first case, but the principle applies to them both.
 The naïve solution would be to create a new table for each media type e.g. 
-Song (id, title, artist, album, coverURI, rentPrice, …) or
-Movie (id, title, director, coverURI, rentPrice, …)
+\textbf{Song (id, title, artist, album, coverURI, rentPrice, …)} or
+\textbf{Movie (id, title, director, coverURI, rentPrice, …)}
 This will however create a lot of duplicate columns in different tables. If we wanted to add new information to our media types later, e.g. a “viewCount” (which did actually happen) this would need to be added to every media table.
 The realization that several columns of information is shared across the media suggest for an inheritance based approach, where the shared columns are placed in a “super table”, while every media table will take part in an IS-A relationship with said “super table”.
 
@@ -44,7 +44,7 @@ Looking back at our database design we realized that a few improvements could be
 After having designed the database structure we had to decide how to access and utilize the database in the best suited way for our webservice. We quickly settled for a C\#/WCF-based web service, since every group member had about the same experience in that platform from other ITU courses.
 With access to the .NET framework, we considered to make use of the Entity Framework for our database interactions and general object-relational mapping. However several group members had been experiencing some inconvenient performance issues in previous projects. We do believe performance is an important aspect of our service and research has shown that users of the internet has become very impatient with regards to response times (http://www.nytimes.com/2012/03/01/technology/impatient-web-users-flee-slow-loading-sites.html?pagewanted=all\&_r=0). We also deemed our queries and database interaction to be fairly simple, thus having no real need for most of the functionality in the Entity Framework. After a discussion it became clear that the only real benefit of using the framework was the possibility of faster prototyping. With our emphasis on a solid performance we choose to spend a little more time developing our own database access layer in order to maintain a more direct control over the performance of our solution.
 
-\subsection{Other potential section}
+\subsection{Other potential sections}
 \textbf{Nævn partial classes for DBAccess}
 Kunne godt være relevant. Det er trods alt en fin nok design beslutning.
 
