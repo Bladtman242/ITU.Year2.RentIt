@@ -1,0 +1,38 @@
+As part of the analysis, we need a set of requirements for our product to establish what users will and will not be able to do with the system. This section describes and discusses our choice of requirements and use cases.
+
+
+There are two types of users: users and managers. A manager’s rights are a superset of a regular user’s rights. Ther means that a manager can do anything that a user can and some extra. In addition, managers do not have to purchase anything.
+
+
+The following are our use cases, which describe in more detail what users and managers must be able to do with the system.
+
+\textbf{Users:}
+\begin{itemize}
+\item A user must be able to login, register, edit and delete (CRUD) an account. \\
+\item A user may deposit money into her account, to be used for later purchases. \\
+\item Users must be able to overview movies by the following categories: lexicographically; by release date; and by genre. \\
+\item Users must be able to locate a specific movie through text search, matching movies with any property matching the text string. \\
+\item A movie must have properties describing title of movie, year of release, director(s), genre(s) of movie and a textual description. \\
+\item A user must be able to purchase a movie, which will then be associated with her account. \\
+\item A user must be able to rent a movie, which will then be associated with her account for 2 days. \\
+\item A user must be able to watch any movie associated with her account in the browser, as long as it is still available through the service. \\
+\item A user must be able to download any movie associated with her account, as long as it is still available through the service. \\
+\item A user must be able to find all movies that are or have been associated with her account, as long it is still available through the service (ie. movies the user has purchased or rented at a given time). \\
+\item A user must be able to find all movies that are associated with her account, as long it is still available through the service (ie. movies that the user can watch at the given time). \\
+\end{itemize} \\
+
+\textbf{Managers:}
+\begin{itemize}
+\item A manager's rights extend those of the user, so that a manager can do everything the user can, without purchase. \\
+\item A manager must be able to upload movies as well as provide properties and prices to them. \\
+\item A manager must be able to delete movies from the service. \\\
+\item A manager can view analytic information (recent searches). \\
+\end{itemize} \\
+
+\subsubsection{Security and other Design Decisions}
+When deciding on the requirements for the system, several criteria are considered, and some requirements which might be crucial in a real-life product are left out. These decision sare mainly made on the basis that this is an educational project, making these requirements more or less irrelevant to the project: \\
+\begin{itemize}
+\item We decided to leave out user authentication in our web services, so given the URL, anyone can download a movie our song without authenticating. The data structure does, however, support user authentication with each user having a password. \\
+\item In a real-life renting service such as iTunes, once a users starts playing the movie that she has just rented, the movie will only be available for viewing in the next 48 hours. When a user rents and downloads a movie or song using our service, they can keep the file for as long as they want. However, the file is only available for download for a limited period of time. \\
+\item Naturally, we have no implemented a real payment service but rather a fake balance where people can deposit money to their account, for use when purchasing or renting movies and songs.
+\end{itemize}
