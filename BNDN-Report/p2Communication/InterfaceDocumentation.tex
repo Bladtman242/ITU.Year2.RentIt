@@ -1,0 +1,24 @@
+\subsection{Interface Documentation}
+
+% stuff about where the documentation is placed (deciding towards a shared resource)
+
+\subsubsection{Format of Documentation}
+
+After our first discussion with the Singaporean team, the Danish team had the impression that they were
+relatively technically savvy: they had chosen to use a technology that was not the standard choice, and
+they had researched what this would require on our part.
+
+As JSON is a relatively easily understandable format, and as properly designed RESTful APIs should be
+understandable from just the URI, we decided to use the two in combination to document it: a URI heading
+with parameters denoted in curly-brackets, accompanied by an optional JSON-format request body as well as
+a required response body, also in JSON, which denotes the return format if the request was a success.
+
+% Example of JSON API documentation
+
+In accordance with proper RESTful design, requests that fail will return the proper error codes[citation
+needed] in the header of the HTTP-response.
+
+As we had proposed this format to the Singaporean team, and they had agreed to it, this seemed like an
+acceptable solution.
+
+%how it all went wrong when they didn't read it.
