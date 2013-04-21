@@ -158,25 +158,21 @@ namespace moofy.JsonServices {
         }
 
         public SuccessFlagUpload UploadSong(Stream fileStream) {
-            try
-            {
-                db.Open();
-                int id = db.UploadFile(fileStream);
+            db.Open();
+            int id;
+            try {
+                id = db.UploadFile(fileStream);
+            } catch (FormatException e) {
+                BadReq(e.Message);
+                return new SuccessFlagUpload() { success = false, tmpid = "" };
+            } finally {
+                System.Diagnostics.Debug.WriteLine("here");
                 db.Close();
-                return new SuccessFlagUpload()
-                {
-                    success = true,
-                    tmpid = id.ToString()
-                };
-            }
-            catch (Exception)
-            {
-                return new SuccessFlagUpload()
-                {
-                    success = false,
-                    tmpid = null
-                };
-            }
+           } 
+            return new SuccessFlagUpload() {
+                success = true,
+                tmpid = id.ToString()
+            };
         }
 
         public SuccessFlagId CreateSong(int managerid, int tmpid, string title, string description, int release, string artist, string album, string[] genres, int rentalPrice, int purchasePrice, string coverUri) {
@@ -194,14 +190,16 @@ namespace moofy.JsonServices {
             db.Open();
             IList<string> genr = new List<string>(genres);
             Song song1 = db.CreateSong(managerid, tmpid, genr, song);
-            if (song1 == null)
-                throw new ArgumentException("Ensure you entered a valid tmpId and a valid admin id");
-            else
-                return new SuccessFlagId()
-                {
+            db.Close();
+            if (song1 == null) {
+                BadReq("Ensure you entered a valid tmpId and a valid admin id");
+                return new SuccessFlagId() { success = false };
+            } else {
+                return new SuccessFlagId() {
                     id = song1.Id,
                     success = true
                 };
+            }
         }
 
         public SuccessFlag DeleteSong(string id, int managerid) {
@@ -209,6 +207,7 @@ namespace moofy.JsonServices {
             try {
                 sid = Convert.ToInt32(id);
             } catch (FormatException e) {
+                BadReq(e.Message);
                 return new SuccessFlag() { success = false, message = id + " nach uimhir?" };
             }
             if (sid > 0 && managerid > 0) {
@@ -217,10 +216,11 @@ namespace moofy.JsonServices {
                 db.Close();
                 
                 return new SuccessFlag() {
-                    success = suc, //actual confimation? the 
+                    success = suc,
                     message = suc ? "" : "Song not found, or user not a manager"
                 };
             } else {
+                BadReq("id's must be positive");
                 return new SuccessFlag() {
                     success = false,
                     message = "Invalid ids"
@@ -236,6 +236,7 @@ namespace moofy.JsonServices {
             }
             catch (FormatException e)
             {
+                BadReq(e.Message);
                 return new SuccessFlag() { success = false, message = id + " nach uimhir?" };
             }
             if (sid > 0 && userId > 0)
@@ -252,6 +253,7 @@ namespace moofy.JsonServices {
             }
             else
             {
+                BadReq("id's must be positive");
                 return new SuccessFlag()
                 {
                     success = false,
@@ -271,6 +273,7 @@ namespace moofy.JsonServices {
             }
             catch (FormatException e)
             {
+                BadReq(e.Message);
                 return null;
             }
             if (sid > 0 && uid > 0)
@@ -286,19 +289,23 @@ namespace moofy.JsonServices {
                     rating= rat
                 };
             }
-
+            BadReq("id's must be positive integers");
             return null;
         }
 
         public SuccessFlag UpdateSong(string id, int managerId, string artist = null, string album = null, string title = null, string description = null, int rentalPrice = -1, int purchasePrice = -1, int release = -1, string coverUri = null, string[] genres = null) {
-            if (id == "" || id == null) throw new ArgumentNullException("Must give a valid song id");
+            if (id == "" || id == null) {
+                BadReq("Must give a valid song id");
+                new SuccessFlag() { message = "Must give a valid song id", success = false };
+            }
 
             int sid;
             try {
                 sid = Convert.ToInt32(id);
             }
             catch (Exception e) {
-                throw new ArgumentException("id must be a number", e);
+                BadReq("id must be a number "+e.Message);
+                return new SuccessFlag() { message = "Must give a valid song id", success = false };
             }
 
             db.Open();
@@ -306,6 +313,7 @@ namespace moofy.JsonServices {
 
             if (s == null) {
                 db.Close();
+                NotFound("song " + sid + " not found");
                 return new SuccessFlag() {
                     success = false,
                     message = "The song you tried to update does not exit"
@@ -330,24 +338,20 @@ namespace moofy.JsonServices {
             }
             db.Close();
 
-            return new SuccessFlag() {
-                message = success ? "Song data updated succesfully." : "Update of song data failed. You must be manager to update song data.",
-                success = success
-            };
+            if (success) {
+                return new SuccessFlag() {
+                    message = "Song data updated succesfully.",
+                    success = success
+                };
+            } else {
+                BadReq("Update of song data failed. You must be manager to update song data.");
+                return new SuccessFlag() {
+                    message = "Update of song data failed. You must be manager to update song data.",
+                    success = false
+                };
+            }
         }
 
-        //sets the HTTP status code to 400, with desc as description
-        private void BadReq(string desc) {
-            WebOperationContext cctx = WebOperationContext.Current;
-            cctx.OutgoingResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
-            cctx.OutgoingResponse.StatusDescription = desc;
-        }
-
-        //sets the HTTP status code to 404, with desc as description
-        private void NotFound(string desc) {
-            WebOperationContext cctx = WebOperationContext.Current;
-            cctx.OutgoingResponse.StatusCode = System.Net.HttpStatusCode.NotFound;
-            cctx.OutgoingResponse.StatusDescription = desc;
-        }
+        
     }
 }
