@@ -14,7 +14,7 @@ namespace moofy.JsonServices {
             try {
                 sid = Convert.ToInt32(id);
             } catch (FormatException e) { // id is not number
-                BadReq("\""+id+"\"" + " is not a number");
+                Utils.BadReq("\""+id+"\"" + " is not a number");
                 return null;
             }
             if (sid > 0) {
@@ -22,12 +22,12 @@ namespace moofy.JsonServices {
                 Song s = db.GetSong(sid);
                 db.Close();
                 if (s == null) { // song not found
-                    NotFound("could not find song with id \"" + sid + "\"");
+                    Utils.NotFound("could not find song with id \"" + sid + "\"");
                     return null;
                 }
                 return s.ToWrapper();
             } else { // id below zero
-                BadReq("id's must be positive numbers");
+                Utils.BadReq("id's must be positive numbers");
                 return null;
             }
         }
@@ -37,7 +37,7 @@ namespace moofy.JsonServices {
             try {
                 sid = Convert.ToInt32(id);
             } catch (FormatException e) { //sid is not a number
-                BadReq("\"" + id + "\"" + " is not a number");
+                Utils.BadReq("\"" + id + "\"" + " is not a number");
                 return new SuccessFlag() { success = false, message = id + " doesn't seem like a number" };
             }
                 if (sid > 0 && userId > 0) {
@@ -50,11 +50,11 @@ namespace moofy.JsonServices {
                             message = "Song Purchased"
                         };
                     } else { //song or user not found in db
-                        NotFound("either the user: " + userId + ", or the song: " + sid + "could not be found");
+                        Utils.NotFound("either the user: " + userId + ", or the song: " + sid + "could not be found");
                         return null;
                     }
                 } else { // either or both of the id's are less than zero
-                    BadReq("id's must be positive numbers");
+                    Utils.BadReq("id's must be positive numbers");
                     return new SuccessFlag() {
                         success = false,
                         message = "Id's must be positive (non-zero) integers"
@@ -67,7 +67,7 @@ namespace moofy.JsonServices {
             try{
                 sid = Convert.ToInt32(id);
             } catch(FormatException e) { //id is not a number
-                BadReq("\"" + id + "\"" + " is not a number");
+                Utils.BadReq("\"" + id + "\"" + " is not a number");
                 return new SuccessFlag() { success=false, message = id + " doesn't seem to be a number" }; //NaNNaNNaNNaNNaNNaNNaNNaNNaNNaNNaNNaN WATMAN!
             }
             if (sid > 0 && userId > 0) {
@@ -80,11 +80,11 @@ namespace moofy.JsonServices {
                         message = "Song rented"
                     };
                 } else { //song or user not found
-                    NotFound("either the user: " + userId + ", or the song: " + sid + "could not be found");
+                    Utils.NotFound("either the user: " + userId + ", or the song: " + sid + "could not be found");
                     return null;
                 }
             } else { // either or both id's below zero
-                BadReq("id's must be positive numbers");
+                Utils.BadReq("id's must be positive numbers");
                 return new SuccessFlag() {
                     success = false,
                     message = "Id's must be positive (non-zero) integers"
@@ -99,7 +99,7 @@ namespace moofy.JsonServices {
                 uid = Convert.ToInt32(userId);
             }
             catch (FormatException e) { // not a number
-                BadReq("either \"" + id + "\", or " + "\"" + userId + "\"" + " is not a number");
+                Utils.BadReq("either \"" + id + "\", or " + "\"" + userId + "\"" + " is not a number");
                 return new SuccessFlagDownload() {
                     success = false,
                     downloadLink = ""
@@ -117,15 +117,15 @@ namespace moofy.JsonServices {
                         downloadLink = downloadLink
                     };
                 } else if (downloadLink == "") { //file not found
-                    NotFound("could not find song with id \"" + sid + "\"");
+                    Utils.NotFound("could not find song with id \"" + sid + "\"");
                     return new SuccessFlagDownload { success = false, downloadLink = "" };
                 } else { // song not purchased
-                    BadReq("user " + uid + " is not allowed access to song " + sid);
+                    Utils.BadReq("user " + uid + " is not allowed access to song " + sid);
                     return new SuccessFlagDownload { success = false, downloadLink = "" };
                 }
             }
             else { // id below zero
-                BadReq("id's must be positive numbers");
+                Utils.BadReq("id's must be positive numbers");
                 return new SuccessFlagDownload { success = false, downloadLink = "" };
             }
         }
@@ -152,7 +152,7 @@ namespace moofy.JsonServices {
                 Sorter.SortBy(s, sortBy);
                 return s.ToWrapper();
             } catch (ArgumentException e) {
-                BadReq(e.Message);
+                Utils.BadReq(e.Message);
                 return null;
             }
         }
@@ -163,7 +163,7 @@ namespace moofy.JsonServices {
             try {
                 id = db.UploadFile(fileStream);
             } catch (FormatException e) {
-                BadReq(e.Message);
+                Utils.BadReq(e.Message);
                 return new SuccessFlagUpload() { success = false, tmpid = "" };
             } finally {
                 System.Diagnostics.Debug.WriteLine("here");
@@ -192,7 +192,7 @@ namespace moofy.JsonServices {
             Song song1 = db.CreateSong(managerid, tmpid, genr, song);
             db.Close();
             if (song1 == null) {
-                BadReq("Ensure you entered a valid tmpId and a valid admin id");
+                Utils.BadReq("Ensure you entered a valid tmpId and a valid admin id");
                 return new SuccessFlagId() { success = false };
             } else {
                 return new SuccessFlagId() {
@@ -207,7 +207,7 @@ namespace moofy.JsonServices {
             try {
                 sid = Convert.ToInt32(id);
             } catch (FormatException e) {
-                BadReq(e.Message);
+                Utils.BadReq(e.Message);
                 return new SuccessFlag() { success = false, message = id + " nach uimhir?" };
             }
             if (sid > 0 && managerid > 0) {
@@ -220,7 +220,7 @@ namespace moofy.JsonServices {
                     message = suc ? "" : "Song not found, or user not a manager"
                 };
             } else {
-                BadReq("id's must be positive");
+                Utils.BadReq("id's must be positive");
                 return new SuccessFlag() {
                     success = false,
                     message = "Invalid ids"
@@ -236,7 +236,7 @@ namespace moofy.JsonServices {
             }
             catch (FormatException e)
             {
-                BadReq(e.Message);
+                Utils.BadReq(e.Message);
                 return new SuccessFlag() { success = false, message = id + " nach uimhir?" };
             }
             if (sid > 0 && userId > 0)
@@ -253,7 +253,7 @@ namespace moofy.JsonServices {
             }
             else
             {
-                BadReq("id's must be positive");
+                Utils.BadReq("id's must be positive");
                 return new SuccessFlag()
                 {
                     success = false,
@@ -273,7 +273,7 @@ namespace moofy.JsonServices {
             }
             catch (FormatException e)
             {
-                BadReq(e.Message);
+                Utils.BadReq(e.Message);
                 return null;
             }
             if (sid > 0 && uid > 0)
@@ -289,13 +289,13 @@ namespace moofy.JsonServices {
                     rating= rat
                 };
             }
-            BadReq("id's must be positive integers");
+            Utils.BadReq("id's must be positive integers");
             return null;
         }
 
         public SuccessFlag UpdateSong(string id, int managerId, string artist = null, string album = null, string title = null, string description = null, int rentalPrice = -1, int purchasePrice = -1, int release = -1, string coverUri = null, string[] genres = null) {
             if (id == "" || id == null) {
-                BadReq("Must give a valid song id");
+                Utils.BadReq("Must give a valid song id");
                 new SuccessFlag() { message = "Must give a valid song id", success = false };
             }
 
@@ -304,7 +304,7 @@ namespace moofy.JsonServices {
                 sid = Convert.ToInt32(id);
             }
             catch (Exception e) {
-                BadReq("id must be a number "+e.Message);
+                Utils.BadReq("id must be a number "+e.Message);
                 return new SuccessFlag() { message = "Must give a valid song id", success = false };
             }
 
@@ -313,7 +313,7 @@ namespace moofy.JsonServices {
 
             if (s == null) {
                 db.Close();
-                NotFound("song " + sid + " not found");
+                Utils.NotFound("song " + sid + " not found");
                 return new SuccessFlag() {
                     success = false,
                     message = "The song you tried to update does not exit"
@@ -344,7 +344,7 @@ namespace moofy.JsonServices {
                     success = success
                 };
             } else {
-                BadReq("Update of song data failed. You must be manager to update song data.");
+                Utils.BadReq("Update of song data failed. You must be manager to update song data.");
                 return new SuccessFlag() {
                     message = "Update of song data failed. You must be manager to update song data.",
                     success = false
