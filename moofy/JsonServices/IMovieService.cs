@@ -59,8 +59,8 @@ namespace moofy.JsonServices {
         [OperationContract]
         [WebInvoke(Method = "POST",
             ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "upload?extension={ext}")]
-        SuccessFlagUpload UploadMovie(string ext, Stream fileStream);
+            UriTemplate = "upload")]
+        SuccessFlagUpload UploadMovie(Stream fileStream);
 
         [OperationContract]
         [WebInvoke(Method = "POST",
@@ -71,11 +71,11 @@ namespace moofy.JsonServices {
         SuccessFlagId CreateMovie(int managerid, int tmpid, string title, int release, string[] directors, string[] genres, string description, int rentalPrice, int purchasePrice, string coverUri);
 
         [OperationContract]
-        [WebInvoke(Method = "DELETE",
+        [WebInvoke(Method = "POST",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.WrappedRequest,
-            UriTemplate = "{id}")]
+            UriTemplate = "{id}/delete")]
         SuccessFlag DeleteMovie(string id, int managerid);
 
         [OperationContract]
@@ -98,7 +98,7 @@ namespace moofy.JsonServices {
             RequestFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.WrappedRequest,
             UriTemplate = "{id}/update")]
-        SuccessFlag UpdateMovie(string id, int managerId, string title = null, string description = null, int rentalPrice = -1, int purchasePrice = -1, int release = -1, string coverUri = null, string[] genres = null, string[] directors = null);
+        SuccessFlag UpdateMovie(string id, int managerid, string title = null, string description = null, int rentalPrice = -1, int purchasePrice = -1, int release = -1, string coverUri = null, string[] genres = null, string[] directors = null);
 
     }
 }

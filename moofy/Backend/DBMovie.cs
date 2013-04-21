@@ -20,14 +20,14 @@ namespace moofy.Backend {
             if (command.ExecuteScalar() == null) return false;
 
             command.CommandText = "UPDATE Filez " +
-                                  "SET title = '" + movie.Title + "', " +
-                                  "description = '" + movie.Description + "', " +
+                                  "SET title = '" + movie.Title.Replace("'", "''") + "', " +
+                                  "description = '" + movie.Description.Replace("'", "''") + "', " +
                                   "rentPrice = " + movie.RentPrice + ", " +
                                   "buyPrice = " + movie.BuyPrice + ", " +
                                   "year = " + movie.Year + ", " +
-                                  "coverURI = '" + movie.CoverUri + "' " +
+                                  "coverURI = '" + movie.CoverUri.Replace("'", "''") + "' " +
                                   "WHERE id =" + movie.Id +
-                                  "UPDATE Movie SET director = '" + movie.Director +"' "+
+                                  " UPDATE Movie SET director = '" + movie.Director.Replace("'", "''") + "' " +
                                   "WHERE id = " + movie.Id;
 
             return command.ExecuteNonQuery() > 0;
@@ -80,10 +80,14 @@ namespace moofy.Backend {
 
             //Get the price of the movie
             command.CommandText = "SELECT buyPrice FROM Filez WHERE id =" + movieId;
-            int price = (int)command.ExecuteScalar();
+            Object pric = command.ExecuteScalar();
+            if (pric == null) return false;
+            int price = (int)pric;
             //Get the balance of the user
             command.CommandText = "SELECT balance FROM Userz WHERE id =" + userId;
-            int balance = (int)command.ExecuteScalar();
+            Object bal = command.ExecuteScalar();
+            if (bal == null) return false;
+            int balance = (int)bal;
             if (balance - price >= 0) {
                 //Withdraw the amount from the users balance and only continue if it is successful
                 command.CommandText = "UPDATE Userz " +
@@ -114,10 +118,14 @@ namespace moofy.Backend {
 
             //Get the rental price of the movie
             command.CommandText = "SELECT rentPrice FROM Filez WHERE id =" + movieId;
-            int price = (int)command.ExecuteScalar();
+            Object pric = command.ExecuteScalar();
+            if (pric == null) return false;
+            int price = (int)pric;
             //Get the balance of the user
             command.CommandText = "SELECT balance FROM Userz WHERE id =" + userId;
-            int balance = (int)command.ExecuteScalar();
+            Object bal = command.ExecuteScalar();
+            if (bal == null) return false;
+            int balance = (int)bal;
             if (balance - price >= 0) {
                 //Withdraw the amount from the users balance and only continue if it is successful
                 command.CommandText = "UPDATE Userz " +
@@ -146,15 +154,13 @@ namespace moofy.Backend {
                 //Delete the movie record first as it has a reference to the file record.
                 command.CommandText = "DELETE FROM Movie WHERE id=" + movieId;
                 if (command.ExecuteNonQuery() > 0) {
-                    command.CommandText = "DELETE FROM GenreFile WHERE fid=" + movieId;
-                    if (command.ExecuteNonQuery() > 0) {
-                        command.CommandText = "DELETE FROM UserFileRating WHERE fid=" + movieId;
-                        if (command.ExecuteNonQuery() > 0)
-                        {
-                            command.CommandText = "DELETE FROM Filez WHERE id=" + movieId;
-                            return command.ExecuteNonQuery() > 0;
-                        }
-                    }
+                    command.CommandText = "DELETE FROM GenreFile WHERE fid=" + movieId +
+                                          " DELETE FROM UserFile WHERE fid=" + movieId +
+                                          " DELETE FROM UserFileRating WHERE fid=" + movieId +
+                                          " DELETE FROM Filez WHERE id=" + movieId;
+                    
+                    return command.ExecuteNonQuery() > 0;
+                  
                 }
 
             }
@@ -187,13 +193,13 @@ namespace moofy.Backend {
                 command.CommandText = "INSERT INTO Filez" +
                                       "(title, rentPrice, buyPrice, URI, year, description, coverURI, viewCount) " +
                                       "VALUES('" +
-                                      movie.Title + "', " +
+                                      movie.Title.Replace("'", "''") + "', " +
                                       movie.RentPrice + ", " +
                                       movie.BuyPrice + ", '" +
-                                      uri + "', " +
+                                      uri.Replace("'", "''") + "', " +
                                       movie.Year + ", '" +
-                                      movie.Description + "', '"+
-                                      movie.CoverUri+ "', "+
+                                      movie.Description.Replace("'", "''") + "', '" +
+                                      movie.CoverUri.Replace("'", "''") + "', " +
                                       "0)";
 
                 //If the information is successfully added continue to add info to the Movie table and GenreFile table
@@ -206,15 +212,16 @@ namespace moofy.Backend {
 
                     //Add genres to the file if any exist
                     if (genres.Count > 0) {
-                        string sql = "SELECT id FROM Genre WHERE name IN ('" +
-                                      string.Join<string>("', '", genres) + "')";
-                        command.CommandText = sql;
-                        SqlDataReader reader = command.ExecuteReader();
-                        while (reader.Read()) {
-                            SqlCommand command2 = new SqlCommand("INSERT INTO GenreFile VALUES(" + reader["id"] + " ," + fileId + ")", connection);
-                            command2.ExecuteNonQuery();
-                        }
-                        reader.Close();
+                        AddAllGenres(fileId, genres);
+                        //string sql = "SELECT id FROM Genre WHERE name IN ('" +
+                        //              string.Join<string>("', '", genres) + "')";
+                        //command.CommandText = sql;
+                        //SqlDataReader reader = command.ExecuteReader();
+                        //while (reader.Read()) {
+                        //    SqlCommand command2 = new SqlCommand("INSERT INTO GenreFile VALUES(" + reader["id"] + " ," + fileId + ")", connection);
+                        //    command2.ExecuteNonQuery();
+                        //}
+                        //reader.Close();
 
                     }
                     command.CommandText = "DELETE FROM StagedFile WHERE id=" + tmpId;

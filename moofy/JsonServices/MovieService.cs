@@ -140,7 +140,7 @@ namespace moofy.JsonServices {
             }
         }
 
-        public SuccessFlagUpload UploadMovie(string ext, Stream fileStream) {
+        public SuccessFlagUpload UploadMovie(Stream fileStream) {
 
             try
             {
@@ -203,12 +203,12 @@ namespace moofy.JsonServices {
                     success = suc,
                     message = suc ? "Movie deleted" : "Couldn't delete movie"
                 };
-        }else{
+            }else{
                 return new SuccessFlag() {
                     success = false,
                     message = "Id's must be positive (non-zero) integers"
                 };
-    }
+            }
         }
 
         public SuccessFlag RateMovie(string id, int userId, int rating) {
@@ -283,9 +283,37 @@ namespace moofy.JsonServices {
                 throw new ArgumentException("id must be a number", e);
             }
 
+            db.Open();
+            Movie m = db.GetMovie(mid);
+
+            if (m == null) {
+                db.Close();
+                return new SuccessFlag() {
+                    success = false,
+                    message = "The movie you tried to update does not exit"
+                };
+            }
+
+            if (title != null) m.Title = title;
+            if (description != null) m.Description = description;
+            if (rentalPrice >= 0) m.RentPrice = rentalPrice;
+            if (purchasePrice >= 0) m.BuyPrice = purchasePrice;
+            if (release >= 0) m.Year = (short)release;
+            if (coverUri != null) m.CoverUri = coverUri;
+            if (directors != null) m.Director = string.Join(",", directors);
+
+            bool success = db.UpdateMovie(m, managerId);
+            if (success) {
+                if (genres != null) {
+                    db.ClearFileGenres(m.Id);
+                    db.AddAllGenres(m.Id, genres);
+                }
+            }
+            db.Close();
+
             return new SuccessFlag() {
-                message = "This has not yet been implemented.",
-                success = false
+                message = success ? "Movie data updated succesfully." : "Update of movie data failed. You must be manager to update movie data.",
+                success = success
             };
 
         }

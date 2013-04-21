@@ -157,7 +157,7 @@ namespace moofy.JsonServices {
             }
         }
 
-        public SuccessFlagUpload UploadSong(string ext, Stream fileStream) {
+        public SuccessFlagUpload UploadSong(Stream fileStream) {
             try
             {
                 db.Open();
@@ -301,9 +301,38 @@ namespace moofy.JsonServices {
                 throw new ArgumentException("id must be a number", e);
             }
 
+            db.Open();
+            Song s = db.GetSong(sid);
+
+            if (s == null) {
+                db.Close();
+                return new SuccessFlag() {
+                    success = false,
+                    message = "The song you tried to update does not exit"
+                };
+            }
+
+            if (artist != null) s.Artist = artist;
+            if (album != null) s.Album = album;
+            if (title != null) s.Title = title;
+            if (description != null) s.Description = description;
+            if (rentalPrice >= 0) s.RentPrice = rentalPrice;
+            if (purchasePrice >= 0) s.BuyPrice = purchasePrice;
+            if (release >= 0) s.Year = (short)release;
+            if (coverUri != null) s.CoverUri = coverUri;
+
+            bool success = db.UpdateSong(s, managerId);
+            if (success) {
+                if (genres != null) {
+                    db.ClearFileGenres(s.Id);
+                    db.AddAllGenres(s.Id, genres);
+                }
+            }
+            db.Close();
+
             return new SuccessFlag() {
-                message = "This has not yet been implemented.",
-                success = false
+                message = success ? "Song data updated succesfully." : "Update of song data failed. You must be manager to update song data.",
+                success = success
             };
         }
 

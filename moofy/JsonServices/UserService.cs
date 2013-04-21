@@ -2,6 +2,7 @@
 using System.Net;
 using System.ServiceModel.Web;
 using moofy.Backend;
+using System.Collections.Generic;
 
 namespace moofy.JsonServices {
     public partial class MoofyServices : IUserService {
@@ -92,89 +93,95 @@ namespace moofy.JsonServices {
         }
 
         public MovieWrapper[] GetMoviesFromUser(string id) {
-            int uid;
-            try {
-                uid = Convert.ToInt32(id);
-            } catch (FormatException e) {
-                return null;
-            }
+            int uid = Convert.ToInt32(id);
+            if (uid <= 0) throw new ArgumentException("User id must be greater than 0.");
 
-            if (uid > 0) {
-                db.Open();
-                db.GetMovies(uid);
-                db.Close();
-                return new MovieWrapper[] {
-                    new MovieWrapper() {
-                        title = "Skew",
-                        release = 2011,
-                        genres = new string[] { "Horror", "Thriller" },
-                        directors = new string[] { "Sevé Schelenz" },
-                        description = "When Simon, Rich, and Eva head out on an eagerly anticipated road trip, they bring along a video camera to record their journey. What starts out as a carefree adventure slowly becomes a descent into the ominous as unexplained events threaten to disrupt the balance between the three close friends. Each one of them must struggle with personal demons and paranoia as friendships are tested and gruesome realities are revealed...and recorded.",
-                        rentalPrice = 10,
-                        purchasePrice = 30
-                    }
-                };
-            } else {
-                return null;
+            List<MovieWrapper> movieList = new List<MovieWrapper>();
+            db.Open();
+            User u = db.GetUser(uid);
+            IList<Purchase> purchases = u.Movies;
+            foreach (Purchase p in purchases) {
+                movieList.Add(db.GetMovie(p.File.Id).ToWrapper());
             }
+            db.Close();
+
+            return movieList.ToArray();
         }
 
         public MovieWrapper[] GetCurrentMoviesFromUser(string id) {
             int uid = Convert.ToInt32(id);
-            if (uid > 0)
-                return new MovieWrapper[] {
-                    new MovieWrapper() {
-                        title = "Skew",
-                        release = 2011,
-                        genres = new string[] { "Horror", "Thriller" },
-                        directors = new string[] { "Sevé Schelenz" },
-                        description = "When Simon, Rich, and Eva head out on an eagerly anticipated road trip, they bring along a video camera to record their journey. What starts out as a carefree adventure slowly becomes a descent into the ominous as unexplained events threaten to disrupt the balance between the three close friends. Each one of them must struggle with personal demons and paranoia as friendships are tested and gruesome realities are revealed...and recorded.",
-                        rentalPrice = 10,
-                        purchasePrice = 30
-                    }
-                };
-            else throw new ArgumentException("Illegal id");
+            if (uid <= 0) throw new ArgumentException("User id must be greater than 0.");
+
+            List<MovieWrapper> movieList = new List<MovieWrapper>();
+            db.Open();
+            User u = db.GetUser(uid);
+            IList<Purchase> purchases = u.Movies;
+            foreach (Purchase p in purchases) {
+                if (p.EndTime < DateTime.Now)
+                    movieList.Add(db.GetMovie(p.File.Id).ToWrapper());
+            }
+            db.Close();
+
+            return movieList.ToArray();
         }
 
         public SongWrapper[] GetSongsFromUser(string id) {
             int uid = Convert.ToInt32(id);
-            if (uid > 0)
-                return new SongWrapper[] {
-                    new SongWrapper() {
-                        title = "I Knew You Were Trouble",
-                        release = 2012,
-                        genres = new string[] { "Pop" },
-                        album = "Red",
-                        artist = "Taylor Swift",
-                        rentalPrice = 2,
-                        purchasePrice = 8
-                    }
-                };
-            else throw new ArgumentException("Illegal id");
+            if (uid <= 0) throw new ArgumentException("User id must be greater than 0.");
+
+            List<SongWrapper> songList = new List<SongWrapper>();
+            db.Open();
+            User u = db.GetUser(uid);
+            IList<Purchase> purchases = u.Songs;
+            foreach (Purchase p in purchases) {
+                songList.Add(db.GetSong(p.File.Id).ToWrapper());
+            }
+            db.Close();
+
+            return songList.ToArray();
         }
 
         public SongWrapper[] GetCurrentSongsFromUser(string id) {
             int uid = Convert.ToInt32(id);
-            if (uid > 0)
-                return new SongWrapper[] {
-                    new SongWrapper() {
-                        title = "I Knew You Were Trouble",
-                        release = 2012,
-                        genres = new string[] { "Pop" },
-                        album = "Red",
-                        artist = "Taylor Swift",
-                        rentalPrice = 2,
-                        purchasePrice = 8
-                    }
-                };
-            else throw new ArgumentException("Illegal id");
+            if (uid <= 0) throw new ArgumentException("User id must be greater than 0.");
+
+            List<SongWrapper> songList = new List<SongWrapper>();
+            db.Open();
+            User u = db.GetUser(uid);
+            IList<Purchase> purchases = u.Songs;
+            foreach (Purchase p in purchases) {
+                if (p.EndTime < DateTime.Now)
+                    songList.Add(db.GetSong(p.File.Id).ToWrapper());
+            }
+            db.Close();
+
+            return songList.ToArray();
         }
 
         public SuccessFlag UpdateUser(string id, string name, string email, string password) {
-            //temp implementation
+            if (id == null || id == "") throw new ArgumentException("Must supply an id.");
+            
+            int uid;
+            try {
+                uid = Convert.ToInt32(id);
+            }
+            catch (Exception e) {
+                throw new ArgumentException("User id must be an integer!", e);
+            }
+
+            db.Open();
+            User u = db.GetUser(uid);
+
+            if (name != null) u.Name = name;
+            if (email != null) u.Email = email;
+            if (password != null) u.Password = password;
+
+            bool success = db.UpdateUser(u);
+            db.Close();
+
             return new SuccessFlag() {
-                message = "This has not yet been implemented.",
-                success = false
+                success = success,
+                message = success ? "Succesfully updated user." : "Failed to update user info!"
             };
         }
 

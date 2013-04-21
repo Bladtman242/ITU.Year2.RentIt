@@ -1,0 +1,84 @@
+\documentclass[a4paper,titlepage,draft]{article}
+
+% Page size
+%\usepackage{a4wide}
+
+% Fonts and Language Support
+\usepackage[utf8]{inputenc} 
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+
+% Other packages
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{fixme}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{underscore}
+\usepackage{lastpage}
+\usepackage{pdfpages}
+\usepackage[bookmarks]{hyperref}
+
+% Macros
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\newcommand{\SYSNAME}{RentIt}
+
+% Style setup
+\setlength{\headheight}{15pt}
+\pagestyle{fancyplain}
+%\cfoot{\thepage\ of \pageref{LastPage}}
+%\setstretch{1.15}
+
+% Header and footer
+\lhead{}
+\rfoot{\fancyplain{}{\thepage \hspace{1pt} of \pageref{LastPage}}}
+\cfoot{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Frontpage
+\begin{document}
+
+% diverse
+\parindent=0pt % Ingen indrykkning
+\parskip=8pt plus 2pt minus 4pt
+
+% Start on page 0
+\setcounter{page}{1}
+
+% TOC
+\tableofcontents
+\newpage
+
+% Body
+%\onehalfspace
+\begin{spacing}{1.15}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\input{./FrontPage/main}
+\section{Analysis and Design}
+\input{./p1design/requirements}
+\input{./p1design/datamodel}
+\input{./p1design/API-discussion}
+\input{./p1design/InterInterfaces}
+\pagebreak
+\section{Working with Singapore}
+\input{./p2Communication/main}
+
+% section problemstatement (end)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{spacing}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Bibliography
+\pagebreak
+\input{./Bibliography/main}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Appendices
+\newpage
+\appendix
+\section{Appendices}
+%\addcontentsline{toc}{\protect\setcounter{tocdepth}{1}}
+%\addcontentsline{toc}{section}{Appendices}
+\input{./Appendices/main}
+
+\end{document}

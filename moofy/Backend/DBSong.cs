@@ -11,24 +11,23 @@ namespace moofy.Backend {
         /// </summary>
         /// <param name="song">The song object containing the new information</param>
         /// <returns>true if the new values are succesfully added, false otherwise.</returns>
-        public bool UpdateSong(Song song, int adminId)
-        {
+        public bool UpdateSong(Song song, int adminId) {
             //Ensure that the admin id does infact belong to an admin
             SqlCommand command = new SqlCommand("SELECT id FROM Admin WHERE id =" + adminId, connection);
             if (command.ExecuteScalar() == null) return false;
 
-            command = new SqlCommand("UPDATE Filez " +
-                                     "SET title = '" + song.Title + "', " +
-                                     "description = '" + song.Description + "', " +
+            command.CommandText =   ("UPDATE Filez " +
+                                     "SET title = '" + song.Title.Replace("'", "''") + "', " +
+                                     "description = '" + song.Description.Replace("'", "''") + "', " +
                                      "rentPrice = " + song.RentPrice + ", " +
                                      "buyPrice = " + song.BuyPrice + ", " +
                                      "year = " + song.Year + ", " +
-                                     "coverURI = '" + song.CoverUri + "'" +
+                                     "coverURI = '" + song.CoverUri.Replace("'", "''") + "'" +
                                      "WHERE id =" + song.Id +
-                                     "UPDATE Song SET album = '" + song.Album + "', " +
-                                     "artist = '" + song.Artist + "' " +
+                                     "UPDATE Song SET album = '" + song.Album.Replace("'", "''") + "', " +
+                                     "artist = '" + song.Artist.Replace("'", "''") + "' " +
                                      "WHERE id = " + song.Id);
-            
+
             return command.ExecuteNonQuery() > 0;
         }
 
@@ -82,10 +81,14 @@ namespace moofy.Backend {
 
             //Get the price of the song
             command.CommandText = "SELECT buyPrice FROM Filez WHERE id =" + songId;
-            int price = (int)command.ExecuteScalar();
+            Object pric = command.ExecuteScalar();
+            if (pric == null) return false;
+            int price = (int)pric;
             //Get the balance of the user
             command.CommandText = "SELECT balance FROM Userz WHERE id =" + userId;
-            int balance = (int)command.ExecuteScalar();
+            Object bal = command.ExecuteScalar();
+            if (bal == null) return false;
+            int balance = (int)bal;
             if (balance - price >= 0) {
                 //Withdraw the amount from the users balance and only continue if it is successful
                 command.CommandText = "UPDATE Userz " +
@@ -115,10 +118,14 @@ namespace moofy.Backend {
 
             //Get the price of the song
             command.CommandText = "SELECT rentPrice FROM Filez WHERE id =" + songId;
-            int price = (int)command.ExecuteScalar();
+            Object pric = command.ExecuteScalar();
+            if (pric == null) return false;
+            int price = (int)pric;
             //Get the balance of the user
             command.CommandText = "SELECT balance FROM Userz WHERE id =" + userId;
-            int balance = (int)command.ExecuteScalar();
+            Object bal = command.ExecuteScalar();
+            if (bal == null) return false;
+            int balance = (int)bal;
             if (balance - price >= 0) {
                 //Withdraw the amount from the users balance and only continue if it is successful
                 command.CommandText = "UPDATE Userz " +
@@ -147,15 +154,12 @@ namespace moofy.Backend {
                 //Delete the movie record first as it has a reference to the file record.
                 command.CommandText = "DELETE FROM Song WHERE id=" + songId;
                 if (command.ExecuteNonQuery() > 0) {
-                    command.CommandText = "DELETE FROM GenreFile WHERE fid=" + songId;
-                    if (command.ExecuteNonQuery() > 0) {
-                        command.CommandText = "DELETE FROM UserFileRating WHERE fid=" + songId;
-                        if (command.ExecuteNonQuery() > 0)
-                        {
-                            command.CommandText = "DELETE FROM Filez WHERE id=" + songId;
-                            return command.ExecuteNonQuery() > 0;
-                        }
-                    }
+                    command.CommandText = "DELETE FROM GenreFile WHERE fid=" + songId +
+                                          " DELETE FROM UserFileRating WHERE fid=" + songId+
+                                          " DELETE FROM UserFile WHERE fid=" + songId +
+                                          " DELETE FROM Filez WHERE id=" + songId;
+                    return command.ExecuteNonQuery() > 0;
+                  
                 }
 
             }
@@ -188,13 +192,13 @@ namespace moofy.Backend {
                 command.CommandText = "INSERT INTO Filez" +
                                       "(title, rentPrice, buyPrice, URI, year, description, coverURI, viewCount) " +
                                       "VALUES('" +
-                                      song.Title + "', " +
+                                      song.Title.Replace("'", "''") + "', " +
                                       song.RentPrice + ", " +
                                       song.BuyPrice + ", '" +
-                                      uri + "', " +
+                                      uri.Replace("'", "''") + "', " +
                                       song.Year + ", '" +
-                                      song.Description + "', '"+
-                                      song.CoverUri + "', " +
+                                      song.Description.Replace("'", "''") + "', '" +
+                                      song.CoverUri.Replace("'", "''") + "', " +
                                       "0)";
 
                 //If the information is successfully added continue to add info to the Movie table and GenreFile table
