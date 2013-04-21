@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using moofy.Backend;
+using System.ServiceModel.Web;
 
 namespace moofy.JsonServices {
     public partial class MoofyServices : ISongService {
@@ -12,17 +13,22 @@ namespace moofy.JsonServices {
             int sid;
             try {
                 sid = Convert.ToInt32(id);
-            } catch (FormatException e) {
-                return new SongWrapper(); //dunno how to actually return a 404
+            } catch (FormatException e) { // id is not number
+                BadReq("\""+id+"\"" + " is not a number");
+                return null;
             }
             if (sid > 0) {
                 db.Open();
                 Song s = db.GetSong(sid);
-                if (s == null) return null;
                 db.Close();
+                if (s == null) { // song not found
+                    NotFound("could not find song with id \"" + sid + "\"");
+                    return null;
+                }
                 return s.ToWrapper();
-            } else {
-                return new SongWrapper();
+            } else { // id below zero
+                BadReq("id's must be positive numbers");
+                return null;
             }
         }
 
@@ -30,18 +36,25 @@ namespace moofy.JsonServices {
             int sid;
             try {
                 sid = Convert.ToInt32(id);
-            } catch (FormatException e) {
+            } catch (FormatException e) { //sid is not a number
+                BadReq("\"" + id + "\"" + " is not a number");
                 return new SuccessFlag() { success = false, message = id + " doesn't seem like a number" };
             }
                 if (sid > 0 && userId > 0) {
                     db.Open();
-                    db.PurchaseSong(sid, userId);
+                    bool res = db.PurchaseSong(sid, userId);
                     db.Close();
-                    return new SuccessFlag() {
-                        success = true,
-                        message = "Song Purchased"
-                    };
-                } else {
+                    if (res){ //success
+                        return new SuccessFlag() {
+                            success = true,
+                            message = "Song Purchased"
+                        };
+                    } else { //song or user not found in db
+                        NotFound("either the user: " + userId + ", or the song: " + sid + "could not be found");
+                        return null;
+                    }
+                } else { // either or both of the id's are less than zero
+                    BadReq("id's must be positive numbers");
                     return new SuccessFlag() {
                         success = false,
                         message = "Id's must be positive (non-zero) integers"
@@ -53,18 +66,25 @@ namespace moofy.JsonServices {
             int sid;
             try{
                 sid = Convert.ToInt32(id);
-            } catch(FormatException e) {
+            } catch(FormatException e) { //id is not a number
+                BadReq("\"" + id + "\"" + " is not a number");
                 return new SuccessFlag() { success=false, message = id + " doesn't seem to be a number" }; //NaNNaNNaNNaNNaNNaNNaNNaNNaNNaNNaNNaN WATMAN!
             }
             if (sid > 0 && userId > 0) {
                 db.Open();
-                db.RentSong(sid, userId, 42); //TODO period
+                bool res = db.RentSong(sid, userId, 42); //TODO period
                 db.Close();
-                return new SuccessFlag() {
-                    success = true,
-                    message = "Song rented"
-                };
-            } else {
+                if (res) { //success
+                    return new SuccessFlag() {
+                        success = true,
+                        message = "Song rented"
+                    };
+                } else { //song or user not found
+                    NotFound("either the user: " + userId + ", or the song: " + sid + "could not be found");
+                    return null;
+                }
+            } else { // either or both id's below zero
+                BadReq("id's must be positive numbers");
                 return new SuccessFlag() {
                     success = false,
                     message = "Id's must be positive (non-zero) integers"
@@ -73,15 +93,17 @@ namespace moofy.JsonServices {
         }
 
         public SuccessFlagDownload DownloadSong(string id, string userId) {
-            if (userId == "" || id == "" || userId == null || id == null) throw new ArgumentException("Invalid value for id or userId, must supply both.");
-
             int sid, uid;
             try {
                 sid = Convert.ToInt32(id);
                 uid = Convert.ToInt32(userId);
             }
-            catch (FormatException e) {
-                throw new ArgumentException("Invalid format of song id or user id - must be integer!", e);
+            catch (FormatException e) { // not a number
+                BadReq("either \"" + id + "\", or " + "\"" + userId + "\"" + " is not a number");
+                return new SuccessFlagDownload() {
+                    success = false,
+                    downloadLink = ""
+                };
             }
 
             if (sid > 0 && uid > 0) {
@@ -89,18 +111,22 @@ namespace moofy.JsonServices {
                 string downloadLink = db.DownloadFile(sid, uid);
                 db.Close();
 
-                if (downloadLink != null) {
+                if (downloadLink != null && downloadLink !="") {//success
                     return new SuccessFlagDownload() {
                         success = true,
                         downloadLink = downloadLink
                     };
-                }
-                else {
-                    throw new AccessViolationException("You do not have the permission to download this song.");
+                } else if (downloadLink == "") { //file not found
+                    NotFound("could not find song with id \"" + sid + "\"");
+                    return new SuccessFlagDownload { success = false, downloadLink = "" };
+                } else { // song not purchased
+                    BadReq("user " + uid + " is not allowed access to song " + sid);
+                    return new SuccessFlagDownload { success = false, downloadLink = "" };
                 }
             }
-            else {
-                throw new ArgumentException("Song and user ids must both be greater than 0.");
+            else { // id below zero
+                BadReq("id's must be positive numbers");
+                return new SuccessFlagDownload { success = false, downloadLink = "" };
             }
         }
 
@@ -112,31 +138,22 @@ namespace moofy.JsonServices {
         }
 
         public SongWrapper[] FilterSongs(string filter) {
-            if (filter != "emptyList"){
                 db.Open();
                 SongWrapper[] s = db.FilterSongs(filter).ToWrapper();
                 db.Close();
                 return s;
-            }else{
-                return new SongWrapper[0];
-            }
         }
 
         public SongWrapper[] FilterAndSortSongs(string filter, string sortBy) {
-            if (filter != "emptyList") {
-                db.Open();
-                Song[] s = db.FilterSongs(filter);
-                try {
-                    
-                    Sorter.SortBy(s, sortBy);
-                    return s.ToWrapper();
-                } catch (ArgumentException e){
-                    return new SongWrapper[0];
-                } finally{
-                    db.Close();
-                }
-            } else {
-                return new SongWrapper[0];
+            db.Open();
+            Song[] s = db.FilterSongs(filter);
+            db.Close();
+            try {
+                Sorter.SortBy(s, sortBy);
+                return s.ToWrapper();
+            } catch (ArgumentException e) {
+                BadReq(e.Message);
+                return null;
             }
         }
 
@@ -288,8 +305,20 @@ namespace moofy.JsonServices {
                 message = "This has not yet been implemented.",
                 success = false
             };
-
         }
 
+        //sets the HTTP status code to 400, with desc as description
+        private void BadReq(string desc) {
+            WebOperationContext cctx = WebOperationContext.Current;
+            cctx.OutgoingResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
+            cctx.OutgoingResponse.StatusDescription = desc;
+        }
+
+        //sets the HTTP status code to 404, with desc as description
+        private void NotFound(string desc) {
+            WebOperationContext cctx = WebOperationContext.Current;
+            cctx.OutgoingResponse.StatusCode = System.Net.HttpStatusCode.NotFound;
+            cctx.OutgoingResponse.StatusDescription = desc;
+        }
     }
 }

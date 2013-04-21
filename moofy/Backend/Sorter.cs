@@ -72,7 +72,6 @@ namespace moofy.Backend {
                     break;
                 default:
                     throw new ArgumentException(property + " is undefined");
-                    break; //completely unnecessary
             }
         }
 
