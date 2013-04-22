@@ -83,6 +83,7 @@
     <Compile Include="SuccessFlagUpload.cs" />
     <Compile Include="UserService.cs" />
     <Compile Include="UserWrapper.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

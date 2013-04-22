@@ -1,0 +1,95 @@
+\subsection{Interface Documentation}
+
+In the beginning of the project the two teams had not agreed on how to share documentation - each of the
+teams were left to their own devices.
+
+In the Danish team we used a combination of well-documented code and various diagrams to show the relationship
+between classes in the program, entities in the backend, and so on. As the project is fairly limited in scope,
+all members of the Danish team were aware of the more abstract ideas of the project, so this documentation was
+sufficient.
+
+Additionally, comments for the top layer, found in the \verb+JsonServices+ project, were deferred as this part
+of the project was subject to the most change and, additionally, was mostly self-documenting in its format.
+
+%Begin example of C# API interface implementation
+\begin{table}[h]
+    \begin{tabular}{ | l | }
+        \hline
+        [WebInvoke(Method = "POST", \\
+        \hspace{5em}
+            RequestFormat = WebMessageFormat.Json, \\
+        \hspace{5em}
+            ResponseFormat = WebMessageFormat.Json, \\
+        \hspace{5em}
+            BodyStyle = WebMessageBodyStyle.WrappedRequest, \\
+        \hspace{5em}
+            UriTemplate = "\{id\}/purchase")] \\
+        SuccessFlag PurchaseSong(string id, int userId); \\
+        \hline
+    \end{tabular}
+    \caption{Example of the interface implementation (ISongService) of the service's action to purchase
+        a song. As is seen, the code is rather verbose, in that it details request method, request- and response-format,
+        as well as the actual URI used.}
+\end{table}
+%End example
+
+Adding documentation comments to this code would simply require for the team to learn a \emph{different} syntax.
+
+With requests for changes coming in rapidly, some asking for features that had already been implemented, we
+realized that it would be more optimal to share updated documentation with the Singaporean team. We had previously
+shared the first draft with them in the context of agreeing on initial requirements for the API, and it was
+straight-forward to move this to Google Docs\footnote{Google Docs allows users to share and collaboratively edit
+documents online, http://docs.google.com/} and bring it up to date. Going forward this was our single
+reference-point for updated documentation of the API.
+
+\subsubsection{Format of Documentation}
+
+After our first discussion with the Singaporean team, the Danish team had the impression that they were
+relatively technically savvy: they had chosen to use a technology that was not the standard choice, and
+they had researched what this would require on our part.
+
+As JSON is a relatively easily understandable format, and as properly designed RESTful APIs should be
+understandable from just the URI, we decided to use the two in combination to document it: a HTTP-method
+and URI heading with parameters denoted in curly-brackets, accompanied by an optional JSON-format request
+body as well as a required response body, also in JSON, which denotes the return format if the request was
+a success.
+
+%Following is an example of the JSON documentation
+\begin{table}[h]
+    \begin{tabular}{ | l | }
+        \hline
+        POST users/create \\
+        \textbf{\{ name: /*string*/, username: /*string*/, email: /*string*/, password: /*string*/ \}} \\
+        \{ success: /*boolean*/, message: /*string*/ \} \\
+        \hline
+    \end{tabular}
+    \caption{Example of API documentation showing the request and response formats for creating a new user.}
+\end{table}
+%End of example
+
+%NOTICE CITATION NEEDED BELOW!
+
+In accordance with proper RESTful design, requests that fail will return the proper error codes[citation
+needed] in the header of the HTTP-response.
+
+As we had proposed this format to the Singaporean team, and they had agreed to it, this seemed like an
+acceptable solution. In addition to this, we expected them to be fairly aware of how the JSON format works,
+as they had proposed it themselves.
+
+\subsubsection{Issues with Shared Documentation}
+
+We did not encounter any massive issues with our way of sharing the documentation of the interface.
+
+With a shared document where all members of both teams had the rights to edit, one could imagine a situation
+where changes were made to the documentation without being made to the actual implementation, causing a
+discrepancy that might take a long time to notice and fix. Such a situation did, however, not occur.
+
+We encountered only one issue with the whole of the documentation process, which we did not find a solution for
+during the time of the project.
+
+On several occasions, when the Singaporean team requested features, the features turned out to already exist, be
+implemented and fully documented. This was a case of simply not reading the documentation before posting an idea.
+
+This led to a growing amount of time spent checking that the feature was indeed documented and implemented, and then
+informing the Singaporean team of the situation. Mostly this was a minor issue, but adding up, as it did, it led to
+an increasing level of annoyance, which was not healthy for collaboration.
