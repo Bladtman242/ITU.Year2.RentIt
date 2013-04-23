@@ -31,25 +31,25 @@ namespace moofy.Backend {
                                                 "IF OBJECT_ID('GenreFile') IS NOT NULL DROP TABLE GenreFile " +
                                                 "IF OBJECT_ID('UserFile') IS NOT NULL DROP TABLE UserFile " +
                                                 "IF OBJECT_ID('UserFileRating') IS NOT NULL DROP TABLE UserFileRating " +
-                                                "IF OBJECT_ID('Filez') IS NOT NULL DROP TABLE Filez " +
+                                                "IF OBJECT_ID('Files') IS NOT NULL DROP TABLE Files " +
                                                 "IF OBJECT_ID('Genre') IS NOT NULL DROP TABLE Genre " +
                                                 "IF OBJECT_ID('Admin') IS NOT NULL DROP TABLE Admin " +
-                                                "IF OBJECT_ID('Userz') IS NOT NULL DROP TABLE Userz " +
+                                                "IF OBJECT_ID('Users') IS NOT NULL DROP TABLE Users " +
                                                 "CREATE TABLE StagedFile (id INT IDENTITY(1,1) PRIMARY KEY NOT NULL, path VARCHAR(200) NOT NULL) "+
-                                                "CREATE TABLE Filez (id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,title VARCHAR(200) NOT NULL,rentPrice INT NOT NULL, buyPrice INT NOT NULL, URI VARCHAR(200) NOT NULL, year INT NOT NULL, description VARCHAR(1000), coverURI VARCHAR(200) NOT NULL, viewCount INT NOT NULL) "+
-                                                "CREATE TABLE Movie (id INT PRIMARY KEY NOT NULL, director VARCHAR(150), FOREIGN KEY (id) REFERENCES Filez(id)) "+
-                                                "CREATE TABLE Song (id INT PRIMARY KEY NOT NULL, artist VARCHAR(150), album VARCHAR(150), FOREIGN KEY (id) REFERENCES Filez(id)) "+
+                                                "CREATE TABLE Files (id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,title VARCHAR(200) NOT NULL,rentPrice INT NOT NULL, buyPrice INT NOT NULL, URI VARCHAR(200) NOT NULL, year INT NOT NULL, description VARCHAR(1000), coverURI VARCHAR(200) NOT NULL, viewCount INT NOT NULL) "+
+                                                "CREATE TABLE Movie (id INT PRIMARY KEY NOT NULL, director VARCHAR(150), FOREIGN KEY (id) REFERENCES Files(id)) "+
+                                                "CREATE TABLE Song (id INT PRIMARY KEY NOT NULL, artist VARCHAR(150), album VARCHAR(150), FOREIGN KEY (id) REFERENCES Files(id)) "+
                                                 "CREATE TABLE Genre (id INT IDENTITY(1,1) PRIMARY KEY NOT NULL, name VARCHAR(150)) "+
-                                                "CREATE TABLE GenreFile (gid INT NOT NULL, fid INT NOT NULL, PRIMARY KEY (gid, fid), FOREIGN KEY (gid) REFERENCES Genre(id), FOREIGN KEY (fid) REFERENCES Filez(id)) "+
-                                                "CREATE TABLE Userz (id INT IDENTITY(1,1) PRIMARY KEY NOT NULL, userName VARCHAR(150) NOT NULL, password VARCHAR(150) NOT NULL, name VARCHAR(150), email VARCHAR(150) UNIQUE, balance INT NOT NULL) "+
-                                                "CREATE TABLE UserFile (uid INT NOT NULL, fid INT NOT NULL, endTime DATETIME not null, PRIMARY KEY (uid, fid), FOREIGN KEY (uid) REFERENCES Userz(id), FOREIGN KEY (fid) REFERENCES Filez(id)) "+
-                                                "CREATE TABLE UserFileRating (uid INT NOT NULL, fid INT NOT NULL, rating FLOAT NOT NULL, PRIMARY KEY (uid, fid), FOREIGN KEY (uid) REFERENCES Userz(id), FOREIGN KEY (fid) REFERENCES Filez(id)) "+
-                                                "CREATE TABLE Admin (id INT PRIMARY KEY NOT NULL, FOREIGN KEY (id) REFERENCES Userz(id)) "+
+                                                "CREATE TABLE GenreFile (gid INT NOT NULL, fid INT NOT NULL, PRIMARY KEY (gid, fid), FOREIGN KEY (gid) REFERENCES Genre(id), FOREIGN KEY (fid) REFERENCES Files(id)) "+
+                                                "CREATE TABLE Users (id INT IDENTITY(1,1) PRIMARY KEY NOT NULL, userName VARCHAR(150) NOT NULL, password VARCHAR(150) NOT NULL, name VARCHAR(150), email VARCHAR(150) UNIQUE, balance INT NOT NULL) "+
+                                                "CREATE TABLE UserFile (uid INT NOT NULL, fid INT NOT NULL, endTime DATETIME not null, PRIMARY KEY (uid, fid), FOREIGN KEY (uid) REFERENCES Users(id), FOREIGN KEY (fid) REFERENCES Files(id)) "+
+                                                "CREATE TABLE UserFileRating (uid INT NOT NULL, fid INT NOT NULL, rating FLOAT NOT NULL, PRIMARY KEY (uid, fid), FOREIGN KEY (uid) REFERENCES Users(id), FOREIGN KEY (fid) REFERENCES Files(id)) "+
+                                                "CREATE TABLE Admin (id INT PRIMARY KEY NOT NULL, FOREIGN KEY (id) REFERENCES Users(id)) "+
                                                 "INSERT INTO StagedFile VALUES('path') " +
-                                                "INSERT INTO Userz (userName, password, name, email, balance) VALUES('SmallSon', 'password', 'Niclas Benjamin Tollstorff', 'nben@itu.dk', 0), " +
+                                                "INSERT INTO Users (userName, password, name, email, balance) VALUES('SmallSon', 'password', 'Niclas Benjamin Tollstorff', 'nben@itu.dk', 0), " +
                                                 "('Bigson', 'stortpassword', 'Ikke Niclas Benjamin Tollstorff', 'lol@itu.dk', 872043) " +
                                                 "INSERT INTO Admin VALUES(1) "+
-                                                "INSERT INTO Filez VALUES('Life of a Small Son', 10, 25, '', 2013, 'Tells the sad tale of director Niclas Benjamin Tollstorff''s life as a small son', 'http://4.bp.blogspot.com/-1tmYxvB58CY/UFjMqzTdQKI/AAAAAAAAH_M/g7kWAu4Y4kc/s1600/600px-No_image_available.svg.png',0),"+
+                                                "INSERT INTO Files VALUES('Life of a Small Son', 10, 25, '', 2013, 'Tells the sad tale of director Niclas Benjamin Tollstorff''s life as a small son', 'http://4.bp.blogspot.com/-1tmYxvB58CY/UFjMqzTdQKI/AAAAAAAAH_M/g7kWAu4Y4kc/s1600/600px-No_image_available.svg.png',0),"+
                                                 "('Life of a Small Son Title Track (Small Son)', 2, 5, 'rentit.itu.dk/RentIt25/downloads/flute.mp3', 2013, 'Awesome flutez', 'http://4.bp.blogspot.com/-1tmYxvB58CY/UFjMqzTdQKI/AAAAAAAAH_M/g7kWAu4Y4kc/s1600/600px-No_image_available.svg.png',0), "+
                                                 "('A', 1, 2, '', 2912, 'Hej', 'URILOL', 4000), " +
                                                 "('Sang', 55, 345, '', 93, 'dsffd', '.', 1) " +
