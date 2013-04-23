@@ -150,7 +150,8 @@ namespace moofy.Backend {
             SqlCommand command = new SqlCommand("SELECT * FROM Admin WHERE id =" + adminId, connection);
             if (command.ExecuteScalar() != null) {
                 //Delete the movie record first as it has a reference to the file record.
-                command.CommandText = "DELETE FROM Song WHERE id=" + songId;
+                command.CommandText = "DELETE FROM SongArtist WHERE sid="+songId +
+                                      " DELETE FROM Song WHERE id=" + songId;
                 if (command.ExecuteNonQuery() > 0) {
                     command.CommandText = "DELETE FROM GenreFile WHERE fid=" + songId +
                                           " DELETE FROM UserFileRating WHERE fid=" + songId+
