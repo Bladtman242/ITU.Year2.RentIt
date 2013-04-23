@@ -31,7 +31,7 @@ namespace moofy.Backend
         }
         public bool AddGenre(int fileId, string genre)
         {
-            SqlCommand command = new SqlCommand("SELECT id FROM Filez WHERE id =" + fileId, connection);
+            SqlCommand command = new SqlCommand("SELECT id FROM Files WHERE id =" + fileId, connection);
             if(command.ExecuteScalar() == null) return false;
 
             command.CommandText = "IF('" + genre + "' NOT IN (SELECT name FROM Genre)) " +

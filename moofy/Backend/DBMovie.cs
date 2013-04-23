@@ -19,7 +19,7 @@ namespace moofy.Backend {
             SqlCommand command = new SqlCommand("SELECT id FROM Admin WHERE id =" + adminId, connection);
             if (command.ExecuteScalar() == null) return false;
 
-            command.CommandText = "UPDATE Filez " +
+            command.CommandText = "UPDATE Files " +
                                   "SET title = '" + movie.Title.Replace("'", "''") + "', " +
                                   "description = '" + movie.Description.Replace("'", "''") + "', " +
                                   "rentPrice = " + movie.RentPrice + ", " +
@@ -44,7 +44,7 @@ namespace moofy.Backend {
             if (reader.Read()) {
                 string director = reader["director"].ToString();
                 reader.Close();
-                command.CommandText = "SELECT * FROM Filez WHERE id =" + movieId;
+                command.CommandText = "SELECT * FROM Files WHERE id =" + movieId;
                 reader = command.ExecuteReader();
                 reader.Read();
                 Movie mov = new Movie() {
@@ -79,18 +79,18 @@ namespace moofy.Backend {
             if (command.ExecuteScalar() == null) return false;
 
             //Get the price of the movie
-            command.CommandText = "SELECT buyPrice FROM Filez WHERE id =" + movieId;
+            command.CommandText = "SELECT buyPrice FROM Files WHERE id =" + movieId;
             Object pric = command.ExecuteScalar();
             if (pric == null) return false;
             int price = (int)pric;
             //Get the balance of the user
-            command.CommandText = "SELECT balance FROM Userz WHERE id =" + userId;
+            command.CommandText = "SELECT balance FROM Users WHERE id =" + userId;
             Object bal = command.ExecuteScalar();
             if (bal == null) return false;
             int balance = (int)bal;
             if (balance - price >= 0) {
                 //Withdraw the amount from the users balance and only continue if it is successful
-                command.CommandText = "UPDATE Userz " +
+                command.CommandText = "UPDATE Users " +
                                       "SET balance = balance - " + price +
                                       "WHERE id = " + userId;
                 if (command.ExecuteNonQuery() > 0) {
@@ -117,18 +117,18 @@ namespace moofy.Backend {
             if (command.ExecuteScalar() == null) return false;
 
             //Get the rental price of the movie
-            command.CommandText = "SELECT rentPrice FROM Filez WHERE id =" + movieId;
+            command.CommandText = "SELECT rentPrice FROM Files WHERE id =" + movieId;
             Object pric = command.ExecuteScalar();
             if (pric == null) return false;
             int price = (int)pric;
             //Get the balance of the user
-            command.CommandText = "SELECT balance FROM Userz WHERE id =" + userId;
+            command.CommandText = "SELECT balance FROM Users WHERE id =" + userId;
             Object bal = command.ExecuteScalar();
             if (bal == null) return false;
             int balance = (int)bal;
             if (balance - price >= 0) {
                 //Withdraw the amount from the users balance and only continue if it is successful
-                command.CommandText = "UPDATE Userz " +
+                command.CommandText = "UPDATE Users " +
                                       "SET balance = balance - " + price +
                                       "WHERE id = " + userId;
                 if (command.ExecuteNonQuery() > 0) {
@@ -157,7 +157,7 @@ namespace moofy.Backend {
                     command.CommandText = "DELETE FROM GenreFile WHERE fid=" + movieId +
                                           " DELETE FROM UserFile WHERE fid=" + movieId +
                                           " DELETE FROM UserFileRating WHERE fid=" + movieId +
-                                          " DELETE FROM Filez WHERE id=" + movieId;
+                                          " DELETE FROM Files WHERE id=" + movieId;
                     
                     return command.ExecuteNonQuery() > 0;
                   
@@ -189,8 +189,8 @@ namespace moofy.Backend {
 
                 string uri = tmpUri.ToString();
 
-                //Add the file information into to Filez table
-                command.CommandText = "INSERT INTO Filez" +
+                //Add the file information into to Files table
+                command.CommandText = "INSERT INTO Files" +
                                       "(title, rentPrice, buyPrice, URI, year, description, coverURI, viewCount) " +
                                       "VALUES('" +
                                       movie.Title.Replace("'", "''") + "', " +
@@ -204,7 +204,7 @@ namespace moofy.Backend {
 
                 //If the information is successfully added continue to add info to the Movie table and GenreFile table
                 if (command.ExecuteNonQuery() > 0) {
-                    command.CommandText = "SELECT IDENT_CURRENT('Filez')";
+                    command.CommandText = "SELECT IDENT_CURRENT('Files')";
                     int fileId = Int32.Parse(command.ExecuteScalar().ToString());
 
                     command.CommandText = "INSERT INTO Movie VALUES(" + fileId + ", '" + movie.Director + "')";
@@ -243,12 +243,12 @@ namespace moofy.Backend {
             List<Movie> movies = new List<Movie>();
 
             //First get all rows from the movie table where an attribute matches the filter
-            SqlCommand command = new SqlCommand("SELECT * FROM Movie , Filez " +
-                                                "WHERE Movie.id = Filez.id " +
+            SqlCommand command = new SqlCommand("SELECT * FROM Movie , Files " +
+                                                "WHERE Movie.id = Files.id " +
                                                 "AND (director LIKE '%" + filter + "%' " +
                                                 "OR title LIKE '%" + filter + "%' " +
                                                 "OR description LIKE '%" + filter + "%' " +
-                                                "OR Filez.id IN (" +
+                                                "OR Files.id IN (" +
                                                     "SELECT fid FROM GenreFile " +
                                                     "WHERE gid =(" +
                                                         "SELECT id FROM Genre " +
