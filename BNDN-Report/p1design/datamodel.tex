@@ -4,12 +4,24 @@
 
 With the overall requirements set we began working on the data model of the system with an initial focus on the database entities and relationships. The database entity-relationship model was sketched in LucidChart \footnote{LucidChart is a bla bla} using the notation from Database Management Systems \cite{dbbook}. The complete E-R  model is shown below.
 
-\includegraphics[scale=0.5]{./p1design/erdmodel.png}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[scale=0.5]{./p1design/erdmodel.png}
+	\caption{Our Entity Relationship Model}
+\end{figure}
 
 \subsubsection{Reading the ER-model}
 \label{sec:readingdatamodel}
-Our design follows a naming scheme, where each table is named after the real domain object it represents (singularized), with junction tables named by a concatenation of the tables linked. The naming scheme of junction tables are shown in \textbf{FIGURE X.X}.
-\includegraphics[scale=0.5]{./p1design/junctionfigure.png}
+Our design follows a naming scheme, where each table is named after the real domain object it represents (singularized), with junction tables named by a concatenation of the tables linked. The naming scheme of junction tables are shown in Figure ~\ref{fig:junctionfigure}.
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[scale=0.5]{./p1design/junctionfigure.png}
+	\caption{Example of concatenated naming for junction tables.}
+	\label{fig:junctionfigure}
+\end{figure}
+
 
 Where several junction tables exist between the same entities, we append an additional description string to the name (as seen in "UserFile\textit{Rating}").
 Our decision to use the domain objects' names singularized caused problems with the “User” and “File” tables, since these names are reserved keywords in MS SQL. We updated said tables by appending a ‘s’ to the name (making it plural), but we kept the names singularized in the junction tables.
