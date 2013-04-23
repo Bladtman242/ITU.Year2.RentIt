@@ -36,7 +36,7 @@ namespace moofy.Backend
 
             command.CommandText = "IF('" + artist + "' NOT IN (SELECT name FROM Artist)) " +
                                   "INSERT INTO Artist(name) VALUES('" + artist + "') " +
-                                  "INSERT INTO SongArtist VALUES((SELECT id FROM Artist WHERE name='" + artist + "'), " + songId + ")";
+                                  "INSERT INTO SongArtist VALUES(" + songId + ", (SELECT id FROM Artist WHERE name='" + artist + "'))";
 
             return command.ExecuteNonQuery() > 0;
         }

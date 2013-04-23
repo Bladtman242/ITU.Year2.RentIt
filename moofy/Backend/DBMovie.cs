@@ -43,7 +43,6 @@ namespace moofy.Backend {
             SqlDataReader reader = command.ExecuteReader();
 
             if (reader.Read()) {
-                string director = reader["director"].ToString();
                 reader.Close();
                 command.CommandText = "SELECT * FROM Files WHERE id =" + movieId;
                 reader = command.ExecuteReader();
@@ -152,7 +151,8 @@ namespace moofy.Backend {
             SqlCommand command = new SqlCommand("SELECT * FROM Admin WHERE id =" + adminId, connection);
             if (command.ExecuteScalar() != null) {
                 //Delete the movie record first as it has a reference to the file record.
-                command.CommandText = "DELETE FROM Movie WHERE id=" + movieId;
+                command.CommandText = "DELETE FROM MovieDirector WHERE moid=" + movieId +
+                                      " DELETE FROM Movie WHERE id=" + movieId;
                 if (command.ExecuteNonQuery() > 0) {
                     command.CommandText = "DELETE FROM GenreFile WHERE fid=" + movieId +
                                           " DELETE FROM UserFile WHERE fid=" + movieId +
@@ -237,14 +237,18 @@ namespace moofy.Backend {
             //First get all rows from the movie table where an attribute matches the filter
             SqlCommand command = new SqlCommand("SELECT * FROM Movie , Files " +
                                                 "WHERE Movie.id = Files.id " +
-                                                "AND (director LIKE '%" + filter + "%' " +
-                                                "OR title LIKE '%" + filter + "%' " +
+                                                "AND (title LIKE '%" + filter + "%' " +
                                                 "OR description LIKE '%" + filter + "%' " +
                                                 "OR Files.id IN (" +
                                                     "SELECT fid FROM GenreFile " +
                                                     "WHERE gid =(" +
                                                         "SELECT id FROM Genre " +
-                                                        "WHERE name Like '%" + filter + "%' )))"
+                                                        "WHERE name Like '%" + filter + "%' )) "+
+                                                "OR Movie.id IN ("+
+                                                    "SELECT moid FROM MovieDirector " +
+                                                    "WHERE did =(" +
+                                                         "SELECT id FROM Director "+
+                                                         "WHERE name Like '%" + filter + "%')))"
                                                 , connection);
             SqlDataReader reader = command.ExecuteReader();
 
