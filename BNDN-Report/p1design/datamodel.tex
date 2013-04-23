@@ -4,7 +4,7 @@
 
 With the overall requirements set we began working on the data model of the system with an initial focus on the database entities and relationships. The database entity-relationship model was sketched in LucidChart \footnote{Lucidchart is a web-based diagramming software which allows users to collaborate and work together in real time to create flowcharts, organisational charts, website wireframes, UML designs, mind maps, software prototypes, and many other diagram types.} using the notation from Database Management Systems \cite{dbbook}. The complete E-R  model is shown in Figure ~\ref{fig:erd}.
 
-\begin{figure}[h!]
+\begin{figure}[t]
 	\centering
 	\includegraphics[scale=0.5]{./p1design/erdmodel.png}
 	\caption{Our Entity Relationship Model}
@@ -14,7 +14,7 @@ With the overall requirements set we began working on the data model of the syst
 Our E-R model follows a naming scheme, where each table is named after the real domain object it represents (singularized), with junction tables named by a concatenation of the tables linked. The naming scheme of junction tables are shown in Figure ~\ref{fig:junctionfigure}.
 
 
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 	\includegraphics[scale=0.5]{./p1design/junctionfigure.png}
 	\caption{Example of concatenated naming for junction tables.}
