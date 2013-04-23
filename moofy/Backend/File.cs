@@ -10,7 +10,7 @@ namespace moofy.Backend {
         private float? averageRating;
         private int? numberOfRatings;
         private IList<string> genres;
-        private DBAccess db;
+        protected DBAccess db;
 
         public File() {
             db = new DBAccess();

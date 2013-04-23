@@ -26,11 +26,12 @@ namespace moofy.Backend {
                                   "buyPrice = " + movie.BuyPrice + ", " +
                                   "year = " + movie.Year + ", " +
                                   "coverURI = '" + movie.CoverUri.Replace("'", "''") + "' " +
-                                  "WHERE id =" + movie.Id +
-                                  " UPDATE Movie SET director = '" + movie.Director.Replace("'", "''") + "' " +
-                                  "WHERE id = " + movie.Id;
+                                  "WHERE id =" + movie.Id;
 
-            return command.ExecuteNonQuery() > 0;
+
+            return (command.ExecuteNonQuery() > 0);
+            
+            
         }
         /// <summary>
         /// Return the movie with a given id
@@ -49,7 +50,6 @@ namespace moofy.Backend {
                 reader.Read();
                 Movie mov = new Movie() {
                     Id = movieId,
-                    Director = director,
                     RentPrice = int.Parse(reader["rentPrice"].ToString()),
                     BuyPrice = int.Parse(reader["buyPrice"].ToString()),
                     Uri = reader["URI"].ToString(),
@@ -179,7 +179,7 @@ namespace moofy.Backend {
         /// <param name="genres">The genres the movie fit into</param>
         /// <param name="description">A description of the movie</param>
         /// <returns>The movie including id and uri or null if the movie could not be added to the database</returns>
-        public Movie CreateMovie(int managerId, int tmpId, IList<string> genres, Movie movie) {
+        public Movie CreateMovie(int managerId, int tmpId, IList<string> genres, Movie movie, IList<string> directors) {
             SqlCommand command = new SqlCommand("SELECT * FROM Admin WHERE id =" + managerId, connection);
             if (command.ExecuteScalar() != null) {
                 //Get the uri from the StagedFile table
@@ -207,23 +207,15 @@ namespace moofy.Backend {
                     command.CommandText = "SELECT IDENT_CURRENT('Files')";
                     int fileId = Int32.Parse(command.ExecuteScalar().ToString());
 
-                    command.CommandText = "INSERT INTO Movie VALUES(" + fileId + ", '" + movie.Director + "')";
+                    command.CommandText = "INSERT INTO Movie VALUES(" + fileId + ")";
                     command.ExecuteNonQuery();
 
                     //Add genres to the file if any exist
-                    if (genres.Count > 0) {
+                    if (genres.Count > 0) 
                         AddAllGenres(fileId, genres);
-                        //string sql = "SELECT id FROM Genre WHERE name IN ('" +
-                        //              string.Join<string>("', '", genres) + "')";
-                        //command.CommandText = sql;
-                        //SqlDataReader reader = command.ExecuteReader();
-                        //while (reader.Read()) {
-                        //    SqlCommand command2 = new SqlCommand("INSERT INTO GenreFile VALUES(" + reader["id"] + " ," + fileId + ")", connection);
-                        //    command2.ExecuteNonQuery();
-                        //}
-                        //reader.Close();
-
-                    }
+                    if (directors.Count > 0)
+                        AddAllDirectors(fileId, directors);
+                     
                     command.CommandText = "DELETE FROM StagedFile WHERE id=" + tmpId;
                     command.ExecuteNonQuery();
                     movie.Id = fileId;
@@ -260,7 +252,6 @@ namespace moofy.Backend {
 
                 movies.Add(new Movie() {
                     Id = Int32.Parse(reader["id"].ToString()),
-                    Director = reader["director"].ToString(),
                     RentPrice = int.Parse(reader["rentPrice"].ToString()),
                     BuyPrice = int.Parse(reader["buyPrice"].ToString()),
                     Uri = reader["URI"].ToString(),

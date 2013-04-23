@@ -182,14 +182,13 @@ namespace moofy.JsonServices {
                 Year = (short)release,
                 Description = description,
                 Album = album,
-                Artist = artist,
                 RentPrice = rentalPrice,
                 BuyPrice = purchasePrice,
                 CoverUri = coverUri
             };
             db.Open();
             IList<string> genr = new List<string>(genres);
-            Song song1 = db.CreateSong(managerid, tmpid, genr, song);
+            Song song1 = db.CreateSong(managerid, tmpid, genr, song, new List<string>{artist});
             db.Close();
             if (song1 == null) {
                 Utils.BadReq("Ensure you entered a valid tmpId and a valid admin id");
@@ -320,7 +319,7 @@ namespace moofy.JsonServices {
                 };
             }
 
-            if (artist != null) s.Artist = artist;
+            
             if (album != null) s.Album = album;
             if (title != null) s.Title = title;
             if (description != null) s.Description = description;
@@ -333,7 +332,15 @@ namespace moofy.JsonServices {
             if (success) {
                 if (genres != null) {
                     db.ClearFileGenres(s.Id);
-                    db.AddAllGenres(s.Id, genres);
+                    success = db.AddAllGenres(s.Id, genres);
+                }
+            }
+            if (success)
+            {
+                if (artist != null)
+                {
+                    db.ClearSongArtists(s.Id);
+                    success = db.AddArtist(s.Id, artist);
                 }
             }
             db.Close();

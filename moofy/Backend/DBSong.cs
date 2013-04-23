@@ -25,7 +25,6 @@ namespace moofy.Backend {
                                      "coverURI = '" + song.CoverUri.Replace("'", "''") + "'" +
                                      "WHERE id =" + song.Id +
                                      "UPDATE Song SET album = '" + song.Album.Replace("'", "''") + "', " +
-                                     "artist = '" + song.Artist.Replace("'", "''") + "' " +
                                      "WHERE id = " + song.Id);
 
             return command.ExecuteNonQuery() > 0;
@@ -50,7 +49,6 @@ namespace moofy.Backend {
                 Song song = new Song() {
                     Id = songId,
                     Album = album,
-                    Artist = artist,
                     RentPrice = int.Parse(reader["rentPrice"].ToString()),
                     BuyPrice = int.Parse(reader["buyPrice"].ToString()),
                     Uri = reader["URI"].ToString(),
@@ -180,7 +178,7 @@ namespace moofy.Backend {
         /// <param name="genres">The genres the song fits into</param>
         /// <param name="description">The description of the song</param>
         /// <returns>The Song object including id and uri , or null if the song could not be added to the database</returns>
-        public Song CreateSong(int managerId, int tmpId, IList<String> genres, Song song) {
+        public Song CreateSong(int managerId, int tmpId, IList<String> genres, Song song, IList<string> artists) {
             SqlCommand command = new SqlCommand("SELECT * FROM Admin WHERE id =" + managerId, connection);
             if (command.ExecuteScalar() != null) {
                 //Get the uri from the StagedFile table
@@ -206,22 +204,15 @@ namespace moofy.Backend {
                     command.CommandText = "SELECT IDENT_CURRENT('Files')";
                     int fileId = Int32.Parse(command.ExecuteScalar().ToString());
 
-                    command.CommandText = "INSERT INTO Song VALUES(" + fileId + ", '" + song.Artist + "', '" + song.Album + "')";
+                    command.CommandText = "INSERT INTO Song VALUES(" + fileId + ", '" + song.Album + "')";
                     command.ExecuteNonQuery();
 
                     //Add genres to the file if any exist
-                    if (genres.Count() > 0) {
-                        string sql = "SELECT id FROM Genre WHERE name IN ('" +
-                                      string.Join<string>("', '", genres) + "')";
-                        command.CommandText = sql;
-                        SqlDataReader reader = command.ExecuteReader();
-                        while (reader.Read()) {
-                            SqlCommand command2 = new SqlCommand("INSERT INTO GenreFile VALUES(" + reader["id"] + " ," + fileId + ")", connection);
-                            command2.ExecuteNonQuery();
-                        }
-                        reader.Close();
+                    if (genres.Count() > 0) 
+                        AddAllGenres(fileId, genres);
+                    if (artists.Count() > 0)
+                        AddAllArtists(fileId, artists);
 
-                    }
                     command.CommandText = "DELETE FROM StagedFile WHERE id=" + tmpId;
                     command.ExecuteNonQuery();
                     song.Uri = uri;
@@ -259,7 +250,6 @@ namespace moofy.Backend {
 
                 songs.Add(new Song() {
                     Id = Int32.Parse(reader["id"].ToString()),
-                    Artist = reader["artist"].ToString(),
                     Album = reader["album"].ToString(),
                     RentPrice = int.Parse(reader["rentPrice"].ToString()),
                     BuyPrice = int.Parse(reader["buyPrice"].ToString()),

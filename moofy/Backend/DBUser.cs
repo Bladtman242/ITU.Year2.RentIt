@@ -241,8 +241,7 @@ namespace moofy.Backend {
                             Title = fr["title"].ToString(),
                             Uri = fr["URI"].ToString(),
                             Year = short.Parse(fr["year"].ToString()),
-                            RentPrice = int.Parse(fr["rentPrice"].ToString()),
-                            Director = mr["director"].ToString()
+                            RentPrice = int.Parse(fr["rentPrice"].ToString())
                         };
                         purchases.Add(new Purchase(mov, (DateTime)reader["endTime"]));
                     } else if (sr.Read()) {
@@ -254,8 +253,7 @@ namespace moofy.Backend {
                             Uri = fr["URI"].ToString(),
                             Year = short.Parse(fr["year"].ToString()),
                             RentPrice = int.Parse(fr["rentPrice"].ToString()),
-                            Album = sr["album"].ToString(),
-                            Artist = sr["artist"].ToString()
+                            Album = sr["album"].ToString()
                         };
                         purchases.Add(new Purchase(song, (DateTime.Parse(reader["endTime"].ToString()))));
                     }
@@ -296,8 +294,7 @@ namespace moofy.Backend {
                                 Uri = fr["URI"].ToString(),
                                 Year = short.Parse(fr["year"].ToString()),
                                 RentPrice = int.Parse(fr["rentPrice"].ToString()),
-                                Album = sr["album"].ToString(),
-                                Artist = sr["artist"].ToString()
+                                Album = sr["album"].ToString()
                             };
                             purchases.Add(new Purchase(song, (DateTime.Parse(reader["endTime"].ToString()))));
                         }
@@ -340,8 +337,7 @@ namespace moofy.Backend {
                                 Title = fr["title"].ToString(),
                                 Uri = fr["URI"].ToString(),
                                 Year = short.Parse(fr["year"].ToString()),
-                                RentPrice = int.Parse(fr["rentPrice"].ToString()),
-                                Director = mr["director"].ToString()
+                                RentPrice = int.Parse(fr["rentPrice"].ToString())
                             };
                             purchases.Add(new Purchase(mov, (DateTime)reader["endTime"]));
                         }

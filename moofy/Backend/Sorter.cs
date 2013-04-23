@@ -43,11 +43,11 @@ namespace moofy.Backend {
         }
 
         protected static void ByDirector(Movie[] movs) {
-            Array.Sort(movs, (m1, m2) => m1.Director.CompareTo(m2.Director)); //This is a pretty useless sort.
+            Array.Sort(movs, (m1, m2) => m1.Directors.First().CompareTo(m2.Directors.First())); //This is a pretty useless sort.
         }
 
         protected static void ByArtist(Song[] songs) {
-            Array.Sort(songs, (s1, s2) => s1.Artist.CompareTo(s2.Artist));
+            Array.Sort(songs, (s1, s2) => s1.Artists.First().CompareTo(s2.Artists.First()));
         }
 
         protected static void ByAlbum(Song[] songs) {

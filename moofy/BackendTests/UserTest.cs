@@ -51,10 +51,9 @@ namespace moofy.Backend.Tests {
                 Year = 1950,
                 BuyPrice = 100,
                 RentPrice = 10,
-                Director = "testdirector",
                 Description = "description1"
             };
-            Movie firstMovie = db.CreateMovie(1, tmpId, new string[] { "Horror" }, mo1);
+            Movie firstMovie = db.CreateMovie(1, tmpId, new string[] { "Horror" }, mo1, new List<string>{"testdirector"});
 
             //Upload another movie
             s = new MemoryStream();
@@ -67,10 +66,9 @@ namespace moofy.Backend.Tests {
                 Year = 1980,
                 BuyPrice = 200,
                 RentPrice = 30,
-                Director = "testdirector2",
                 Description = "description2"
             };
-            Movie secondMovie = db.CreateMovie(1, tmpId, new string[] { "Action" }, mo2);
+            Movie secondMovie = db.CreateMovie(1, tmpId, new string[] { "Action" }, mo2, new List<string> { "testdirector2" });
 
             //Create a user to purchase the movies
             User user = db.AddUser(new User() {
@@ -108,7 +106,7 @@ namespace moofy.Backend.Tests {
             Assert.AreEqual(firstMovie.Year, actualFirstMovie.Year);
             Assert.AreEqual(firstMovie.BuyPrice, actualFirstMovie.BuyPrice);
             Assert.AreEqual(firstMovie.RentPrice, actualFirstMovie.RentPrice);
-            Assert.AreEqual(firstMovie.Director, actualFirstMovie.Director);
+            Assert.AreEqual(firstMovie.Directors[0], actualFirstMovie.Directors[0]);
             Assert.IsTrue(firstMovie.Genres.SequenceEqual(actualFirstMovie.Genres));
             Assert.AreEqual(firstMovie.Description, actualFirstMovie.Description);
 
@@ -116,7 +114,7 @@ namespace moofy.Backend.Tests {
             Assert.AreEqual(secondMovie.Year, actualSecondMovie.Year);
             Assert.AreEqual(secondMovie.BuyPrice, actualSecondMovie.BuyPrice);
             Assert.AreEqual(secondMovie.RentPrice, actualSecondMovie.RentPrice);
-            Assert.AreEqual(secondMovie.Director, actualSecondMovie.Director);
+            Assert.AreEqual(secondMovie.Directors[0], actualSecondMovie.Directors[0]);
             Assert.IsTrue(secondMovie.Genres.SequenceEqual(actualSecondMovie.Genres));
             Assert.AreEqual(secondMovie.Description, actualSecondMovie.Description);
             
@@ -143,10 +141,9 @@ namespace moofy.Backend.Tests {
                 BuyPrice = 100,
                 RentPrice = 10,
                 Album = "testalbum1",
-                Artist = "testartist1",
                 Description = "description1"
             };
-            Song firstSong = db.CreateSong(1, tmpId,  new string[] { "Horror" }, song1);
+            Song firstSong = db.CreateSong(1, tmpId,  new string[] { "Horror" }, song1, new List<string>{"testartist1"});
             
 
             //Upload another song
@@ -161,10 +158,9 @@ namespace moofy.Backend.Tests {
                 BuyPrice = 200,
                 RentPrice = 30,
                 Album = "testalbum2",
-                Artist = "testartist2",
                 Description = "description2"
             };
-            Song secondSong = db.CreateSong(1, tmpId, new string[] { "Action" },song2);
+            Song secondSong = db.CreateSong(1, tmpId, new string[] { "Action" }, song2, new List<string> { "testartist2" });
 
             //Create a user to purchase the songs
             User user = db.AddUser(new User() {
@@ -203,7 +199,7 @@ namespace moofy.Backend.Tests {
             Assert.AreEqual(firstSong.BuyPrice, actualFirstSong.BuyPrice);
             Assert.AreEqual(firstSong.RentPrice, actualFirstSong.RentPrice);
             Assert.AreEqual(firstSong.Album, actualFirstSong.Album);
-            Assert.AreEqual(firstSong.Artist, actualFirstSong.Artist);
+            Assert.AreEqual(firstSong.Artists[0], actualFirstSong.Artists[0]);
             Assert.IsTrue(firstSong.Genres.SequenceEqual(actualFirstSong.Genres));
             Assert.AreEqual(firstSong.Description, actualFirstSong.Description);
 
@@ -212,7 +208,7 @@ namespace moofy.Backend.Tests {
             Assert.AreEqual(secondSong.BuyPrice, actualSecondSong.BuyPrice);
             Assert.AreEqual(secondSong.RentPrice, actualSecondSong.RentPrice);
             Assert.AreEqual(secondSong.Album, actualSecondSong.Album);
-            Assert.AreEqual(secondSong.Artist, actualSecondSong.Artist);
+            Assert.AreEqual(secondSong.Artists[0], actualSecondSong.Artists[0]);
             Assert.IsTrue(secondSong.Genres.SequenceEqual(actualSecondSong.Genres));
             Assert.AreEqual(secondSong.Description, actualSecondSong.Description);
 
