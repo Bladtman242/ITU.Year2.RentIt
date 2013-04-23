@@ -2,10 +2,9 @@
 \subsubsection{Data Model and Back-end Structures}
 \label{sec:datamodel}
 
-With the overall requirements set we began working on the data model of the system with an initial focus on the database entities and relationships. The database entity-relationship model was sketched in LucidChart using the notation taught in the “Introduction to Database Design” course at ITU. The complete E-R  model is shown below.
-\textbf{INSERT PICTURE HERE}
+With the overall requirements set we began working on the data model of the system with an initial focus on the database entities and relationships. The database entity-relationship model was sketched in LucidChart using the notation from Database Management Systems \cite{dbbook}. The complete E-R  model is shown below.
 
-Notation : http://pages.cs.wisc.edu/~dbbook/
+\includegraphics[scale=0.5]{./p2Communication/erdmodel.png}
 
 \subsubsection{Reading the ER-model}
 \label{sec:readingdatamodel}
@@ -14,7 +13,7 @@ This structure caused a problem with the “User” and “File” tables, since
 
 \subsubsection{Normalization}
 \label{sec:normalization}
-Besides creating a database structure capable of holding all the data needed for our use cases, we wanted to avoid redundant data. Our choice to avoid redundant data stems from the wish to eliminate anomalies within the database of which redundant data is a key cause. Anomalies are known to weaken the integrity of data due to irregular or inconsistent storage, and we believe integrity is a key characteristic of a database dealing with users, their money, and their property. We enforced this constraint by applying a database normalization (third normal form) to our design, which is known to be free of update, insertion, and deletion anomalies.
+Besides creating a database structure capable of holding all the data needed for our use cases, we wanted to avoid redundant data. Our choice to avoid redundant data stems from the wish to eliminate anomalies within the database of which redundant data is a key cause. Anomalies are known to weaken the integrity of the database \cite{dbbook} due to irregular or inconsistent data, and we believe integrity is a key characteristic of a database dealing with users, their money, and their property. We enforced this constraint by applying a database normalization (third normal form) to our design, which is known to be free of update, insertion, and deletion anomalies.
 
 \subsubsection{Designing for Extendability}
 \label{sec:extendability}
@@ -43,7 +42,7 @@ Looking back at our database design we realized that a few improvements could be
 \subsubsection{Accessing the Database}
 \label{sec:databaseaccess}
 After having designed the database structure we had to decide how to access and utilize the database in the best suited way for our webservice. We quickly settled for a C\#/WCF-based web service, since every group member had about the same experience in that platform from other ITU courses.
-With access to the .NET framework, we considered to make use of the Entity Framework for our database interactions and general object-relational mapping. However several group members had been experiencing some inconvenient performance issues in previous projects. We do believe performance is an important aspect of our service and research has shown that users of the internet has become very impatient with regards to response times (http://www.nytimes.com/2012/03/01/technology/impatient-web-users-flee-slow-loadi\\ng-sites.html?pagewanted=all\&_r=0). We also deemed our queries and database interaction to be fairly simple, thus having no real need for most of the functionality in the Entity Framework. After a discussion it became clear that the only real benefit of using the framework was the possibility of faster prototyping. With our emphasis on a solid performance we choose to spend a little more time developing our own database access layer in order to maintain a more direct control over the performance of our solution.
+With access to the .NET framework, we considered to make use of the Entity Framework for our database interactions and general object-relational mapping. However several group members had been experiencing some inconvenient performance issues in previous projects. We do believe performance is an important aspect of our service and research has shown that users of the internet have become very impatient with regards to response times \cite{webusersflee}. We also deemed our queries and database interaction to be fairly simple, thus having no real need for most of the functionality in the Entity Framework. After a discussion it became clear that the only real benefit of using the framework was the possibility of faster prototyping. With our emphasis on a solid performance we choose to spend a little more time developing our own database access layer in order to maintain a more direct control over the performance of our solution.
 
 \subsubsection{Other Potential Sections}
 \textbf{Nævn lazy loading?}
