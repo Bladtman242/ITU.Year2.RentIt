@@ -2,14 +2,17 @@
 \subsubsection{Data Model and Back-end Structures}
 \label{sec:datamodel}
 
-With the overall requirements set we began working on the data model of the system with an initial focus on the database entities and relationships. The database entity-relationship model was sketched in LucidChart using the notation from Database Management Systems \cite{dbbook}. The complete E-R  model is shown below.
+With the overall requirements set we began working on the data model of the system with an initial focus on the database entities and relationships. The database entity-relationship model was sketched in LucidChart \footnote{LucidChart is a bla bla} using the notation from Database Management Systems \cite{dbbook}. The complete E-R  model is shown below.
 
-\includegraphics[scale=0.5]{./p2Communication/erdmodel.png}
+\includegraphics[scale=0.5]{./p1design/erdmodel.png}
 
 \subsubsection{Reading the ER-model}
 \label{sec:readingdatamodel}
-Our design follows a naming scheme, where each table is named after the real domain object it represents, with junction tables following the structure\linebreak <table1><table2><optional own name>.
-This structure caused a problem with the “User” and “File” tables, since these names are reserved keywords in MS SQL. We updated said tables by appending a ‘z’ to the name, but we did not update the junction tables.
+Our design follows a naming scheme, where each table is named after the real domain object it represents (singularized), with junction tables named by a concatenation of the tables linked. The naming scheme of junction tables are shown in \textbf{FIGURE X.X}.
+\includegraphics[scale=0.5]{./p1design/junctionfigure.png}
+
+Where several junction tables exist between the same entities, we append an additional description string to the name (as seen in "UserFile\textit{Rating}").
+Our decision to use the domain objects' names singularized caused problems with the “User” and “File” tables, since these names are reserved keywords in MS SQL. We updated said tables by appending a ‘s’ to the name (making it plural), but we kept the names singularized in the junction tables.
 
 \subsubsection{Normalization}
 \label{sec:normalization}
