@@ -40,7 +40,7 @@ namespace moofy.Backend.Tests
             Assert.AreEqual(actual.Title, movie.Title);
             Assert.AreEqual(actual.BuyPrice, movie.BuyPrice);
             Assert.AreEqual(actual.RentPrice, movie.RentPrice);
-            Assert.AreEqual(actual.Director, movie.Director);
+            Assert.AreEqual(actual.Directors[0], movie.Directors[0]);
             Assert.AreEqual(actual.Description, movie.Description);
             Assert.AreEqual(actual.ViewCount, movie.ViewCount);
             Assert.AreEqual(actual.Uri, movie.Uri);
@@ -60,7 +60,7 @@ namespace moofy.Backend.Tests
             Assert.AreNotEqual(actual.Title, movie.Title);
             Assert.AreEqual(actual.BuyPrice, movie.BuyPrice);
             Assert.AreEqual(actual.RentPrice, movie.RentPrice);
-            Assert.AreEqual(actual.Director, movie.Director);
+            Assert.AreEqual(actual.Directors[0], movie.Directors[0]);
             Assert.AreEqual(actual.Description, movie.Description);
             Assert.AreEqual(actual.ViewCount, movie.ViewCount);
             Assert.AreEqual(actual.Uri, movie.Uri);
@@ -80,7 +80,7 @@ namespace moofy.Backend.Tests
             Assert.AreNotEqual(actual.Title, movie.Title);
             Assert.AreEqual(actual.BuyPrice, movie.BuyPrice);
             Assert.AreEqual(actual.RentPrice, movie.RentPrice);
-            Assert.AreEqual(actual.Director, movie.Director);
+            Assert.AreEqual(actual.Directors[0], movie.Directors[0]);
             Assert.AreEqual(actual.Description, movie.Description);
             Assert.AreEqual(actual.ViewCount, movie.ViewCount);
             Assert.AreEqual(actual.Uri, movie.Uri);
@@ -234,12 +234,11 @@ namespace moofy.Backend.Tests
                 Year = 1900,
                 BuyPrice = 1000,
                 RentPrice = 100,
-                Director = "testest",
                 Description = "description",
                 CoverUri = "is"
             };
 
-            Movie mov  = db.CreateMovie(1, 1, new List<String>(), movie);
+            Movie mov = db.CreateMovie(1, 1, new List<String>(), movie, new List<string> { "testest" });
 
             Movie actual = db.GetMovie(mov.Id);
 
@@ -248,7 +247,7 @@ namespace moofy.Backend.Tests
             Assert.AreEqual(actual.Title, movie.Title);
             Assert.AreEqual(actual.BuyPrice, movie.BuyPrice);
             Assert.AreEqual(actual.RentPrice, movie.RentPrice);
-            Assert.AreEqual(actual.Director, movie.Director);
+            Assert.AreEqual(actual.Directors[0], movie.Directors[0]);
             Assert.AreEqual(actual.Description, movie.Description);
             Assert.AreEqual(actual.ViewCount, movie.ViewCount);
             Assert.AreEqual(actual.Uri, movie.Uri);
@@ -265,12 +264,11 @@ namespace moofy.Backend.Tests
                 Year = 1900,
                 BuyPrice = 1000,
                 RentPrice = 100,
-                Director = "testest",
                 Description = "description",
                 CoverUri = "is"
             };
 
-            Movie mov = db.CreateMovie(2, 1, new List<String>(), movie);
+            Movie mov = db.CreateMovie(2, 1, new List<String>(), movie, new List<string> { "testest" });
             Assert.IsNull(mov);
         }
 
@@ -284,10 +282,9 @@ namespace moofy.Backend.Tests
                 Year = 1900,
                 BuyPrice = 1000,
                 RentPrice = 100,
-                Director = "testest",
                 Description = "description"
             };
-            db.CreateMovie(1, 1, new List<String>(), movie);
+            db.CreateMovie(1, 1, new List<String>(), movie, new List<string> { "testest" });
 
         }
 
@@ -300,12 +297,11 @@ namespace moofy.Backend.Tests
                 Year = 1900,
                 BuyPrice = 1000,
                 RentPrice = 100,
-                Director = "testest",
                 Description = "description",
                 CoverUri = "is"
             };
 
-            Movie mov = db.CreateMovie(-2, 1, new List<String>(), movie);
+            Movie mov = db.CreateMovie(-2, 1, new List<String>(), movie, new List<string> { "testest" });
             Assert.IsNull(mov);
         }
 
@@ -318,12 +314,11 @@ namespace moofy.Backend.Tests
                 Year = 1900,
                 BuyPrice = 1000,
                 RentPrice = 100,
-                Director = "testest",
                 Description = "description",
                 CoverUri = "is"
             };
 
-            Movie mov = db.CreateMovie(1, -1, new List<String>(), movie);
+            Movie mov = db.CreateMovie(1, -1, new List<String>(), movie, new List<string> { "testest" });
             Assert.IsNull(mov);
         }
 

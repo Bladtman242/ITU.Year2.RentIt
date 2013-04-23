@@ -169,7 +169,6 @@ namespace moofy.JsonServices {
             {
                 Title = title,
                 Year = (short)release,
-                Director = String.Join(" , ", directors),
                 Description = description,
                 RentPrice = rentalPrice,
                 BuyPrice = purchasePrice,
@@ -177,7 +176,7 @@ namespace moofy.JsonServices {
             };
             db.Open();
             IList<string> genr = new List<string>(genres);
-            Movie mov1 = db.CreateMovie(managerid, tmpid, genr, mov);
+            Movie mov1 = db.CreateMovie(managerid, tmpid, genr, mov, directors);
             if (mov1 == null)
                 throw new ArgumentException("Ensure you entered a valid tmpId and a valid admin id");
             else
@@ -300,13 +299,22 @@ namespace moofy.JsonServices {
             if (purchasePrice >= 0) m.BuyPrice = purchasePrice;
             if (release >= 0) m.Year = (short)release;
             if (coverUri != null) m.CoverUri = coverUri;
-            if (directors != null) m.Director = string.Join(",", directors);
+            
 
             bool success = db.UpdateMovie(m, managerId);
-            if (success) {
-                if (genres != null) {
+            if (success)
+            {
+                if (genres != null)
+                {
                     db.ClearFileGenres(m.Id);
-                    db.AddAllGenres(m.Id, genres);
+                    success = db.AddAllGenres(m.Id, genres);
+                }
+            }
+            if(success) {
+                if(directors != null)
+                {
+                    db.ClearMovieDirectors(m.Id);
+                    success =db.AddAllDirectors(m.Id, directors);
                 }
             }
             db.Close();

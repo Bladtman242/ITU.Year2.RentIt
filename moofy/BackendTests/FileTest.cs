@@ -35,10 +35,9 @@ namespace moofy.Backend.Tests {
                 Year = 1900,
                 BuyPrice = 1000,
                 RentPrice = 100,
-                Director = "director",
                 Description = "description"
             };
-            Movie movie = db.CreateMovie(1, tmpId, expectedGenres, mov);
+            Movie movie = db.CreateMovie(1, tmpId, expectedGenres, mov, new List<string>{"director"});
             
             //Retrieve the movie from the database and check that the genres match the inserted
             Movie actMovie = db.GetMovie(movie.Id);

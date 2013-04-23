@@ -20,7 +20,7 @@ namespace moofy.JsonServices {
             set;
         }
 
-        public string artist {
+        public string[] artists {
             get;
             set;
         }

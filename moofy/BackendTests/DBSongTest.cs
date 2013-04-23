@@ -39,10 +39,9 @@ namespace moofy.Backend.Tests
                 BuyPrice = 1000,
                 RentPrice = rent,
                 Album = "testalbum",
-                Artist = "testartist",
                 Description = "description"
             };
-            Song song1 = db.CreateSong(1, tmpId, new string[] { "Horror" }, song);
+            Song song1 = db.CreateSong(1, tmpId, new string[] { "Horror" }, song, new List<string>{"testartist"});
 
             Song newSong = new Song()
             {
@@ -52,7 +51,6 @@ namespace moofy.Backend.Tests
                 BuyPrice = 1000,
                 RentPrice = rent,
                 Album = "NEWALBUM",
-                Artist = "testartist",
                 Description = "description"
             };
             bool isUpdated = db.UpdateSong(newSong,1);
@@ -79,10 +77,9 @@ namespace moofy.Backend.Tests
                 BuyPrice = 1000,
                 RentPrice = rent,
                 Album = "testalbum",
-                Artist = "testartist",
                 Description = "description"
             };
-            Song song1 = db.CreateSong(1, tmpId, new string[] { "Horror" }, song);
+            Song song1 = db.CreateSong(1, tmpId, new string[] { "Horror" }, song, new List<string> { "testartist" });
 
             //Create a user to buy the movie, who can afford it
             User user = db.AddUser(new User()
@@ -128,10 +125,9 @@ namespace moofy.Backend.Tests
                 BuyPrice = buy,
                 RentPrice = 10,
                 Album = "testalbum",
-                Artist = "testartist",
                 Description = "description"
             };
-            Song actSong = db.CreateSong(1, tmpId, new string[] { "Horror" },song);
+            Song actSong = db.CreateSong(1, tmpId, new string[] { "Horror" }, song, new List<string> { "testartist" });
 
             //Create a user to buy the movie, who can afford it
             User user = db.AddUser(new User(){
@@ -173,12 +169,11 @@ namespace moofy.Backend.Tests
                 BuyPrice = 10,
                 RentPrice = 1,
                 Album = "test album",
-                Artist = "test artist",
                 Description = "test song description"
             };
             string[] genres = new string[] { "Horror" };
 
-            Song expected = db.CreateSong(1, tmpId,  genres, song);
+            Song expected = db.CreateSong(1, tmpId, genres, song, new List<string> { "test artist" });
             
             //The actual values in the database
             Song actual = db.GetSong(expected.Id);
@@ -189,7 +184,7 @@ namespace moofy.Backend.Tests
             Assert.AreEqual(actual.BuyPrice, expected.BuyPrice);
             Assert.AreEqual(actual.RentPrice, expected.RentPrice);
             Assert.AreEqual(actual.Album, expected.Album);
-            Assert.AreEqual(actual.Artist, expected.Artist);
+            Assert.AreEqual(actual.Artists[0], expected.Artists[0]);
             Assert.AreEqual(actual.Description, expected.Description);
 
             db.DeleteSong(song.Id, 1);
@@ -210,12 +205,11 @@ namespace moofy.Backend.Tests
                 BuyPrice = 10,
                 RentPrice = 1,
                 Album = "test album",
-                Artist = "test artist",
                 Description = "test song description"
             };
             string[] genres1 = new string[] { "Horror" };
 
-            Song song1 = db.CreateSong(1, tmpId1, genres1, s1);
+            Song song1 = db.CreateSong(1, tmpId1, genres1, s1, new List<string> { "test artist" });
 
             Song s2 = new Song()
             {
@@ -224,13 +218,12 @@ namespace moofy.Backend.Tests
                 BuyPrice = 1022,
                 RentPrice = 100,
                 Album = "test albummmmmmmmm",
-                Artist = "test artist",
                 Description = "test song description2"
             };
             
             string[] genres2 = new string[] { "Comedy" };
 
-            Song song2 = db.CreateSong(1, tmpId2, genres2, s2);
+            Song song2 = db.CreateSong(1, tmpId2, genres2, s2, new List<string> { "test artist" });
             
             Song[] songs = db.FilterSongs("test album");
 
@@ -246,7 +239,7 @@ namespace moofy.Backend.Tests
             Assert.AreEqual(song1.BuyPrice, filtSong1.BuyPrice);
             Assert.AreEqual(song1.RentPrice, filtSong1.RentPrice);
             Assert.AreEqual(song1.Album, filtSong1.Album);
-            Assert.AreEqual(song1.Artist, filtSong1.Artist);
+            Assert.AreEqual(song1.Artists[0], filtSong1.Artists[0]);
             Assert.AreEqual(song1.Description, filtSong1.Description);
 
             //Ensure that the second movie is equal to the second movie returned by the filter method
@@ -256,7 +249,7 @@ namespace moofy.Backend.Tests
             Assert.AreEqual(song2.BuyPrice, filtSong2.BuyPrice);
             Assert.AreEqual(song2.RentPrice, filtSong2.RentPrice);
             Assert.AreEqual(song2.Album, filtSong2.Album);
-            Assert.AreEqual(song2.Artist, filtSong2.Artist);
+            Assert.AreEqual(song2.Artists[0], filtSong2.Artists[0]);
             Assert.AreEqual(song2.Description, filtSong2.Description);
             
 
