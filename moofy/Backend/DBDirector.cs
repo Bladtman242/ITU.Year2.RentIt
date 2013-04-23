@@ -31,7 +31,7 @@ namespace moofy.Backend
 
             command.CommandText = "IF('" + director + "' NOT IN (SELECT name FROM Director)) " +
                                   "INSERT INTO Director(name) VALUES('" + director + "') " +
-                                  "INSERT INTO MovieDirector VALUES((SELECT id FROM Director WHERE name='" + director + "'), " + movieId + ")";
+                                  "INSERT INTO MovieDirector VALUES(" + movieId +" ,(SELECT id FROM Director WHERE name='" + director + "'))";
 
             return command.ExecuteNonQuery() > 0;
         }
