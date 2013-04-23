@@ -42,9 +42,9 @@ This will however create a lot of duplicate columns in different tables. If we w
 The realization that several columns of information is shared across the media suggest for an inheritance based approach, where the shared columns are placed in a “super table”, while every media table will take part in an IS-A relationship with said “super table”. This is the design that can be seen in Figure ~\ref{fig:erd}.
 
 With our minds set on centralizing the common media attributes in the Files super table, we noted that both a movie director and a song artist could be gathered under a common label "Creator". The Files table would then be connected to a "person" table, which would store both song artists and movie directors.
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.5]{./p1design/dilemma.png}
+	\centerline{\includegraphics[scale=0.52]{./p1design/dilemma.png}}
 	\caption{Simplified example of the dilemma cases}
 	\label{fig:erddilemma}
 \end{figure}
