@@ -43,7 +43,6 @@ namespace moofy.Backend {
             SqlDataReader reader = command.ExecuteReader();
 
             if (reader.Read()) {
-                string director = reader["director"].ToString();
                 reader.Close();
                 command.CommandText = "SELECT * FROM Files WHERE id =" + movieId;
                 reader = command.ExecuteReader();
