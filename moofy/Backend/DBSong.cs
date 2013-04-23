@@ -234,15 +234,19 @@ namespace moofy.Backend {
             //First get all rows from the song and file table joined, where an attribute matches the filter
             SqlCommand command = new SqlCommand("SELECT * FROM Song , Files " +
                                                 "WHERE Song.id = Files.id " +
-                                                "AND (artist LIKE '%" + filter + "%' " +
-                                                "OR album LIKE '%" + filter + "%' " +
+                                                "AND (album LIKE '%" + filter + "%' " +
                                                 "OR title LIKE '%" + filter + "%' " +
                                                 "OR description LIKE '%" + filter + "%' " +
                                                 "OR Files.id IN (" +
                                                     "SELECT fid FROM GenreFile " +
                                                     "WHERE gid =(" +
                                                         "SELECT id FROM Genre " +
-                                                        "WHERE name Like '%" + filter + "%' )))"
+                                                        "WHERE name Like '%" + filter + "%' )) " +
+                                                "OR Song.id IN (" +
+                                                    "SELECT sid FROM SongArtist " +
+                                                    "WHERE aid =(" +
+                                                         "SELECT id FROM Director " +
+                                                         "WHERE name Like '%" + filter + "%')))"
                                                 , connection);
             SqlDataReader reader = command.ExecuteReader();
 

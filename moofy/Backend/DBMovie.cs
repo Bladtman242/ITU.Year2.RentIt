@@ -237,14 +237,18 @@ namespace moofy.Backend {
             //First get all rows from the movie table where an attribute matches the filter
             SqlCommand command = new SqlCommand("SELECT * FROM Movie , Files " +
                                                 "WHERE Movie.id = Files.id " +
-                                                "AND (director LIKE '%" + filter + "%' " +
-                                                "OR title LIKE '%" + filter + "%' " +
+                                                "AND (title LIKE '%" + filter + "%' " +
                                                 "OR description LIKE '%" + filter + "%' " +
                                                 "OR Files.id IN (" +
                                                     "SELECT fid FROM GenreFile " +
                                                     "WHERE gid =(" +
                                                         "SELECT id FROM Genre " +
-                                                        "WHERE name Like '%" + filter + "%' )))"
+                                                        "WHERE name Like '%" + filter + "%' )) "+
+                                                "OR Movie.id IN ("+
+                                                    "SELECT moid FROM MovieDirector " +
+                                                    "WHERE did =(" +
+                                                         "SELECT id FROM Director "+
+                                                         "WHERE name Like '%" + filter + "%')))"
                                                 , connection);
             SqlDataReader reader = command.ExecuteReader();
 
