@@ -7,7 +7,7 @@ With the overall requirements set we began working on the data model of the syst
 
 Notation : http://pages.cs.wisc.edu/~dbbook/
 
-\subsubsection{Reading the ER-model (lol.. vildt ligegyldigt)}
+\subsubsection{Reading the ER-model}
 \label{sec:readingdatamodel}
 Our design follows a naming scheme, where each table is named after the real domain object it represents, with junction tables following the structure\linebreak <table1><table2><optional own name>.
 This structure caused a problem with the “User” and “File” tables, since these names are reserved keywords in MS SQL. We updated said tables by appending a ‘z’ to the name, but we did not update the junction tables.

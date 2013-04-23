@@ -49,12 +49,12 @@ namespace moofy.Backend {
             SqlCommand command = new SqlCommand("SELECT fid FROM UserFile WHERE fid=" + fileId + " AND uid=" + userId, connection);
             if (command.ExecuteScalar() == null) return null;
 
-            command.CommandText = "SELECT uri FROM Filez WHERE id =" + fileId;
+            command.CommandText = "SELECT uri FROM Files WHERE id =" + fileId;
             Object uri = command.ExecuteScalar();
 
             if (uri == null) return "";//No file with the given id exists in the database
             else {
-                command.CommandText = "UPDATE Filez " +
+                command.CommandText = "UPDATE Files " +
                                       "SET viewCount = viewCount + 1 " +
                                       "WHERE id = " + fileId;
                 command.ExecuteNonQuery();
