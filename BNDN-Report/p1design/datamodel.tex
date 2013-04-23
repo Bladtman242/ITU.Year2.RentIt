@@ -44,7 +44,7 @@ The realization that several columns of information is shared across the media s
 With our minds set on centralizing the common media attributes in the Files super table, we noted that both a movie director and a song artist could be gathered under a common label "Creator". The Files table would then be connected to a "person" table, which would store both song artists and movie directors.
 We discussed this design and noted that it could not maintain the current constraint that only songs are linked to artists and only movies to directors. In addition we would not be able to extend the information on artists without extending it for directors too. This led to the decision to keep them seperate, although they are conceptually very close.
 
-Later in the project we became aware that the above dilemma also applies to the concept of genres with the implication that a song could be linked to the genre "Horror", which does not make sense (Justin Bieber songs excluded). As such the design of the genres-relation does not match our established design philosophies and we believe that this could (and should) be improved upon in any later revision of the project.
+Later in the project we became aware that the above dilemma also applies to the concept of genres with the implication that a song could be linked to the genre "Horror", which does not make sense. As such the design of the genres-relation does not match our established design philosophies and we believe that this could (and should) be improved upon in any later revision of the project.
 
 \subsubsection{Accessing the Database}
 \label{sec:databaseaccess}
