@@ -72,16 +72,18 @@ namespace moofy.Backend {
             if (!parser.Success) throw new FormatException("Failed to parse file data");
 
             int hash = parser.Filename.GetHashCode();
+            string ext = "." + parser.Filename.Split('.').Last();
 
-            string pathLocal = "C:\\RentItServices\\Rentit25\\Files\\" + hash + parser.Filename;
-            string pathHttp = "http://rentit.itu.dk/RentIt25/Files/" + hash + parser.Filename;
+            string pathLocal = "C:\\RentItServices\\Rentit25\\Files\\" + hash + ext;
+            string pathHttp = "http://rentit.itu.dk/RentIt25/Files/" + hash + ext;
             Random rand = new Random();
 
             //Ensure that no other file exists with this name
             while (new FileInfo(pathLocal).Exists) {
                 int add = rand.Next();
-                pathLocal = pathLocal + add;
-                pathHttp = pathHttp + add;
+                pathLocal = pathLocal.Substring(0, pathLocal.Length - ext.Length) + add + ext;
+
+                pathHttp = pathHttp.Substring(0, pathLocal.Length - ext.Length) + add + ext;
             }
 
             //Create a filestream to the wanted path and copy the contents of the input stream to this 
