@@ -1,2 +1,85 @@
 \section{Risk Management}
 
+In order to be prepared for what may go wrong during our project, we use risk management techniques.
+We identified several risks, and placed them into several categories inspired by those used in Cadle
+\& Yeates (should be reference). We have no suppliers to take into account, and the project is not
+based on an actual business case (as it is a thought-up example to be used to test project management
+methods).
+
+Each risk has an impact, which is how much this issue could prolong the time spent in development,
+if it was realized. We are using Cadle \& Yeates' proposed impact-size definitions, based on percentages:
+\textbf{large impact} (more than 10\%), \textbf{moderate impact} (5-10\%), and \textbf{small impact}
+(less than 5\%).
+
+Additionally, the likelihood of the risk manifesting should also be taken into account. Here we use the
+categories \textbf{high probability} (greater than 30\%), \textbf{medium probability} (10-30\%), and
+\textbf{low probability} (less than 10\%).
+
+Below is an excerpt of the most important risks (refer to the appendix for the full list). The risks are
+identified with a string representing their category and a number to make the identification unique. The
+full list of risks can be seen in Appendix \ref{app:risks-appendix}.
+
+\begin{description}
+    \item[T4 Development environment differs from Live environment] The environment present on
+        developers' computers as well as the way WCF applications are tested locally, differs vastly
+        from the way the code is deployed. This requires the maintenance of two different (but similar)
+        configuration files. It is likely that there will, at some point during the project, arise a
+        situation where there is some inconsistency between the two, resulting in improper tests. This
+        could be everything from very easy to very hard to fix, depending on the situation.\newline
+        \textbf{\emph{Impact: moderate; Likelihood: high}}
+    \item[P2 Time constraints may be exceeded due to project overhead] Starting a project, especially when
+        it is a small one, requires a relatively large amount of overhead (bureaucracy, preparation). This
+        often requires for the entire team to assemble and agree on the terms by which they work. \newline
+        \textbf{\emph{Impact: moderate; Likelihood: high}}
+    \item[Req1 Requirements are changeable] As the requirements are a product of two teams (separated by
+        space, and often time) discussing their wants and needs, it is very likely that they will be very
+        volatile. Changing requirements early on is not a problem, but the later they change the more of an
+        impact they will have on the development, as more of the product will have to be scrapped and redone.
+        \newline
+        \textbf{\emph{Impact: moderate; Likelihood: high}}
+\end{description}
+
+\begin{table}[t]
+    \begin{tabular}{ | l | c | c | c | }
+        \hline
+        \backslashbox{Likelihood}{Impact} & \makebox[4em]{Small} & \makebox[4em]{Moderate} & \makebox[4em]{Large} \\[1em]
+        \hline
+        High & & \pbox{4em}{T4 P2 Req1} & \\[1em]
+        \hline
+        Medium & \pbox{4em}{Req2} & \pbox{4em}{T2} & \\[1em]
+        \hline
+        Low & \pbox{4em}{T3 P1} & \pbox{4em}{T1} & \\[1em]
+        \hline
+    \end{tabular}
+    \caption{Table showing the spread of risks in the project. There are no risks with large impact, which
+        leaves us free to concentrate on lesser risks.}
+\end{table}
+
+\subsection{Risk actions}
+There are four types of actions possible when dealing with risks (according to Cadle \& Yeates):
+
+\begin{itemize}
+    \item Acceptance: Accepting the risk and doing nothing about it.
+    \item Avoidance: Attempting to lower the likelihood of the risk.
+    \item Mitigation: Attempting to lower the impact of the risk.
+    \item Transfer: Attempt to move any potential damage caused by the risk to someone else.
+\end{itemize}
+
+We focused on mitigating the risks with the highest \verb+impact*likelihood+.
+
+For \textbf{Risk T4}, the difference between development and live environments, there was not much we could
+do. As we would not have access to the server before starting the project we had to accept this risk.
+
+In order to avoid overhead in the project (\textbf{Risk P2}) we focused on choosing a development
+methodology that would require little set-up, allowing us to start developing quickly. This is discussed in
+more detail in Section \ref{sec:organizational}.
+
+To mitigate changing requirements (due to several involved parties; \textbf{Risk Req1}) we focused on
+thoroughly discussing requirements early on, in order to take as much as possible into account. We did not
+expect this to bar any future changes, but hoped that doing a little more work up front we would have to
+backtrack and redo less in future iterations.
+
+Similar actions were taken for a few other risks. A lot of risks were accepted (Risks T3, P1 and Rel1) as
+they did not seem to pose enough of a threat to justify the work required for mitigation or avoidance.
+
+\textbf{(Note til analysatorere: Skriv endelig om hvor mange ting vi undgik grundet denne fantastiske analyse!)}
