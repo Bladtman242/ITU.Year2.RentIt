@@ -1,0 +1,70 @@
+2.1: Where did the books go? You mention books and audio, but end on audiobooks, which seems like an audio-dominated idea.
+Mention why you ended up downvoting the music-creation idea, or leave out the bit altogether.
+
+2.1.1: This is slightly confusing. Is it user-authored books or existing books that users read or both?
+
+2.1.2: We see no reason to split 2.1.1 and 2.1.2 into two different sections, as ‘How?’ should be a part of the ‘Main Concept’.
+
+2.2: What is “media”? Explain this in a bit more detail. Eg.: “...who upload soundbites, contributing to audiobooks...”.
+It seems like the purchase of credits is relevant for describing the business opportunity (it is mentioned in 2.1.2, but not here).
+
+2.2.1: This doesn’t seem to argue for an actual “community feel”, but rather argues for a sort of competition. Is it possible to comment or rate soundbites? This would create community.
+The last sentence, about money, seems to be misplaced here.
+
+2.2.2: How does this cater to blind people? Is your client designed with this in mind? It doesn’t seem inherent to the system.
+You haven’t mentioned “free sponsor titles” previously.
+“a group of people that like literature and accepts everyone as they are” - how do you ensure this?
+This subsection seems quite weakly argued, and could be left out.
+
+3.1: This section fits better in an introduction for the entire report.
+
+3.2: You might want to place the full list of use cases in an appendix (it is pointless to just list them) and then discuss an (or a couple of) example(s) in the report. 
+The use of the word “pertain” seems to us to be misused in the context.
+
+3.3: “Maximum amount of credit”, explain the context.
+“The areas chosen for the discussion can be seen in appendix A, lower is more important“ - remove “lower is more important”, as a reader there is no frame of reference for what “lower” is, and as such this is confusing.
+“The course requirements are important for obvious reasons and was weighed somewhat higher.” - either just say that they are weighed “higher”, or explain why they’re more important. It is not obvious/you are missing an entire section of the argument.
+“textbftesting” (you meant \textbf{testing},didn’t you?)
+Page 8 is a bit of a wall of text and might benefit from splitting into smaller paragraphs.
+You explain how everything adds to “automatic documentation” - but documentation is not prioritized very highly? This seems counter-intuitive.
+A reference for and an explanation of doxygen would be nice here.
+You claim that code quality is “important”, but do not qualify the claim with an explanation.
+You have a ton of different themes and claims mixed together, this makes the paragraph almost unreadable. It would benefit from a restructuring.
+Also most of the claims made in this section have no warrant (Toulmin).
+“To benefit ourselves” - ends abruptly.
+
+6: This is a nice introduction.
+
+6.1: This is a lot of referencing and quoting from the books. It would be better to very briefly introduce the terms, provide references, and then focus on discussing your experiences (take the discussion from your perspective instead of a general perspective).
+
+6.3: This section is good!
+Explain what the Singaporean usage of the word ”can” actually means.
+It seems misplaced (you haven’t done this before) to introduce the next section already in this one (the last paragraph can be removed).
+
+6.4: A bit wall-of-text-y. Break it up a bit more, perhaps. Illustrations, tables, etc. would be welcome.
+The first bit, about the video conference, is about your experience (which is good), but it doesn’t really concern technical tools.
+“Of course...” - either qualify it by explaining why or just state that it happened and not that it was a given.
+You say that you used several tools for “different purposes”, but don’t introduce these. Don’t be a tease - save it for when you’re actually talking about it.
+You are only talking about Skype in the first 1½ page- mentioning that it was used “extensively” in the last week seems redundant.
+You have some nice points in this section but it is very repetitive. You mention, several times, that you ended up moving from voice chat to text chat. This section could be boiled down to around one page without losing anything important.
+
+6.5: Good section!
+Qualify that it is often that communication leads to misunderstandings or simply state that “misunderstandings sometimes happen”.
+Include pictures (small versions), it breaks up the reading flow, making it more digestable.
+Additionally, you have several cases of “lag” where you actually mean “lack of”.
+
+6.6: Good section
+Could use a better finish to the section.
+
+6.7: Differs from previous projects? Exemplify or leave out.
+You mention “similarities (that you have a lot of)” but don’t mention any actual similarities.
+6.8.1: Why is it obvious that you have “thick Danish accents”?
+How are you “the leaders” if it did not shine through “decision-wise”? 
+Writing that you resorted to an excuse to move to Skype Chat, seems to imply that your previous Skype section is also just an excuse.
+
+6.8.2: Good mix of referencing and examples!
+“Avoiding a bit of ethnocentrism also proved unattainable.” - Why not “A bit of ethnocentrim proved unavoidable”?
+
+Overall: You mention accent barriers, switch to Skype a lot of times in the report, repeating a lot of surrounding stuff.
+
+
