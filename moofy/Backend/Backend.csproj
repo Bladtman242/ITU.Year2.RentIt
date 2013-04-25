@@ -58,9 +58,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DBArtist.cs" />
+    <Compile Include="DBDirector.cs" />
     <Compile Include="DBGenre.cs" />
     <Compile Include="MultipartParser.cs" />
-    <Compile Include="Sorter.cs" />
     <Compile Include="DBAccess.cs" />
     <Compile Include="DBFileHandler.cs" />
     <Compile Include="DBMovie.cs" />

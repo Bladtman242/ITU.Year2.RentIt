@@ -13,7 +13,7 @@ namespace moofy.Backend {
         /// <returns>true if the update is sucessful, false otherwise</returns>
         public bool UpdateUser(User user)
         {
-            SqlCommand command = new SqlCommand("UPDATE Userz "+
+            SqlCommand command = new SqlCommand("UPDATE Users "+
                                                 "SET name ='"+ user.Name + "', "+
                                                 "password ='" + user.Password + "', " +
                                                 "email = '" + user.Email + "'",
@@ -29,7 +29,7 @@ namespace moofy.Backend {
                                                 , connection);
             command.ExecuteNonQuery();
 
-            command.CommandText = "DELETE FROM Userz WHERE id=" + userId;
+            command.CommandText = "DELETE FROM Users WHERE id=" + userId;
             return command.ExecuteNonQuery() > 0;
         }
         /// <summary>
@@ -118,7 +118,7 @@ namespace moofy.Backend {
         /// <returns>success flag</returns>
         public bool Deposit(int amount, int userId) {
 
-            SqlCommand command = new SqlCommand("UPDATE Userz " +
+            SqlCommand command = new SqlCommand("UPDATE Users " +
                                                 "SET balance = balance + " + amount +
                                                 "WHERE id = " + userId,
                                                 connection);
@@ -132,7 +132,7 @@ namespace moofy.Backend {
         /// <param name="password">The password to check</param>
         /// <returns>success flag</returns>
         public int Login(string uname, string password) {
-            SqlCommand command = new SqlCommand("SELECT id FROM Userz " +
+            SqlCommand command = new SqlCommand("SELECT id FROM Users " +
                                                 "WHERE password='" + password + "'" +
                                                 " AND userName='" + uname + "'",
                                                 connection);
@@ -147,12 +147,12 @@ namespace moofy.Backend {
         /// <param name="user">The user to add</param>
         /// <returns>Returns the user including the id of the user, or null if the user could not be added</returns>
         public User AddUser(User user) {
-            SqlCommand command = new SqlCommand("SELECT id FROM Userz " +
+            SqlCommand command = new SqlCommand("SELECT id FROM Users " +
                                                 "WHERE userName = '" + user.Username+"'",
                                                 connection);
             if (command.ExecuteScalar() != null) return null;
 
-            command.CommandText = "INSERT INTO Userz(userName, password, name, email, balance)" +
+            command.CommandText = "INSERT INTO Users(userName, password, name, email, balance)" +
                                   "VALUES ('" +
                                   user.Username + "', '" +
                                   user.Password + "', '" +
@@ -161,7 +161,7 @@ namespace moofy.Backend {
                                   user.Balance + ")";
 
             if (command.ExecuteNonQuery() > 0) {
-                command.CommandText = "SELECT IDENT_CURRENT('Userz')";
+                command.CommandText = "SELECT IDENT_CURRENT('Users')";
                 user.Id = Int32.Parse(command.ExecuteScalar().ToString());
                 return user;
             }
@@ -175,7 +175,7 @@ namespace moofy.Backend {
         /// <returns>The user with the given id or null if no such user exists</returns>
         public User GetUser(int userId) {
             //Get the data tied directly to the user table
-            SqlCommand command = new SqlCommand("SELECT * FROM Userz WHERE id=" + userId,
+            SqlCommand command = new SqlCommand("SELECT * FROM Users WHERE id=" + userId,
                                                      connection);
             SqlDataReader reader = command.ExecuteReader();
             if (reader.Read()) {
@@ -222,7 +222,7 @@ namespace moofy.Backend {
             SqlDataReader reader = command.ExecuteReader();
             while (reader.Read()) {
                 int fileId = Int32.Parse(reader["fid"].ToString());
-                SqlCommand filequery = new SqlCommand("SELECT * FROM Filez WHERE id =" + fileId,
+                SqlCommand filequery = new SqlCommand("SELECT * FROM Files WHERE id =" + fileId,
                                                       connection);
                 SqlCommand moviequery = new SqlCommand("SELECT * FROM Movie WHERE id =" + fileId,
                                                       connection);
@@ -241,8 +241,7 @@ namespace moofy.Backend {
                             Title = fr["title"].ToString(),
                             Uri = fr["URI"].ToString(),
                             Year = short.Parse(fr["year"].ToString()),
-                            RentPrice = int.Parse(fr["rentPrice"].ToString()),
-                            Director = mr["director"].ToString()
+                            RentPrice = int.Parse(fr["rentPrice"].ToString())
                         };
                         purchases.Add(new Purchase(mov, (DateTime)reader["endTime"]));
                     } else if (sr.Read()) {
@@ -254,8 +253,7 @@ namespace moofy.Backend {
                             Uri = fr["URI"].ToString(),
                             Year = short.Parse(fr["year"].ToString()),
                             RentPrice = int.Parse(fr["rentPrice"].ToString()),
-                            Album = sr["album"].ToString(),
-                            Artist = sr["artist"].ToString()
+                            Album = sr["album"].ToString()
                         };
                         purchases.Add(new Purchase(song, (DateTime.Parse(reader["endTime"].ToString()))));
                     }
@@ -279,7 +277,7 @@ namespace moofy.Backend {
             using (SqlDataReader reader = command.ExecuteReader()) {
                 while (reader.Read()) {
                     int fileId = Int32.Parse(reader["fid"].ToString());
-                    SqlCommand filequery = new SqlCommand("SELECT * FROM Filez WHERE id =" + fileId,
+                    SqlCommand filequery = new SqlCommand("SELECT * FROM Files WHERE id =" + fileId,
                                                           connection);
                     SqlCommand songquery = new SqlCommand("SELECT * FROM Song WHERE id =" + fileId,
                                                        connection);
@@ -296,8 +294,7 @@ namespace moofy.Backend {
                                 Uri = fr["URI"].ToString(),
                                 Year = short.Parse(fr["year"].ToString()),
                                 RentPrice = int.Parse(fr["rentPrice"].ToString()),
-                                Album = sr["album"].ToString(),
-                                Artist = sr["artist"].ToString()
+                                Album = sr["album"].ToString()
                             };
                             purchases.Add(new Purchase(song, (DateTime.Parse(reader["endTime"].ToString()))));
                         }
@@ -323,7 +320,7 @@ namespace moofy.Backend {
             using (SqlDataReader reader = command.ExecuteReader()) {
                 while (reader.Read()) {
                     int fileId = Int32.Parse(reader["fid"].ToString());
-                    SqlCommand filequery = new SqlCommand("SELECT * FROM Filez WHERE id =" + fileId,
+                    SqlCommand filequery = new SqlCommand("SELECT * FROM Files WHERE id =" + fileId,
                                                           connection);
                     SqlCommand moviequery = new SqlCommand("SELECT * FROM Movie WHERE id =" + fileId,
                                                           connection);
@@ -340,8 +337,7 @@ namespace moofy.Backend {
                                 Title = fr["title"].ToString(),
                                 Uri = fr["URI"].ToString(),
                                 Year = short.Parse(fr["year"].ToString()),
-                                RentPrice = int.Parse(fr["rentPrice"].ToString()),
-                                Director = mr["director"].ToString()
+                                RentPrice = int.Parse(fr["rentPrice"].ToString())
                             };
                             purchases.Add(new Purchase(mov, (DateTime)reader["endTime"]));
                         }

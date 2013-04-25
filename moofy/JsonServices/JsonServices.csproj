@@ -77,6 +77,7 @@
     <Compile Include="RatingWrapper.cs" />
     <Compile Include="SongService.cs" />
     <Compile Include="SongWrapper.cs" />
+    <Compile Include="Sorter.cs" />
     <Compile Include="SuccessFlag.cs" />
     <Compile Include="SuccessFlagDownload.cs" />
     <Compile Include="SuccessFlagId.cs" />

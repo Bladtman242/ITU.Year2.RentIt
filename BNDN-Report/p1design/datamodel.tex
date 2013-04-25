@@ -2,19 +2,30 @@
 \subsubsection{Data Model and Back-end Structures}
 \label{sec:datamodel}
 
-With the overall requirements set we began working on the data model of the system with an initial focus on the database entities and relationships. The database entity-relationship model was sketched in LucidChart using the notation taught in the “Introduction to Database Design” course at ITU. The complete E-R  model is shown below.
-\textbf{INSERT PICTURE HERE}
+With the overall requirements set we began working on the data model of the system with an initial focus on the database entities and relationships. The database entity-relationship model was sketched in LucidChart \footnote{Lucidchart is a web-based diagramming software which allows users to collaborate and work together in real time to create flowcharts, organisational charts, website wireframes, UML designs, mind maps, software prototypes, and many other diagram types.} using the notation from Database Management Systems \cite{dbbook}. The complete E-R  model is shown in Figure ~\ref{fig:erd}.
 
-Notation : http://pages.cs.wisc.edu/~dbbook/
+\begin{figure}[t]
+	\centering
+	\includegraphics[scale=0.5]{./p1design/erdmodel.png}
+	\caption{Our Entity Relationship Model}
+	\label{fig:erd}
+\end{figure}
 
-\subsubsection{Reading the ER-model}
-\label{sec:readingdatamodel}
-Our design follows a naming scheme, where each table is named after the real domain object it represents, with junction tables following the structure\linebreak <table1><table2><optional own name>.
-This structure caused a problem with the “User” and “File” tables, since these names are reserved keywords in MS SQL. We updated said tables by appending a ‘z’ to the name, but we did not update the junction tables.
+Our E-R model follows a naming scheme, where each table is named after the real domain object it represents (singularized), with junction tables named by a concatenation of the tables linked. The naming scheme of junction tables are shown in Figure ~\ref{fig:junctionfigure}.
 
-\subsubsection{Normalization}
-\label{sec:normalization}
-Besides creating a database structure capable of holding all the data needed for our use cases, we wanted to avoid redundant data. Our choice to avoid redundant data stems from the wish to eliminate anomalies within the database of which redundant data is a key cause. Anomalies are known to weaken the integrity of data due to irregular or inconsistent storage, and we believe integrity is a key characteristic of a database dealing with users, their money, and their property. We enforced this constraint by applying a database normalization (third normal form) to our design, which is known to be free of update, insertion, and deletion anomalies.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.5]{./p1design/junctionfigure.png}
+	\caption{Example of concatenated naming for junction tables.}
+	\label{fig:junctionfigure}
+\end{figure}
+
+
+Where several junction tables exist between the same entities, we append an additional description string to the name (as seen in "UserFile\textit{Rating}").
+Our decision to use the domain objects' names singularized caused problems with the “User” and “File” tables, since these names are reserved keywords in MS SQL. We updated said tables by appending a ‘s’ to the name (making it plural), but we kept the names singularized in the junction tables.
+
+Besides creating a database structure capable of holding all the data needed for our use cases, we wanted to avoid redundant data. Our choice to avoid redundant data stems from the wish to eliminate anomalies within the database of which redundant data is a key cause. Anomalies are known to weaken the integrity of the database \cite{dbbook} due to irregular or inconsistent data, and we believe integrity is a key characteristic of a database dealing with users, their money, and their property. We enforced this constraint by applying a database normalization (third normal form) to our design, which is known to be free of update, insertion, and deletion anomalies.
 
 \subsubsection{Designing for Extendability}
 \label{sec:extendability}
@@ -28,29 +39,34 @@ The naïve solution would be to create a new table for each media type e.g.
 \textbf{Song (id, title, artist, album, coverURI, rentPrice, …)} or
 \textbf{Movie (id, title, director, coverURI, rentPrice, …)}
 This will however create a lot of duplicate columns in different tables. If we wanted to add new information to our media types later, e.g. a “viewCount” (which did actually happen) this would need to be added to every media table.
-The realization that several columns of information is shared across the media suggest for an inheritance based approach, where the shared columns are placed in a “super table”, while every media table will take part in an IS-A relationship with said “super table”.
+The realization that several columns of information is shared across the media suggest for an inheritance based approach, where the shared columns are placed in a “super table”, while every media table will take part in an IS-A relationship with said “super table”. This is the design that can be seen in Figure ~\ref{fig:erd}.
 
-This design can be seen in our final entity relationship model.
+With our minds set on centralizing the common media attributes in the Files super table, we noted that both a movie director and a song artist could be gathered under a common label "Creator". The Files table would then be connected to a "person" table, which would store both song artists and movie directors.
+\begin{figure}[h]
+	\centering
+	\centerline{\includegraphics[scale=0.52]{./p1design/dilemma.png}}
+	\caption{Example of the dilemma cases}
+	\label{fig:erddilemma}
+\end{figure}
 
-\subsubsection{Improvements}
-\label{sec:improvementsdatamodel}
-Looking back at our database design we realized that a few improvements could be made. We have sketched these below:
-\begin{itemize}
-\item Currently our movie table has a director property while our song table has an artist property. These could be moved into the File(z) table with the name “creator”.
-\item Our current design does not support several directors/artists. This could have been designed like we designed the genres.
-\end{itemize}
+We discussed this design and noted that it could not maintain the current constraint that only songs are linked to artists and only movies to directors. In addition we would not be able to extend the information on artists without extending it for directors too. This led to the decision to keep them seperate, although they are conceptually very close.
+
+Later in the project we became aware that the above dilemma also applies to the concept of genres with the implication that a song could be linked to the genre "Horror", which does not make sense. As such the design of the genres-relation does not match our established design philosophies and we believe that this could (and should) be improved upon in any later revision of the project.
 
 \subsubsection{Accessing the Database}
 \label{sec:databaseaccess}
 After having designed the database structure we had to decide how to access and utilize the database in the best suited way for our webservice. We quickly settled for a C\#/WCF-based web service, since every group member had about the same experience in that platform from other ITU courses.
-With access to the .NET framework, we considered to make use of the Entity Framework for our database interactions and general object-relational mapping. However several group members had been experiencing some inconvenient performance issues in previous projects. We do believe performance is an important aspect of our service and research has shown that users of the internet has become very impatient with regards to response times (http://www.nytimes.com/2012/03/01/technology/impatient-web-users-flee-slow-loadi\\ng-sites.html?pagewanted=all\&_r=0). We also deemed our queries and database interaction to be fairly simple, thus having no real need for most of the functionality in the Entity Framework. After a discussion it became clear that the only real benefit of using the framework was the possibility of faster prototyping. With our emphasis on a solid performance we choose to spend a little more time developing our own database access layer in order to maintain a more direct control over the performance of our solution.
+With access to the .NET framework, we considered to make use of the Entity Framework for our database interactions and general object-relational mapping. However several group members had been experiencing some inconvenient performance issues in previous projects. We do believe performance is an important aspect of our service and research has shown that users of the internet have become very impatient with regards to response times \cite{webusersflee}. We also deemed our queries and database interaction to be fairly simple, thus having no real need for most of the functionality in the Entity Framework. After a discussion it became clear that the only real benefit of using the framework was the possibility of faster prototyping. With our emphasis on a solid performance we choose to spend a little more time developing our own database access layer in order to maintain a more direct control over the performance of our solution.
 
-\subsubsection{Other Potential Sections}
-\textbf{Nævn lazy loading?}
-Vi bruger det sådan set ikke til noget meget smart
 
-\textbf{Mulige arbejdsgange/forespørgsler understøttet}
-Voldsomt ligegyldigt? Alle use cases er jo understøttet. Kan ikke se noget at skrive her.
+\subsubsection{From Entities to Classes}
+Nævn ét eksempel på en entity -> objekt mapning. Husk - kun backend.
 
-\textbf{Hvordan ER-diagram mappet til C\# objekterne, ala User -> userobjekt..}
-Rimelig selvforklarende mapning vi bruger. De fleste entities hedder det samme.
+
+\subsubsection{Lazy loading}
+Nævn det.
+Giv et eksempel.
+
+\subsubsection{Supported workflows}
+Nævn at alt er understøttet.
+Giv ét eksempel på en use cases/handling med henblik på interaktion og hvor simpel API'en (backend API) er.

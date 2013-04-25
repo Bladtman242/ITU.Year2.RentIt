@@ -16,7 +16,7 @@ namespace moofy.Backend {
             SqlCommand command = new SqlCommand("SELECT id FROM Admin WHERE id =" + adminId, connection);
             if (command.ExecuteScalar() == null) return false;
 
-            command.CommandText =   ("UPDATE Filez " +
+            command.CommandText =   ("UPDATE Files " +
                                      "SET title = '" + song.Title.Replace("'", "''") + "', " +
                                      "description = '" + song.Description.Replace("'", "''") + "', " +
                                      "rentPrice = " + song.RentPrice + ", " +
@@ -25,7 +25,6 @@ namespace moofy.Backend {
                                      "coverURI = '" + song.CoverUri.Replace("'", "''") + "'" +
                                      "WHERE id =" + song.Id +
                                      "UPDATE Song SET album = '" + song.Album.Replace("'", "''") + "', " +
-                                     "artist = '" + song.Artist.Replace("'", "''") + "' " +
                                      "WHERE id = " + song.Id);
 
             return command.ExecuteNonQuery() > 0;
@@ -44,13 +43,12 @@ namespace moofy.Backend {
                 string artist = reader["artist"].ToString();
                 string album = reader["album"].ToString();
                 reader.Close();
-                command.CommandText = "SELECT * FROM Filez WHERE id =" + songId;
+                command.CommandText = "SELECT * FROM Files WHERE id =" + songId;
                 reader = command.ExecuteReader();
                 reader.Read();
                 Song song = new Song() {
                     Id = songId,
                     Album = album,
-                    Artist = artist,
                     RentPrice = int.Parse(reader["rentPrice"].ToString()),
                     BuyPrice = int.Parse(reader["buyPrice"].ToString()),
                     Uri = reader["URI"].ToString(),
@@ -80,18 +78,18 @@ namespace moofy.Backend {
             if (command.ExecuteScalar() == null) return false;
 
             //Get the price of the song
-            command.CommandText = "SELECT buyPrice FROM Filez WHERE id =" + songId;
+            command.CommandText = "SELECT buyPrice FROM Files WHERE id =" + songId;
             Object pric = command.ExecuteScalar();
             if (pric == null) return false;
             int price = (int)pric;
             //Get the balance of the user
-            command.CommandText = "SELECT balance FROM Userz WHERE id =" + userId;
+            command.CommandText = "SELECT balance FROM Users WHERE id =" + userId;
             Object bal = command.ExecuteScalar();
             if (bal == null) return false;
             int balance = (int)bal;
             if (balance - price >= 0) {
                 //Withdraw the amount from the users balance and only continue if it is successful
-                command.CommandText = "UPDATE Userz " +
+                command.CommandText = "UPDATE Users " +
                                       "SET balance = balance - " + price +
                                       "WHERE id = " + userId;
                 if (command.ExecuteNonQuery() > 0) {
@@ -117,18 +115,18 @@ namespace moofy.Backend {
             if (command.ExecuteScalar() == null) return false;
 
             //Get the price of the song
-            command.CommandText = "SELECT rentPrice FROM Filez WHERE id =" + songId;
+            command.CommandText = "SELECT rentPrice FROM Files WHERE id =" + songId;
             Object pric = command.ExecuteScalar();
             if (pric == null) return false;
             int price = (int)pric;
             //Get the balance of the user
-            command.CommandText = "SELECT balance FROM Userz WHERE id =" + userId;
+            command.CommandText = "SELECT balance FROM Users WHERE id =" + userId;
             Object bal = command.ExecuteScalar();
             if (bal == null) return false;
             int balance = (int)bal;
             if (balance - price >= 0) {
                 //Withdraw the amount from the users balance and only continue if it is successful
-                command.CommandText = "UPDATE Userz " +
+                command.CommandText = "UPDATE Users " +
                                       "SET balance = balance - " + price +
                                       "WHERE id = " + userId;
                 if (command.ExecuteNonQuery() > 0) {
@@ -152,12 +150,13 @@ namespace moofy.Backend {
             SqlCommand command = new SqlCommand("SELECT * FROM Admin WHERE id =" + adminId, connection);
             if (command.ExecuteScalar() != null) {
                 //Delete the movie record first as it has a reference to the file record.
-                command.CommandText = "DELETE FROM Song WHERE id=" + songId;
+                command.CommandText = "DELETE FROM SongArtist WHERE sid="+songId +
+                                      " DELETE FROM Song WHERE id=" + songId;
                 if (command.ExecuteNonQuery() > 0) {
                     command.CommandText = "DELETE FROM GenreFile WHERE fid=" + songId +
                                           " DELETE FROM UserFileRating WHERE fid=" + songId+
                                           " DELETE FROM UserFile WHERE fid=" + songId +
-                                          " DELETE FROM Filez WHERE id=" + songId;
+                                          " DELETE FROM Files WHERE id=" + songId;
                     return command.ExecuteNonQuery() > 0;
                   
                 }
@@ -180,7 +179,7 @@ namespace moofy.Backend {
         /// <param name="genres">The genres the song fits into</param>
         /// <param name="description">The description of the song</param>
         /// <returns>The Song object including id and uri , or null if the song could not be added to the database</returns>
-        public Song CreateSong(int managerId, int tmpId, IList<String> genres, Song song) {
+        public Song CreateSong(int managerId, int tmpId, IList<String> genres, Song song, IList<string> artists) {
             SqlCommand command = new SqlCommand("SELECT * FROM Admin WHERE id =" + managerId, connection);
             if (command.ExecuteScalar() != null) {
                 //Get the uri from the StagedFile table
@@ -188,8 +187,8 @@ namespace moofy.Backend {
                 object tmpUri = command.ExecuteScalar();
                 if (tmpUri == null) return null;
                 string uri = tmpUri.ToString();
-                //Add the file information into to Filez table
-                command.CommandText = "INSERT INTO Filez" +
+                //Add the file information into to Files table
+                command.CommandText = "INSERT INTO Files" +
                                       "(title, rentPrice, buyPrice, URI, year, description, coverURI, viewCount) " +
                                       "VALUES('" +
                                       song.Title.Replace("'", "''") + "', " +
@@ -203,25 +202,18 @@ namespace moofy.Backend {
 
                 //If the information is successfully added continue to add info to the Movie table and GenreFile table
                 if (command.ExecuteNonQuery() > 0) {
-                    command.CommandText = "SELECT IDENT_CURRENT('Filez')";
+                    command.CommandText = "SELECT IDENT_CURRENT('Files')";
                     int fileId = Int32.Parse(command.ExecuteScalar().ToString());
 
-                    command.CommandText = "INSERT INTO Song VALUES(" + fileId + ", '" + song.Artist + "', '" + song.Album + "')";
+                    command.CommandText = "INSERT INTO Song VALUES(" + fileId + ", '" + song.Album + "')";
                     command.ExecuteNonQuery();
 
                     //Add genres to the file if any exist
-                    if (genres.Count() > 0) {
-                        string sql = "SELECT id FROM Genre WHERE name IN ('" +
-                                      string.Join<string>("', '", genres) + "')";
-                        command.CommandText = sql;
-                        SqlDataReader reader = command.ExecuteReader();
-                        while (reader.Read()) {
-                            SqlCommand command2 = new SqlCommand("INSERT INTO GenreFile VALUES(" + reader["id"] + " ," + fileId + ")", connection);
-                            command2.ExecuteNonQuery();
-                        }
-                        reader.Close();
+                    if (genres.Count() > 0) 
+                        AddAllGenres(fileId, genres);
+                    if (artists.Count() > 0)
+                        AddAllArtists(fileId, artists);
 
-                    }
                     command.CommandText = "DELETE FROM StagedFile WHERE id=" + tmpId;
                     command.ExecuteNonQuery();
                     song.Uri = uri;
@@ -241,17 +233,21 @@ namespace moofy.Backend {
             List<Song> songs = new List<Song>();
 
             //First get all rows from the song and file table joined, where an attribute matches the filter
-            SqlCommand command = new SqlCommand("SELECT * FROM Song , Filez " +
-                                                "WHERE Song.id = Filez.id " +
-                                                "AND (artist LIKE '%" + filter + "%' " +
-                                                "OR album LIKE '%" + filter + "%' " +
+            SqlCommand command = new SqlCommand("SELECT * FROM Song , Files " +
+                                                "WHERE Song.id = Files.id " +
+                                                "AND (album LIKE '%" + filter + "%' " +
                                                 "OR title LIKE '%" + filter + "%' " +
                                                 "OR description LIKE '%" + filter + "%' " +
-                                                "OR Filez.id IN (" +
+                                                "OR Files.id IN (" +
                                                     "SELECT fid FROM GenreFile " +
                                                     "WHERE gid =(" +
                                                         "SELECT id FROM Genre " +
-                                                        "WHERE name Like '%" + filter + "%' )))"
+                                                        "WHERE name Like '%" + filter + "%' )) " +
+                                                "OR Song.id IN (" +
+                                                    "SELECT sid FROM SongArtist " +
+                                                    "WHERE aid =(" +
+                                                         "SELECT id FROM Director " +
+                                                         "WHERE name Like '%" + filter + "%')))"
                                                 , connection);
             SqlDataReader reader = command.ExecuteReader();
 
@@ -259,7 +255,6 @@ namespace moofy.Backend {
 
                 songs.Add(new Song() {
                     Id = Int32.Parse(reader["id"].ToString()),
-                    Artist = reader["artist"].ToString(),
                     Album = reader["album"].ToString(),
                     RentPrice = int.Parse(reader["rentPrice"].ToString()),
                     BuyPrice = int.Parse(reader["buyPrice"].ToString()),

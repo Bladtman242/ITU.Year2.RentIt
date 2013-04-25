@@ -1,0 +1,61 @@
+\section{Risks}
+\label{app:risks-appendix}
+
+\subsection{Technical Risks}
+\begin{description}
+    \item[T1 New development environment] In the project we will be working with an unfamiliar
+        framework (.NET’s WCF) and server technology (IIS). If any problems arise with these
+        technologies they will considerably lengthen the project scope as no member of the team
+        would have the required familiarity to quickly solve such a problem. On the other hand
+        it is not very likely that any problems should arise as WCF is used through C\#, a
+        programming language the entire team is familiar with, and the interface to the IIS-server
+        is very much like using Windows on a desktop computer.\newline
+        \textbf{\emph{Impact: moderate; Likelihood: low}}
+    \item[T2 New type of application] None of the developers have previously developed a WCF-based
+        RESTful service. This technology will require some self-education on various points. It is
+        fairly likely that the team would end up in situations with lack of knowledge, and this may
+        take a considerable amount of time to get around.\newline
+        \textbf{\emph{Impact: moderate; Likelihood: medium}}
+    \item[T3 New language] Few of the developers have ever worked with the JavaScript Object Notation,
+        which will be a vital part of the service built. The syntax, however, is very simple and easy
+        to learn, so it seems unlikely that this would amount to an actual problem.\newline
+        \textbf{\emph{Impact: small; Likelihood: low}}
+    \item[T4 Development environment differs from Live environment] The environment present on
+        developers' computers as well as the way WCF applications are tested locally, differs vastly
+        from the way the code is deployed. This requires the maintenance of two different (but similar)
+        configuration files. It is likely that there will, at some point during the project, arise a
+        situation where there is some inconsistency between the two, resulting in improper tests. This
+        could be everything from very easy to very hard to fix, depending on the situation.\newline
+        \textbf{\emph{Impact: moderate; Likelihood: high}}
+\end{description}
+
+\subsection{Planning and resource risks}
+\begin{description}
+    \item[P1 Time constraints may be exceeded due to scope of project] The size of the project may have
+        been underestimated, and the project may require more man-hours than originally planned. Due to the
+        actual (small) scope of the project this is not likely, and if it did happen it is likely that the
+        team members would be able to move around their schedule to put in more work, so the impact would
+        not be high.\newline
+        \textbf{\emph{Impact: small; Likelihood: low}}
+    \item[P2 Time constraints may be exceeded due to project overhead] Starting a project, especially when
+        it is a small one, requires a relatively large amount of overhead (bureaucracy, preparation). This
+        often requires for the entire team to assemble and agree on the terms by which they work.\newline
+        \textbf{\emph{Impact: moderate; Likelihood: high}}
+\end{description}
+
+\subsection{Requirement risks}
+\begin{description}
+    \item[Req1 Requirements are changeable] As the requirements are a product of two teams (separated by
+        space, and often time) discussing their wants and needs, it is very likely that they will be very
+        volatile. Changing requirements early on is not a problem, but the later they change the more of an
+        impact they will have on the development, as more of the product will have to be scrapped and redone.
+        \newline
+        \textbf{\emph{Impact: moderate; Likelihood: high}}
+    \item[Req2 Requirements lack detail or are ambiguous] When discussing requirements the final version may
+        be subject to some ambiguity, often the result of earlier misunderstandings. This may result in one
+        team implementing a feature that will not work with what the other team has implemented. It is fairly
+        likely that such a discrepancy will develop during global software development, but as the overall
+        idea will most likely be preserved it is unlikely that fixing such an issue will amount to very much work.
+        \newline
+        \textbf{\emph{Impact: small; Likelihood: medium}}
+\end{description}
