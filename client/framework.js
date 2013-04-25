@@ -1,11 +1,14 @@
-//TODO: Pop State
-
 //Framework object, "namespace" for all framework functions.
 var framework = {
     /**
      * Name of default page to be loaded if none is specified.
      */
     defaultPage: "about",
+    
+    /**
+     * Title of site.
+     */
+    siteTitle: "moofy",
     
     /**
      * Main container of content. This should be a jQuery wrapped DOM element.
@@ -18,7 +21,10 @@ var framework = {
      * a new history frame should be pushed (default true). This is used to preserve history.
      * If set to false, the step will not be recalled in history.
      */
-    loadPage: function(pageName,pushState,callback) {
+    loadPage: function(pageName,pushState) {
+            //Push State default true
+            if(pushState == null) pushState = true;
+            
             //Get page into #container
             framework.container.load(pageName+".htm", function() {
             
@@ -38,10 +44,18 @@ var framework = {
                     alert("A link with the \"internal\" class with an invalid (external-pointing) href was clicked.");
                     return true;
                 });
+                
+                //Push history frame.
+                if(pushState) history.pushState({"page": pageName}, pageName, "#"+pageName);
             });
-            
-            //TODO: Push State
         }
+};
+
+//Handle history pop-event: Pop history frame (back/forward navigration)
+window.onpopstate = function(event) {
+    var page = framework.defaultPage;
+    if(event.state != null) page = event.state.page;
+    framework.loadPage(page,false);
 };
 
 $(document).ready(function() {
