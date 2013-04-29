@@ -1,0 +1,111 @@
+<form id="editUserForm" class="form-horizontal hide">
+    <legend>Edit user profile</legend>
+    <div class="control-group">
+        <label class="control-label" for="inputName">Name (optional)</label>
+        <div class="controls">
+            <input type="text" id="inputName" placeholder="Name"/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="inputEmail">Email (optional)</label>
+        <div class="controls">
+            <input type="text" id="inputEmail" placeholder="Email"/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="inputPassword">Password (optional)</label>
+        <div class="controls">
+            <input type="password" id="inputPassword" placeholder="Password"/>
+        </div>
+    </div>
+    <div class="form-actions">
+        <a id="editUserSubmit" class="btn btn-primary">Save changes</a>
+    </div>
+</form>
+
+<script>
+    //Execute immediately
+    (function () {
+        var success, updateError, noDataError;
+        success = $(
+                "<div class='alert alert-success'>\
+                    <button type='button' class='close' data-dismiss='alert'>&times;</button>\
+                    <strong>Profile updated!</strong> The profile was succesfully updated.\
+                </div>");
+
+        updateError = $(
+                "<div class='alert alert-error'>\
+                    <button type='button' class='close' data-dismiss='alert'>&times;</button>\
+                    <strong>Error!</strong> The profile was not updated.\
+                </div>");
+
+        noDataError = $(
+                "<div class='alert alert-error'>\
+                    <button type='button' class='close' data-dismiss='alert'>&times;</button>\
+                    <strong>No information was entered.</strong> Please enter some new values before clicking submit.\
+                </div>");
+
+        var container = $("#container");
+        var form = $("#editUserForm");
+        var inputName = $("#inputName");
+        var inputEmail = $("#inputEmail");
+        var inputPassword = $("#inputPassword");
+        //Update placeholders with actual user info (except password)
+        inputName.attr("placeholder", "Poul Von Lederhosen");
+        inputEmail.attr("placeholder", "poca@honthas.dk");
+        form.show();
+
+        //Submit handler
+        $("#editUserSubmit").click(function() {
+            var cleanedInputName = inputName.val().trim();
+            var cleanedInputEmail = inputEmail.val().trim();
+            var cleanedInputPassword = inputPassword.val().trim();
+
+            var submit = false;
+            var postData = {};
+            if(cleanedInputName !== "") {
+                submit = true;
+                postData.name = cleanedInputName;
+            }
+            if(cleanedInputEmail !== "") {
+                submit = true;
+                postData.email = cleanedInputEmail;
+            }
+            if(cleanedInputPassword !== "") {
+                submit = true;
+                postData.password = cleanedInputPassword;
+            }
+
+            if (submit) {
+                //TODO: Get actual user id
+                var userid = 1;
+                $.ajax({
+                    url: 'http://rentit.itu.dk/RentIt25/moofy.svc/users/' + userid + '/update',
+                    type: 'POST',
+                    data: JSON.stringify(postData),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    async: true,
+                    success: function(msg) {
+                        noDataError.remove();
+                        updateError.remove();
+                        container.prepend(success);
+                    },
+                    error: function(msg) {
+                        success.remove();
+                        noDataError.remove();
+                        container.prepend(updateError);
+                    }
+                });
+            } else {
+                success.remove();
+                updateError.remove();
+                container.prepend(noDataError);
+            }
+        });
+
+    })();
+
+    //POST users/{id}/update //all arguments below are OPTIONAL, add only the
+
+</script>
