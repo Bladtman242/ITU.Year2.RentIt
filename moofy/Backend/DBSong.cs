@@ -40,7 +40,6 @@ namespace moofy.Backend {
             SqlDataReader reader = command.ExecuteReader();
 
             if (reader.Read()) {
-                string artist = reader["artist"].ToString();
                 string album = reader["album"].ToString();
                 reader.Close();
                 command.CommandText = "SELECT * FROM Files WHERE id =" + songId;
