@@ -1,0 +1,99 @@
+<!-- Button to trigger modal -->
+<a id="buyButton" class="btn">Buy</a>
+<a id="rentButton" class="btn">Rent</a>
+
+<script>
+    var buyModal, rentModal, noCreditsModal;
+    buyModal = $(
+            "<div id='buyModal' class='modal hide'> <div class='modal-header'>\
+                <button type='button' class='close' data-dismiss='modal'>×</button>\
+                <div id='buyModalHeader'/><h3>Are you sure?</h3></div>\
+                <div id='buyModalBody' class='modal-body'><p>Do you really want to buy this movie?!</p></div>\
+                <div class='modal-footer'>\
+                    <button id='buyModalCancelButton' class='btn' data-dismiss='modal'>Cancel</button>\
+                    <button id='buyModalActionButton' class='btn btn-primary'>Buy</button>\
+                </div>\
+            </div>");
+    rentModal = $(
+            "<div id='rentModal' class='modal hide'> <div class='modal-header'>\
+                <button type='button' class='close' data-dismiss='modal'>×</button>\
+                <div id='rentModalHeader'/><h3>Are you sure?</h3></div>\
+                <div id='rentModalBody' class='modal-body'><p>Do you really want to rent this movie?!</p></div>\
+                <div class='modal-footer'>\
+                    <button id='rentModalCancelButton' class='btn' data-dismiss='modal'>Cancel</button>\
+                    <button id='rentModalActionButton' class='btn btn-primary'>Rent</button>\
+                </div>\
+            </div>");
+
+    noCreditsModal = $(
+            "<div id='noCreditsModal' class='modal hide'> <div class='modal-header'>\
+                <button type='button' class='close' data-dismiss='modal'>×</button>\
+                <div id='noCreditsModalHeader'/><h3>Not enough credits</h3></div>\
+                <div id='noCreditsModalBody' class='modal-body'><p>You don't seem to have enough credits. Link to credits site and stuff.</p></div>\
+                <div class='modal-footer'>\
+                    <button id='noCreditsModalCancelButton' class='btn' data-dismiss='modal'>Cancel</button>\
+                </div>\
+            </div>");
+
+    //Execute immediately
+    (function(){
+        $('#buyModalActionButton').click(function () {
+            //Post data
+        });
+
+        $('#buyModalCancelButton').click(function () {
+            $('#buyModal').remove();
+        });
+
+        $('#rentModalActionButton').click(function () {
+            //Post data
+        });
+
+        $('#rentModalCancelButton').click(function () {
+            $('#rentModal').remove();
+        });
+
+        $('#noCreditsModalCancelButton').click(function () {
+            $('#noCreditsModal').remove();
+        });
+
+        $('#buyButton').click(function() {
+            //TODO: Get actual user id and credits for current item
+            validateUserBalance(1, 1000, showBuyModal)
+        });
+
+        $('#rentButton').click(function() {
+            //TODO: Get actual user id and credits for current item
+            validateUserBalance(1, 300, showRentModal)
+        });
+    })();
+
+    function validateUserBalance(userId, creditsNeeded, func) {
+        $.getJSON("http://rentit.itu.dk/RentIt25/moofy.svc/users/" + userId, function(user) {
+            if(user.balance >= creditsNeeded) {
+                func();
+            } else {
+                showNoCreditsModal();
+            }
+        });
+    }
+
+    function showNoCreditsModal() {
+        $("body").append(noCreditsModal);
+        //Show the modal dialog
+        $('#noCreditsModal').modal(null);
+    }
+
+    function showBuyModal() {
+        $("body").append(buyModal);
+        //Show the modal dialog
+        $('#buyModal').modal(null);
+    }
+
+    function showRentModal() {
+        //Perform first time setup
+        $("body").append(rentModal);
+        //Show the modal dialog
+        $('#rentModal').modal(null);
+    }
+</script>
