@@ -1,9 +1,20 @@
 <!-- Button to trigger modal -->
+
 <a id="buyButton" class="btn">Buy</a>
 <a id="rentButton" class="btn">Rent</a>
 
 <script>
-    var buyModal, rentModal, noCreditsModal;
+    var success, alert, buyModal, rentModal, noCreditsModal;
+    success = $(
+            "<div class='alert alert-success'>\
+                <button type='button' class='close' data-dismiss='alert'>&times;</button>\
+                <strong>Purchase completed!</strong> The purchase was succesfull. Go watch the movie here: LINK?\
+            </div>");
+    alert = $(
+            "<div class='alert alert-error'>\
+                <button type='button' class='close' data-dismiss='alert'>&times;</button>\
+                <strong>Error!</strong> An error occurred. Please try again.\
+            </div>");
     buyModal = $(
             "<div id='buyModal' class='modal hide'> <div class='modal-header'>\
                 <button type='button' class='close' data-dismiss='modal'>×</button>\
@@ -57,9 +68,13 @@
                 dataType: 'json',
                 async: true,
                 success: function(msg) {
-                    alert(msg);
+                    $('body').prepend(success);
+                },
+                error: function(msg) {
+                    $('body').prepend(alert);
                 }
             });
+            buyModal.modal('hide');
         });
 
         rentModal.find("#rentModalActionButton").click(function() {
@@ -72,9 +87,13 @@
                 dataType: 'json',
                 async: true,
                 success: function(msg) {
-                    alert(msg);
+                    $('body').prepend(success);
+                },
+                error: function(msg) {
+                    $('body').prepend(alert);
                 }
             });
+            rentModal.modal('hide');
         });
     })();
 
