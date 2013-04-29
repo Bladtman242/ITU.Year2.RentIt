@@ -36,41 +36,51 @@
             </div>");
 
     //Execute immediately
-    (function(){
-        $('#buyModalActionButton').click(function () {
-            //Post data
-        });
-
-        $('#buyModalCancelButton').click(function () {
-            $('#buyModal').remove();
-        });
-
-        $('#rentModalActionButton').click(function () {
-            //Post data
-        });
-
-        $('#rentModalCancelButton').click(function () {
-            $('#rentModal').remove();
-        });
-
-        $('#noCreditsModalCancelButton').click(function () {
-            $('#noCreditsModal').remove();
-        });
-
-        $('#buyButton').click(function() {
+    (function () {
+        $('#buyButton').click(function () {
             //TODO: Get actual user id and credits for current item
             validateUserBalance(1, 1000, showBuyModal)
         });
 
-        $('#rentButton').click(function() {
+        $('#rentButton').click(function () {
             //TODO: Get actual user id and credits for current item
             validateUserBalance(1, 300, showRentModal)
+        });
+
+        buyModal.find("#buyModalActionButton").click(function() {
+            var postData = JSON.stringify({ userId: 1});
+            $.ajax({
+                url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/1/purchase',
+                type: 'POST',
+                data: postData,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: true,
+                success: function(msg) {
+                    alert(msg);
+                }
+            });
+        });
+
+        rentModal.find("#rentModalActionButton").click(function() {
+            var postData = JSON.stringify({ userId: 1});
+            $.ajax({
+                url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/1/rent',
+                type: 'POST',
+                data: postData,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: true,
+                success: function(msg) {
+                    alert(msg);
+                }
+            });
         });
     })();
 
     function validateUserBalance(userId, creditsNeeded, func) {
-        $.getJSON("http://rentit.itu.dk/RentIt25/moofy.svc/users/" + userId, function(user) {
-            if(user.balance >= creditsNeeded) {
+        $.getJSON("http://rentit.itu.dk/RentIt25/moofy.svc/users/" + userId, function (user) {
+            if (user.balance >= creditsNeeded) {
                 func();
             } else {
                 showNoCreditsModal();
