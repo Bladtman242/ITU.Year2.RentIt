@@ -16,7 +16,7 @@ namespace moofy.Backend {
             SqlCommand command = new SqlCommand("UPDATE Users "+
                                                 "SET name ='"+ user.Name + "', "+
                                                 "password ='" + user.Password + "', " +
-                                                "email = '" + user.Email + "'",
+                                                "email = '" + user.Email + "' WHERE id=" + user.Id,
                                                 connection);
 
             return command.ExecuteNonQuery() > 0;

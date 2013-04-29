@@ -69,10 +69,12 @@
                 dataType: 'json',
                 async: true,
                 success: function(msg) {
-                    $('#container').prepend(success);
+                    error.remove();
+                    container.prepend(success);
                 },
                 error: function(msg) {
-                    $('#container').prepend(error);
+                    success.remove();
+                    container.prepend(error);
                 }
             });
             buyModal.modal('hide');
@@ -88,10 +90,12 @@
                 dataType: 'json',
                 async: true,
                 success: function(msg) {
-                    $('#container').prepend(success);
+                    error.remove();
+                    container.prepend(success);
                 },
                 error: function(msg) {
-                    $('#container').prepend(error);
+                    success.remove();
+                    container.prepend(error);
                 }
             });
             rentModal.modal('hide');
