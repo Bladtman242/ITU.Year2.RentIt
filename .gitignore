@@ -4,6 +4,7 @@
 *.toc
 *.aux
 *.out
+*.idea
 
 *.gz
 
