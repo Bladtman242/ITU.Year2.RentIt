@@ -3,13 +3,126 @@
     <head>
         <title>moofy</title>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+        <script src="vendor/jquery.md5.js"></script>
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <style type="text/css">
+            html {
+                text-align: center;
+            }
+            body {
+                width: 1000px;
+                display: inline-block;
+                text-align: left;
+            }
+            #container {
+                text-align: left;
+            }
+            header {
+                padding: 10px;
+            }
+            header hgroup, #login-box, #user-profile-box {
+                display: inline-block;
+                vertical-align: top;
+            }
+            header hgroup {
+                margin-right: 550px;
+            }
+            #login-box input, #login-box label {
+                font-size: 0.7em;
+                height: 15px;
+            }
+            #login-box .control-group {
+                margin-bottom: 4px;
+            }
+            #user-name {
+                font-size: 1.3em;
+            }
+            #user-pic {
+                width: 64px;
+                height: 64px;
+                display: inline-block;
+                vertical-align: top;
+            }
+            #user-info {
+                display: inline-block;
+                vertical-align: top;
+            }
+            #user-profile-box .btn {
+                float: right;
+            }
+            .navbar {
+                margin-top: 15px;
+            }
+        </style>
         <script src="framework.js"></script>
 		<script src="bootstrap/js/bootstrap.min.js"></script>
     </head>
     <body>
+        <header>
+            <!--Name of the song, explosivo-->
+            <hgroup>
+                <h1>moofy</h1>
+                <h5>super-cool rental</h5>
+            </hgroup>
+            
+            <!--User profile/log in-->
+            <div id="login-box">
+                <form class="form-horizontal">
+                    <fieldset>
+                        <div class="control-group">
+                            <label class="control-label" for="username">Username</label>
+                            <div class="controls">
+                                <input name="username" type="text" placeholder="JohnDoe1337">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="password">Password</label>
+                            <div class="controls">
+                                <input name="password" type="password" placeholder="secretive">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="controls">
+                                <button type="submit" class="btn">Sign in</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div id="user-profile-box">
+                <div id="user-pic"></div>
+                <div id="user-info">
+                    <div id="user-name"><span id="user-name-value"></span></div>
+                    <div id="user-username">Username: <span id="user-username-value"></span></div>
+                    <div id="user-email">Email: <span id="user-email-value"></span></div>
+                    <a href="#logout" class="internal btn btn-small">Log out</a>
+                </div>
+            </div>
+            
+            <!--Nav bar-->
+            <div class="navbar">
+                <div class="navbar-inner">
+                    <ul class="nav">
+                        <li><a href="#about" class="internal">Home</a></li>
+                        <li><a href="#page2" class="internal">Test</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
         <div id="container">
             <!--Nothing-->
         </div>
+        <script>
+            if(framework.user) {
+                $("#login-box").hide();
+                $("#user-name-value").html('<a href="#editProfile" class="internal">'+framework.user.name+"</a>");
+                $("#user-username-value").text(framework.user.username);
+                $("#user-email-value").text(framework.user.email);
+                $("#user-pic").html('<a href="#editProfile" class="internal"><img src="http://gravatar.com/avatar/'+$.md5(framework.user.email)+'?size=64&d=mm"></a>');
+            }
+            else {
+                $("#user-profile-box").hide();
+            }
+        </script>
     </body>
 </html>
