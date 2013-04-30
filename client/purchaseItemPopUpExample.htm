@@ -51,16 +51,16 @@
 
         $('#buyButton').click(function () {
             //TODO: Get actual user id and credits for current item
-            validateUserBalance(1, 1000, showBuyModal)
+            validateUserBalance(framework.user.id, 1000, showBuyModal)
         });
 
         $('#rentButton').click(function () {
             //TODO: Get actual user id and credits for current item
-            validateUserBalance(1, 300, showRentModal)
+            validateUserBalance(framework.user.id, 300, showRentModal)
         });
 
         buyModal.find("#buyModalActionButton").click(function() {
-            var postData = JSON.stringify({ userId: 1});
+            var postData = JSON.stringify({ userId: framework.user.id});
             $.ajax({
                 url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/1/purchase',
                 type: 'POST',
@@ -81,7 +81,7 @@
         });
 
         rentModal.find("#rentModalActionButton").click(function() {
-            var postData = JSON.stringify({ userId: 1});
+            var postData = JSON.stringify({ userId: framework.user.id});
             $.ajax({
                 url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/1/rent',
                 type: 'POST',
