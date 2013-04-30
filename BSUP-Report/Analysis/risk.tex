@@ -15,3 +15,88 @@ ultimately worth the \emph{effort} required.
 
 \subsection{Effectiveness of Preventive Analysis}
 
+In the empirical section we highlighted three different risks to be focused on and handled. These risks
+will be the focus for determining the effectiveness of our risk analysis.
+
+We place each of the risks considered in one of the categories \textbf{very effective}, \textbf{some
+effect}, and \textbf{no effect}, to facilitate further discussion.
+
+\subsubsection{P2: Project overhead}
+
+Because we realized early on that project overhead was a real issue, we planned around this and succesfully
+avoided this risk entirely. Our team worked in a highly agile fashion, and the choice of methodology helped
+us stay on target.
+
+Avoiding this risk proved \textbf{very effective}.
+
+\subsubsection{Req1: Requirements are changeable}
+
+Discussing requirements and common interfaces requires involvement of several parties. We had several
+discussions with the Singaporean team, that led to a firm belief that our contact surfaces were going
+to stay more or less the same.
+
+As it turns out, either due to bad communication or misunderstanding of expectations, the Singaporeans
+did not see these early discussions as anything close to final.
+
+During the final week of collaboration a lot of requests for changes to the common interfaces surfaced,
+putting a heavy load on the Danish team and requiring some minor changes to the internal data structure.
+
+The mitigation of the risk was not entirely succesful, and this shows that however much is done to mitigate
+or avoid a risk, it is impossible to be entirely sure.
+
+The mitigation did, however, make sure the most central interfaces (and hence most of the internal datastructure)
+could be preserved. The initial discussions did have \textbf{some effect}, however not as much as desired.
+
+\subsubsection{T4: Development differs from Live}
+
+The final risk we chose to focus on had to be accepted, because we were unable to do
+anything to handle it before starting the project. Having done the analysis, however, was a great help
+as it made us aware of this potential threat to development stability.
+
+Because of this awareness we focues on getting the live and development environments as synchronized as
+possible as well as developing a clear protocol for updating configuration files for the servers, in
+order to avoid any discrepancy.
+
+Had we not had these protocols in mind it is very likely that this could have developed into a serious
+roadblock for development. Although any such risk is entirely hypothetical (as we have not tried this
+situation without first doing a risk analysis) it seems fair to assume that it was a nice safe-guard to
+have in place.
+
+Spending time on this risk had \textbf{some effect}.
+
+\subsubsection{Unavoided risks}
+
+Becuase the risks were prioritized and only the first few handled, some risks could come up as issues and
+hit development with full force. One such case was a risk that we had actually anticipated, but chosen
+not to handle: the fact that we were developing a new type of application (\textbf{Risk T2}).
+
+Unknown technology may be more complex than first anticipated, and this proved to be true for our situation.
+We had only anticipated a few possible issues, but had not anticipated the one that hit us.
+
+As it turns out it was difficult to send out responses with the proper HTTP error codes when using a IIS based
+WCF service. As this wasn't exactly blocking further development, the impact was limited, but it was an issue
+that took a substantial amount of time to fix.
+
+This shows that risk management can never eliminate all issues.
+
+\subsection{Effort Required}
+
+Our risk analysis was performed as a group discussion, where any and all concerns were brought up to scrutiny.
+As it turns out, with a project of the size we undertook, the number of concerns was limited. After an initial
+discussion we had a couple of days to come up with any additional risks or revisions and then a final discussion
+to implement these.
+
+All in all the effort required was rather small, and the planning was done in a matter of hours. Efforts to actually
+mitigate or avoid risks were more substantial, but could mostly be seen as development time. This time was kept
+negligible by choosing to only focus on a few risks. This could have been adjusted by trying to avoid or mitigate
+additional risks.
+
+\subsection{Cost vs Benefit}
+
+With the amount of effort we put into the analysis (cost) and the effect it yielded (benefit), there can be no doubt
+that this practice of analyzing risks is very recommendable, with some to high effectivity and little effort.
+
+In a situation with as few potential risks as ours it would be recommendable to attempt avoiding or mitigating more
+risks than we did in our particular situation. We were hit by a risk that was placed in the second-highest category,
+moderate impact, medium likelihood. If we had chosen to handle the risk in this category a great challenge may have
+had less of an impact.
