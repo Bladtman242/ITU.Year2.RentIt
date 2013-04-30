@@ -51,8 +51,8 @@
         var inputEmail = $("#inputEmail");
         var inputPassword = $("#inputPassword");
         //Update placeholders with actual user info (except password)
-        inputName.attr("placeholder", "Poul Von Lederhosen");
-        inputEmail.attr("placeholder", "poca@honthas.dk");
+        inputName.attr("value", framework.user.name);
+        inputEmail.attr("value", framework.user.email);
         form.show();
 
         //Submit handler
@@ -77,10 +77,8 @@
             }
 
             if (submit) {
-                //TODO: Get actual user id
-                var userid = 1;
                 $.ajax({
-                    url: 'http://rentit.itu.dk/RentIt25/moofy.svc/users/' + userid + '/update',
+                    url: 'http://rentit.itu.dk/RentIt25/moofy.svc/users/' + framework.user.id + '/update',
                     type: 'POST',
                     data: JSON.stringify(postData),
                     contentType: 'application/json; charset=utf-8',
