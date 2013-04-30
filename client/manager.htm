@@ -1,0 +1,56 @@
+<h1>Manager Overview</h1>
+
+<ul id="manager-navigation" class="nav nav-pills">
+    <li class="active">
+        <a href="#" id="manager-overview-link">Overview</a>
+    </li>
+    <li>
+        <a href="#" id="manager-upload-movie-link">Create new movie</a>
+    </li>
+    <li>
+        <a href="#" id="manager-upload-song-link">Create new song</a>
+    </li>
+</ul>
+
+<div id="manager-content">
+    <!--Nothing-->
+</div>
+
+<script>
+    var $mng_content = $("#manager-content");
+    
+    var overview = $('<p>Welcome to the manager overview! I\'ll be your guide.</p>\
+        <p>This is where you will be creating new songs and movies.</p>\
+        If you wish to edit an existing movie, go to the page for the particular movie and click\
+        the "Edit movie" button - same goes for songs.</p>\
+        <p>If you wish to promote a user or demote another manager, go to the particular user\'s\
+        profile and click the corresponding link.</p>');
+    
+    var upload_movie = $("<p>Upload movie</p>");
+    
+    var upload_song = $("<p>Upload song</p>");
+    
+    $("#manager-navigation a").click(function(e) {
+        e.preventDefault();
+        $("#manager-navigation li.active").removeClass("active");
+        var $t = $(this);
+        $t.parent().addClass("active");
+        switch(this.id) {
+            case('manager-overview-link'):
+                $mng_content.html(overview);
+                break;
+            case('manager-upload-movie-link'):
+                $mng_content.html(upload_movie);
+                break;
+            case('manager-upload-song-link'):
+                $mng_content.html(upload_song);
+                break;
+        }
+    });
+    
+    $mng_content.html(overview);
+</script>
+
+<!--
+<script src="manager-restriction.js"></script>
+-->
