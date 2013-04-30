@@ -54,6 +54,13 @@
             .navbar {
                 margin-top: 15px;
             }
+            #manager-link {
+                display: none;
+                bottom: 0;
+                right: 0;
+                position: fixed;
+                padding: 15px 20px;
+            }
         </style>
         <script src="framework.js"></script>
 		<script src="bootstrap/js/bootstrap.min.js"></script>
@@ -113,6 +120,9 @@
         <div id="container">
             <!--Nothing-->
         </div>
+        <div id="manager-link">
+            <a href="#manager" class="internal btn btn-inverse">Manager Overview</a>
+        </div>
         <script>
             $('#logoutButton').click(function() {
                 framework.user = null;
@@ -130,10 +140,18 @@
                     $("#user-username-value").text(framework.user.username);
                     $("#user-email-value").text(framework.user.email);
                     $("#user-pic").html('<a href="#editProfile" class="internal"><img src="http://gravatar.com/avatar/'+$.md5(framework.user.email)+'?size=64&d=mm"></a>');
+                    //Add manager link to nav bar if admin!
+                    if(framework.user.admin) {
+                        $("#manager-link").show();
+                    }
+                    else {
+                        $("#manager-link").hide();
+                    }
                 }
                 else {
                     $("#user-profile-box").hide();
                     $("#login-box").show();
+                    $("#manager-link").hide();
                 }
             }
 
