@@ -78,15 +78,15 @@
                 <form class="form-horizontal">
                     <fieldset>
                         <div class="control-group">
-                            <label class="control-label" for="username">Username</label>
+                            <label class="control-label" for="loginUsername">Username</label>
                             <div class="controls">
-                                <input name="username" type="text" placeholder="JohnDoe1337">
+                                <input id="loginUsername" name="username" type="text" placeholder="JohnDoe1337">
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label" for="password">Password</label>
+                            <label class="control-label" for="loginPassword">Password</label>
                             <div class="controls">
-                                <input name="password" type="password" placeholder="secretive">
+                                <input id="loginPassword" name="password" type="password" placeholder="secretive">
                             </div>
                         </div>
                         <div class="control-group">
@@ -108,7 +108,7 @@
             </div>
             
             <!--Nav bar-->
-            <div class="navbar">
+            <div id="mainNav" class="navbar">
                 <div class="navbar-inner">
                     <ul class="nav">
                         <li><a href="#about" class="internal">Home</a></li>
@@ -130,6 +130,8 @@
                 framework.loadPage(framework.defaultPage);
                 reloadUserBox();
             });
+
+            reloadUserBox();
 
             function reloadUserBox() {
                 if(framework.user) {
@@ -153,8 +155,6 @@
                     $("#manager-link").hide();
                 }
             }
-
-            reloadUserBox();
 
         </script>
     </body>
