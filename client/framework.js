@@ -17,6 +17,15 @@ var framework = {
     container: null,
     
     /**
+     * Query string, from URI (between ? and optional #, eg. in ?movie=2#displayMovie, query string
+     * will be "movie=2". This can be found in query._full. The value of a property can be found through
+     * query.<property>; in this example query.movie will return 2.
+     */
+    query: {
+        _full: location.search.substring(1)
+    },
+    
+    /**
      * loadPage loads a page from its given name. The pushState arguments determines whether
      * a new history frame should be pushed (default true). This is used to preserve history.
      * If set to false, the step will not be recalled in history.
@@ -48,8 +57,49 @@ var framework = {
                 //Push history frame.
                 if(pushState) history.pushState({"page": pageName}, pageName, "#"+pageName);
             });
-        }
+        },
+    
+    /**
+     * The currently logged in user, null if none is logged in.
+     *
+     * Contains id, username, email, name, isManager, balance
+     *
+     * NOTE: Currently temp. implementation until login page is implemented.
+     * TODO: Pass around the user object in the state when loading a new page.
+     */
+    user: {
+        id: 1,
+        username: "SmallSon",
+        name: "Captain Jack",
+        email: "paulus@gmail.jp",
+        isManager: true,
+        balance: 1337
+    }
 };
+
+//Load query properties into framework.query.
+var qstr = framework.query._full;
+var qstrLen = qstr.length;
+var keyAccumulator = "";
+var valueAccumulator = "";
+for(var i = 0; i < qstrLen; i++) {
+    if(qstr[i] == "=") {
+        i++;
+        for(; i < qstrLen; i++) {
+            if(qstr[i] == "&") {
+                framework.query[keyAccumulator] = valueAccumulator;
+                keyAccumulator = "";
+                valueAccumulator = "";
+                break;
+            }
+            valueAccumulator += qstr[i];
+        }
+    }
+    else {
+        keyAccumulator += qstr[i];
+    }
+}
+framework.query[keyAccumulator] = valueAccumulator;
 
 //Handle history pop-event: Pop history frame (back/forward navigration)
 window.onpopstate = function(event) {
