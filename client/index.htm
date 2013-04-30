@@ -18,7 +18,7 @@
                 text-align: left;
             }
             #container {
-                padding-left: 20px;
+                padding: 0 20px;
                 text-align: left;
             }
             header {
@@ -54,12 +54,12 @@
             .navbar {
                 margin-top: 15px;
             }
-            #manager-link {
-                display: none;
-                bottom: 0;
-                right: 0;
-                position: fixed;
-                padding: 15px 20px;
+			footer {
+                background: rgb(245,245,245);
+                border-top: 1px solid rgb(229,229,229);
+                text-align: center;
+                padding: 15px 15px 50px 15px;
+                margin-top: 30px;
             }
         </style>
         <script src="framework.js"></script>
@@ -78,22 +78,23 @@
                 <form class="form-horizontal">
                     <fieldset>
                         <div class="control-group">
-                            <label class="control-label" for="loginUsername">Username</label>
+                            <label class="control-label" for="username">Username</label>
                             <div class="controls">
-                                <input id="loginUsername" name="username" type="text" placeholder="JohnDoe1337">
+                                <input name="username" type="text" placeholder="JohnDoe1337">
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label" for="loginPassword">Password</label>
+                            <label class="control-label" for="password">Password</label>
                             <div class="controls">
-                                <input id="loginPassword" name="password" type="password" placeholder="secretive">
+                                <input name="password" type="password" placeholder="secretive">
                             </div>
                         </div>
                         <div class="control-group">
                             <div class="controls">
-                                <button type="submit" class="btn">Sign in</button>
+                                <button type="submit" class="btn btn-primary">Sign in</button>
+								<a id="create-user-link" href="#createUser" class="internal btn btn-link">Create an account</a>
                             </div>
-                        </div>
+						</div>
                     </fieldset>
                 </form>
             </div>
@@ -110,7 +111,7 @@
             </div>
             
             <!--Nav bar-->
-            <div id="mainNav" class="navbar">
+            <div class="navbar" id="mainNav">
                 <div class="navbar-inner">
                     <ul class="nav">
                         <li><a href="#about" class="internal">Home</a></li>
@@ -123,9 +124,9 @@
         <div id="container">
             <!--Nothing-->
         </div>
-        <div id="manager-link">
-            <a href="#manager" class="internal btn btn-inverse">Manager Overview</a>
-        </div>
+        <footer>
+            &copy; moofy 2013
+        </footer>
         <script>
             reloadUserBox();
 
@@ -138,7 +139,6 @@
                 framework.loadPage(framework.defaultPage);
                 reloadUserBox();
             });
-
 
 
             function reloadUserBox() {
@@ -160,10 +160,8 @@
                 else {
                     $("#user-profile-box").hide();
                     $("#login-box").show();
-                    $("#manager-link").hide();
                 }
             }
-
         </script>
     </body>
 </html>
