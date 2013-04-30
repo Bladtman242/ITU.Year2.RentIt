@@ -63,6 +63,7 @@
             }
         </style>
         <script src="framework.js"></script>
+        <script src="output.js"></script>
 		<script src="bootstrap/js/bootstrap.min.js"></script>
     </head>
     <body>
@@ -130,6 +131,11 @@
         <script>
             reloadUserBox();
 
+
+            $('#container').click(function() {
+                output.success("hehe", "hehehe");
+            });
+
             $('#myAccountLinkBox').click(function() {
                 framework.loadPage('account');
             });
@@ -161,7 +167,7 @@
                     $("#user-profile-box").hide();
                     $("#login-box").show();
                 }
-            }
+            };
         </script>
     </body>
 </html>
