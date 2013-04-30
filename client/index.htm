@@ -3,6 +3,7 @@
     <head>
         <title>moofy</title>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+        <script src="vendor/jquery.md5.js"></script>
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
         <style type="text/css">
             html {
@@ -24,7 +25,7 @@
                 vertical-align: top;
             }
             header hgroup {
-                margin-right: 600px;
+                margin-right: 550px;
             }
             #login-box input, #login-box label {
                 font-size: 0.7em;
@@ -35,6 +36,16 @@
             }
             #user-name {
                 font-size: 1.3em;
+            }
+            #user-pic {
+                width: 64px;
+                height: 64px;
+                display: inline-block;
+                vertical-align: top;
+            }
+            #user-info {
+                display: inline-block;
+                vertical-align: top;
             }
             #user-profile-box .btn {
                 float: right;
@@ -79,10 +90,13 @@
                 </form>
             </div>
             <div id="user-profile-box">
-                <div id="user-name"><span id="user-name-value"></span></div>
-                <div id="user-username">Username: <span id="user-username-value"></span></div>
-                <div id="user-email">Email: <span id="user-email-value"></span></div>
-                <a href="#logout" class="internal btn btn-small">Log out</a>
+                <div id="user-pic"></div>
+                <div id="user-info">
+                    <div id="user-name"><span id="user-name-value"></span></div>
+                    <div id="user-username">Username: <span id="user-username-value"></span></div>
+                    <div id="user-email">Email: <span id="user-email-value"></span></div>
+                    <a href="#logout" class="internal btn btn-small">Log out</a>
+                </div>
             </div>
             
             <!--Nav bar-->
@@ -104,6 +118,7 @@
                 $("#user-name-value").html('<a href="#editProfile" class="internal">'+framework.user.name+"</a>");
                 $("#user-username-value").text(framework.user.username);
                 $("#user-email-value").text(framework.user.email);
+                $("#user-pic").html('<a href="#editProfile" class="internal"><img src="http://gravatar.com/avatar/'+$.md5(framework.user.email)+'?size=64&d=mm"></a>');
             }
             else {
                 $("#user-profile-box").hide();
