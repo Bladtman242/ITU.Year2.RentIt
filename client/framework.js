@@ -37,7 +37,12 @@ var framework = {
             if(pushState == null) pushState = true;
             
             //Get page into #container
-            framework.container.load(pageName+".htm", function() {
+            framework.container.load(pageName+".htm", function(response, status, xhr) {
+            
+                if(status == "error") {
+                    framework.loadPage("404");
+                    return;
+                }
             
                 //TODO: Activate nav-bar link if any is corresponding
             
@@ -56,7 +61,7 @@ var framework = {
                     //Else alert error, and allow link to function normally.
                     alert("A link with the \"internal\" class with an invalid (external-pointing) href was clicked.");
                     return true;
-                });
+                }).fail;
                 
                 //Push history frame.
                 if(pushState) history.pushState({"page": pageName}, pageName, "#"+pageName);
