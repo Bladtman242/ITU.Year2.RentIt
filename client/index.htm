@@ -80,18 +80,18 @@
                         <div class="control-group">
                             <label class="control-label" for="username">Username</label>
                             <div class="controls">
-                                <input name="username" type="text" placeholder="JohnDoe1337">
+                                <input id="signName" name="username" type="text" placeholder="JohnDoe1337">
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="control-label" for="password">Password</label>
                             <div class="controls">
-                                <input name="password" type="password" placeholder="secretive">
+                                <input id="signPass" name="password" type="password" placeholder="secretive">
                             </div>
                         </div>
                         <div class="control-group">
                             <div class="controls">
-                                <button type="submit" class="btn btn-primary">Sign in</button>
+                                <button id="signinSubmit" type="submit" class="btn btn-primary">Sign in</button>
 								<a id="create-user-link" href="#createUser" class="internal btn btn-link">Create an account</a>
                             </div>
 						</div>
@@ -143,8 +143,8 @@
 
             function reloadUserBox() {
                 if(framework.user) {
+					$("#login-box").hide();
                     $("#user-profile-box").show();
-                    $("#login-box").hide();
                     $("#user-name-value").html(framework.user.name);
                     $("#user-username-value").text(framework.user.username);
                     $("#user-email-value").text(framework.user.email);
@@ -162,6 +162,57 @@
                     $("#login-box").show();
                 }
             }
+			$("#signinSubmit").click(function() {
+				var inputPassword = $("#signPass").val();
+				var inputUsername = $("#signName").val();
+				login(inputUsername, inputPassword);
+			});
+			function login(usrnm, psswrd) {
+				var postData = {};
+				postData.username=usrnm;
+				postData.password=psswrd;
+				$.ajax({
+					url: 'http://rentit.itu.dk/RentIt25/moofy.svc/users/login',
+					type: 'POST',
+					data: JSON.stringify(postData),
+					contentType: 'application/json; charset=utf-8',
+					dataType: 'json',
+					async: true,
+					success: function(user)
+					{
+						if(user.success)
+						{
+							setUser(user.id);
+							reloadUserBox();
+						}
+						else
+							alert("ohoh");//output.modal("Login unsuccessful", "The login information could not be validated");
+					},
+					error: function(msg)
+					{
+						alert("fail login");
+					}
+				});
+			}
+			
+			function setUser(id) {
+				$.ajax({
+					url: 'http://rentit.itu.dk/RentIt25/moofy.svc/users/'+id,
+					type: 'GET',
+					contentType: 'application/json; charset=utf-8',
+					dataType: 'json',
+					async: true,
+					success: function(newUser)
+					{
+						framework.user = newUser;
+					},
+					error: function(msg)
+					{
+						alert("fail setuser");
+					}
+				});
+			}
+			
         </script>
     </body>
 </html>

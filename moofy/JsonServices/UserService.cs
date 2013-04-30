@@ -22,12 +22,12 @@ namespace moofy.JsonServices {
                 }
                 return new SuccessFlag() {
                     success = res.Id>0,
-                    message = res.Id>0 ? "assigned id: " +res.Id : "An error occured on the server. Could not register user"
+                    message = res.Id>0 ? "" +res.Id : "An error occured on the server. Could not register user, please try again."
                 };
             }else{
                 return new SuccessFlag() {
                     success = false,
-                    message = "One or more fields are empty"
+                    message = "One or more fields are empty, please try again with data in all fields"
                 };
             }
         }

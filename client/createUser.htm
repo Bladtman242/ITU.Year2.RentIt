@@ -1,4 +1,4 @@
-<form id="editUserForm" class="form-horizontal">
+<form id="createUserForm" class="form-horizontal" accept-charset="UTF-8">
     <legend>Create profile</legend>
     <div class="control-group">
         <label class="control-label" for="inputName">Name</label>
@@ -25,43 +25,45 @@
         </div>
     </div>
     <div class="form-actions">
-		<input type="submit" class="btn btn-primary" value="Create User"/>
+		<input id="createUserSubmit" type="submit" class="btn btn-primary" value="Create User"/>
     </div>
 </form>
 
 <script>
+	function createErrorMessage(msg)
+	{
+		return $(
+                "<div class='alert alert-error'>\
+                    <button type='button' class='close' data-dismiss='alert'>&times;</button>\
+                    <strong>Error!</strong> "+msg+"\
+                </div>");
+	}
+	
     //Execute immediately
     (function (){
-        var success, updateError, noDataError;
+		var success, connectionError, errorMsg;
         success = $(
                 "<div class='alert alert-success'>\
                     <button type='button' class='close' data-dismiss='alert'>&times;</button>\
                     <strong>Profile Created!</strong> The profile was succesfully created.\
                 </div>");
 
-        updateError = $(
+        connectionError = $(
                 "<div class='alert alert-error'>\
                     <button type='button' class='close' data-dismiss='alert'>&times;</button>\
-                    <strong>Error!</strong> The profile was not updated.\
+                    <strong>Error!</strong> A connection-error occured, please try again.\
                 </div>");
-
-        noDataError = $(
-                "<div class='alert alert-error'>\
-                    <button type='button' class='close' data-dismiss='alert'>&times;</button>\
-                    <strong>No information was entered.</strong> Please enter some new values before clicking submit.\
-                </div>");
-
-        var container = $("#container");
-        var form = $("#editUserForm");
+		
+		errorMsg = createErrorMessage("init msg");
+		var container = $("#container");
+        var form = $("#createUserForm");
         var inputName = $("#inputName");
         var inputEmail = $("#inputEmail");
         var inputPassword = $("#inputPassword");
 		var inputUsername = $("#inputUsername");
         
-
         //Submit handler
         $("#createUserSubmit").click(function() {
-            alert("isisiis");
 			var cleanedInputName = inputName.val().trim();
             var cleanedInputEmail = inputEmail.val().trim();
 			var cleanedInputUsername = inputUsername.val().trim();
@@ -80,15 +82,26 @@
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 async: true,
-                success: function(msg) {
-                    noDataError.remove();
-                    updateError.remove();
-                    container.prepend(success);
+                success: function(flag) {
+					if(flag.success)
+					{
+						connectionError.remove();
+						errorMsg.remove();
+						container.prepend(success);
+						
+					}
+					else 
+					{
+						errorMsg = createErrorMessage(flag.message);
+						connectionError.remove();
+						success.remove();
+						container.prepend(errorMsg);
+					}
                 },
                 error: function(msg) {
                     success.remove();
-                    noDataError.remove();
-                    container.prepend(updateError);
+                    errorMsg.remove();
+                    container.prepend(connectionError);
                 }
             });
             
