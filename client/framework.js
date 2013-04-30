@@ -36,13 +36,26 @@ var framework = {
             //Push State default true
             if(pushState == null) pushState = true;
             
-            //Get page into #container
-            framework.container.load(pageName+".htm", function() {
+            //Get page into #containe
+            framework.container.load(pageName+".htm", function(response, status, xhr) {
             
-                //TODO: Activate nav-bar link if any is corresponding
+                if(status == "error") {
+                    framework.loadPage("404");
+                    return;
+                }
+                
+                //If this page is on the navigation bar - make sure it is shown as active
+                $("#mainNav li a").each(function() {
+                    if ($(this).attr('href') === '#' + pageName) {
+                        $(this).parent().addClass('active');
+                    } else {
+                        $(this).parent().removeClass('active');
+                    }
+                });
             
                 //Link bindings (for internal links) - rebound on every page load as new links appear.
-                $("a.internal").click(function() { //Live: constantly looking for changes in the DOM, binding matches' onClick.
+                $("a.internal").unbind('click');
+                $("a.internal").click(function() {
                     var href = $(this).attr("href");
                     
                     //Validate link as internal
@@ -55,7 +68,7 @@ var framework = {
                     
                     //Else alert error, and allow link to function normally.
                     alert("A link with the \"internal\" class with an invalid (external-pointing) href was clicked.");
-                    return true;
+                    return false;
                 });
                 
                 //Push history frame.
@@ -71,14 +84,7 @@ var framework = {
      * NOTE: Currently temp. implementation until login page is implemented.
      * TODO: Pass around the user object in the state when loading a new page.
      */
-    user: {
-        id: 1,
-        username: "SmallSon",
-        name: "Captain Jack",
-        email: "paulus@gmail.jp",
-        isManager: true,
-        balance: 1337
-    }
+    user: null
 };
 
 //Load query properties into framework.query.
@@ -117,9 +123,9 @@ $(document).ready(function() {
     
     //If a page (hash) is set:
     if(location.hash != "") {
-        framework.loadPage(location.hash.substring(1),false);
+        framework.loadPage(location.hash.substring(1));
     }
     else {
-        framework.loadPage(framework.defaultPage,false);
+        framework.loadPage(framework.defaultPage);
     }
 });

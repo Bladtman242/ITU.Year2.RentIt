@@ -18,6 +18,7 @@
                 text-align: left;
             }
             #container {
+                padding: 0 20px;
                 text-align: left;
             }
             header {
@@ -26,9 +27,6 @@
             header hgroup, #login-box, #user-profile-box {
                 display: inline-block;
                 vertical-align: top;
-            }
-            header hgroup {
-                margin-right: 550px;
             }
             #login-box input, #login-box label {
                 font-size: 0.7em;
@@ -56,6 +54,13 @@
             .navbar {
                 margin-top: 15px;
             }
+			footer {
+                background: rgb(245,245,245);
+                border-top: 1px solid rgb(229,229,229);
+                text-align: center;
+                padding: 15px 15px 50px 15px;
+                margin-top: 30px;
+            }
         </style>
         <script src="framework.js"></script>
 		<script src="bootstrap/js/bootstrap.min.js"></script>
@@ -69,7 +74,7 @@
             </hgroup>
             
             <!--User profile/log in-->
-            <div id="login-box">
+            <div id="login-box" class="pull-right">
                 <form class="form-horizontal">
                     <fieldset>
                         <div class="control-group">
@@ -86,28 +91,30 @@
                         </div>
                         <div class="control-group">
                             <div class="controls">
-                                <button type="submit" class="btn">Sign in</button>
+                                <button type="submit" class="btn btn-primary">Sign in</button>
+								<a id="create-user-link" href="#createUser" class="internal btn btn-link">Create an account</a>
                             </div>
-                        </div>
+						</div>
                     </fieldset>
                 </form>
             </div>
-            <div id="user-profile-box">
+            <div id="user-profile-box" class="pull-right">
                 <div id="user-pic"></div>
                 <div id="user-info">
                     <div id="user-name"><span id="user-name-value"></span></div>
                     <div id="user-username">Username: <span id="user-username-value"></span></div>
                     <div id="user-email">Email: <span id="user-email-value"></span></div>
-                    <a href="#logout" class="internal btn btn-small">Log out</a>
+                    <a id="logoutButton" class="internal btn btn-small">Log out</a>
                 </div>
             </div>
             
             <!--Nav bar-->
-            <div class="navbar">
+            <div class="navbar" id="mainNav">
                 <div class="navbar-inner">
                     <ul class="nav">
                         <li><a href="#about" class="internal">Home</a></li>
-                        <li><a href="#page2" class="internal">Test</a></li>
+                        <li><a href="#listMovies" class="internal">Movies</a></li>
+                        <li><a href="#listSongs" class="internal">Songs</a></li>
                     </ul>
                 </div>
             </div>
@@ -115,17 +122,33 @@
         <div id="container">
             <!--Nothing-->
         </div>
+        <footer>
+            &copy; moofy 2013
+        </footer>
         <script>
-            if(framework.user) {
-                $("#login-box").hide();
-                $("#user-name-value").html('<a href="#editProfile" class="internal">'+framework.user.name+"</a>");
-                $("#user-username-value").text(framework.user.username);
-                $("#user-email-value").text(framework.user.email);
-                $("#user-pic").html('<a href="#editProfile" class="internal"><img src="http://gravatar.com/avatar/'+$.md5(framework.user.email)+'?size=64&d=mm"></a>');
+            $('#logoutButton').click(function() {
+                framework.user = null;
+                framework.loadPage(framework.defaultPage);
+                reloadUserBox();
+            });
+
+            function reloadUserBox() {
+                if(framework.user) {
+                    $("#user-profile-box").show();
+                    $("#login-box").hide();
+                    $("#user-name-value").html('<a href="#editProfile" class="internal">'+framework.user.name+"</a>");
+                    $("#user-username-value").text(framework.user.username);
+                    $("#user-email-value").text(framework.user.email);
+                    $("#user-pic").html('<a href="#editProfile" class="internal"><img src="http://gravatar.com/avatar/'+$.md5(framework.user.email)+'?size=64&d=mm"></a>');
+                }
+                else {
+                    $("#user-profile-box").hide();
+                    $("#login-box").show();
+                }
             }
-            else {
-                $("#user-profile-box").hide();
-            }
+
+            reloadUserBox();
+
         </script>
     </body>
 </html>

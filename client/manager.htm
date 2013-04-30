@@ -1,0 +1,116 @@
+<h1>Manager Overview</h1>
+
+<ul id="manager-navigation" class="nav nav-pills">
+    <li class="active">
+        <a href="#" id="manager-overview-link">Overview</a>
+    </li>
+    <li>
+        <a href="#" id="manager-upload-movie-link">Create new movie</a>
+    </li>
+    <li>
+        <a href="#" id="manager-upload-song-link">Create new song</a>
+    </li>
+</ul>
+
+<div id="manager-content">
+    <!--Nothing-->
+</div>
+
+<script>
+    var $mng_content = $("#manager-content");
+    
+    var overview = $('<p>Welcome to the manager overview! I\'ll be your guide.</p>\
+        <p>This is where you will be creating new songs and movies.</p>\
+        If you wish to edit an existing movie, go to the page for the particular movie and click\
+        the "Edit movie" button - same goes for songs.</p>\
+        <p>If you wish to promote a user or demote another manager, go to the particular user\'s\
+        profile and click the corresponding link.</p>');
+    
+    var upload_movie = $('<form id="uploadMovie" class="form-horizontal">\
+            <legend>Create new movie</legend>\
+            <div class="control-group">\
+                <label class="control-label" for="inputFile">File</label>\
+                <div class="controls">\
+                    <input type="file" id="inputFile" title="Browse for file to upload" />\
+                </div>\
+            </div>\
+            <div class="control-group">\
+                <label class="control-label" for="inputTitle">Title</label>\
+                <div class="controls">\
+                    <input type="text" id="inputTitle" placeholder="The Hills Have Nails" required/>\
+                </div>\
+            </div>\
+            <div class="control-group">\
+                <label class="control-label" for="inputRelease">Release year</label>\
+                <div class="controls">\
+                    <input type="number" id="inputRelease" placeholder="2000" min="1000" max="3000" required/>\
+                </div>\
+            </div>\
+            <div class="control-group">\
+                <label class="control-label" for="inputGenres">Genres</label>\
+                <div class="controls">\
+                    <textarea id="inputGenres" placeholder="horror,adventure,thriller" required></textarea>\
+                    <span class="help-block">Comma-separated list</span>\
+                </div>\
+            </div>\
+            <div class="control-group">\
+                <label class="control-label" for="inputDirectors">Directors</label>\
+                <div class="controls">\
+                    <textarea id="inputDirectors" placeholder="Quentin Tarantino,J.J. Abrams" required></textarea>\
+                    <span class="help-block">Comma-separated list</span>\
+                </div>\
+            </div>\
+            <div class="control-group">\
+                <label class="control-label" for="inputRental">Rental price</label>\
+                <div class="controls">\
+                    <input type="number" id="inputRental" placeholder="2" required/>\
+                </div>\
+            </div>\
+            <div class="control-group">\
+                <label class="control-label" for="inputPurchase">Purchase price</label>\
+                <div class="controls">\
+                    <input type="number" id="inputPurchase" placeholder="2" required/>\
+                </div>\
+            </div>\
+            <div class="control-group">\
+                <label class="control-label" for="inputCoverUri">Cover URI</label>\
+                <div class="controls">\
+                    <input type="url" id="inputCoverUri" placeholder="http://swaggerjagger.com/secretcoveruri.png" required/>\
+                </div>\
+            </div>\
+            <div class="control-group">\
+                <label class="control-label" for="inputDescription">Description</label>\
+                <div class="controls">\
+                    <textarea id="inputDescription" placeholder="Lorem ipsum solor dit amet..." required></textarea>\
+                </div>\
+            </div>\
+            <div class="form-actions">\
+                <a id="uploadMovieSubmit" class="btn btn-primary">Create</a>\
+            </div>\
+        </form>');
+    
+    var upload_song = $("<p>Upload song</p>");
+    
+    $("#manager-navigation a").click(function(e) {
+        e.preventDefault();
+        $("#manager-navigation li.active").removeClass("active");
+        var $t = $(this);
+        $t.parent().addClass("active");
+        switch(this.id) {
+            case('manager-overview-link'):
+                $mng_content.html(overview);
+                break;
+            case('manager-upload-movie-link'):
+                $mng_content.html(upload_movie);
+                break;
+            case('manager-upload-song-link'):
+                $mng_content.html(upload_song);
+                break;
+        }
+    });
+    
+    $mng_content.html(overview);
+</script>
+
+
+<!--<script src="manager-restriction.js"></script>-->
