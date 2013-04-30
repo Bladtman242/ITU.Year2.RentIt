@@ -101,7 +101,7 @@
             </div>
             
             <!--Nav bar-->
-            <div class="navbar">
+            <div id="mainNav" class="navbar">
                 <div class="navbar-inner">
                     <ul class="nav">
                         <li><a href="#about" class="internal">Home</a></li>
@@ -120,6 +120,8 @@
                 reloadUserBox();
             });
 
+            reloadUserBox();
+
             function reloadUserBox() {
                 if(framework.user) {
                     $("#user-profile-box").show();
@@ -134,8 +136,6 @@
                     $("#login-box").show();
                 }
             }
-
-            reloadUserBox();
 
         </script>
     </body>
