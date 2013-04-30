@@ -38,8 +38,15 @@ var framework = {
             
             //Get page into #container
             framework.container.load(pageName+".htm", function() {
-            
-                //TODO: Activate nav-bar link if any is corresponding
+
+                //If this page is on the navigation bar - make sure it is shown as active
+                $("#mainNav li a").each(function() {
+                    if ($(this).attr('href') === '#' + pageName) {
+                        $(this).parent().addClass('active');
+                    } else {
+                        $(this).parent().removeClass('active');
+                    }
+                });
             
                 //Link bindings (for internal links) - rebound on every page load as new links appear.
                 $("a.internal").click(function() { //Live: constantly looking for changes in the DOM, binding matches' onClick.
