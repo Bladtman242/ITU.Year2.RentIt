@@ -1,3 +1,5 @@
+//TODO: When clicking links in the navbar, history sometimes breaks! (but only most of the time - sometimes it works).
+
 //Framework object, "namespace" for all framework functions.
 var framework = {
     /**
@@ -36,6 +38,8 @@ var framework = {
             
             //Get page into #container
             framework.container.load(pageName+".htm", function() {
+            
+                //TODO: Activate nav-bar link if any is corresponding
             
                 //Link bindings (for internal links) - rebound on every page load as new links appear.
                 $("a.internal").click(function() { //Live: constantly looking for changes in the DOM, binding matches' onClick.
