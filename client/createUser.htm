@@ -1,30 +1,100 @@
-<form id="editUserForm" class="form-horizontal hide">
+<form id="editUserForm" class="form-horizontal">
     <legend>Create profile</legend>
     <div class="control-group">
         <label class="control-label" for="inputName">Name</label>
         <div class="controls">
-            <input type="text" id="inputName" placeholder="Name"/>
+            <input type="text" id="inputName" placeholder="Name" required="required"/>
         </div>
     </div>
     <div class="control-group">
         <label class="control-label" for="inputEmail">Email</label>
         <div class="controls">
-            <input type="text" id="inputEmail" placeholder="Email"/>
+            <input type="text" id="inputEmail" placeholder="Email" required="required"/>
         </div>
     </div>
 	<div class="control-group">
         <label class="control-label" for="inputUsername">Username</label>
         <div class="controls">
-            <input type="text" id="inputUsername" placeholder="Username"/>
+            <input type="text" id="inputUsername" placeholder="Username" required="required"/>
         </div>
     </div>
     <div class="control-group">
         <label class="control-label" for="inputPassword">Password</label>
         <div class="controls">
-            <input type="password" id="inputPassword" placeholder="Password"/>
+            <input type="password" id="inputPassword" placeholder="Password" required="required"/>
         </div>
     </div>
     <div class="form-actions">
-        <a id="createUserSubmit" class="btn btn-primary">Create User</a>
+		<input type="submit" class="btn btn-primary" value="Create User"/>
     </div>
 </form>
+
+<script>
+    //Execute immediately
+    (function (){
+        var success, updateError, noDataError;
+        success = $(
+                "<div class='alert alert-success'>\
+                    <button type='button' class='close' data-dismiss='alert'>&times;</button>\
+                    <strong>Profile Created!</strong> The profile was succesfully created.\
+                </div>");
+
+        updateError = $(
+                "<div class='alert alert-error'>\
+                    <button type='button' class='close' data-dismiss='alert'>&times;</button>\
+                    <strong>Error!</strong> The profile was not updated.\
+                </div>");
+
+        noDataError = $(
+                "<div class='alert alert-error'>\
+                    <button type='button' class='close' data-dismiss='alert'>&times;</button>\
+                    <strong>No information was entered.</strong> Please enter some new values before clicking submit.\
+                </div>");
+
+        var container = $("#container");
+        var form = $("#editUserForm");
+        var inputName = $("#inputName");
+        var inputEmail = $("#inputEmail");
+        var inputPassword = $("#inputPassword");
+		var inputUsername = $("#inputUsername");
+        
+
+        //Submit handler
+        $("#createUserSubmit").click(function() {
+            alert("isisiis");
+			var cleanedInputName = inputName.val().trim();
+            var cleanedInputEmail = inputEmail.val().trim();
+			var cleanedInputUsername = inputUsername.val().trim();
+            var cleanedInputPassword = inputPassword.val().trim();
+
+            var postData = {};
+            postData.name = cleanedInputName;
+            postData.email = cleanedInputEmail;
+            postData.password = cleanedInputPassword;
+            postData.username = cleanedInputUsername;
+
+            $.ajax({
+                url: 'http://rentit.itu.dk/RentIt25/moofy.svc/users/create',
+                type: 'POST',
+                data: JSON.stringify(postData),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: true,
+                success: function(msg) {
+                    noDataError.remove();
+                    updateError.remove();
+                    container.prepend(success);
+                },
+                error: function(msg) {
+                    success.remove();
+                    noDataError.remove();
+                    container.prepend(updateError);
+                }
+            });
+            
+        });
+
+    })();
+
+
+</script>
