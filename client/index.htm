@@ -38,6 +38,9 @@
             #user-name {
                 font-size: 1.3em;
             }
+            #myAccountLinkBox {
+                cursor: pointer;
+            }
             #user-pic {
                 width: 64px;
                 height: 64px;
@@ -47,9 +50,6 @@
             #user-info {
                 display: inline-block;
                 vertical-align: top;
-            }
-            #user-profile-box .btn {
-                float: right;
             }
             .navbar {
                 margin-top: 15px;
@@ -98,13 +98,15 @@
                 </form>
             </div>
             <div id="user-profile-box" class="pull-right">
-                <div id="user-pic"></div>
-                <div id="user-info">
-                    <div id="user-name"><span id="user-name-value"></span></div>
-                    <div id="user-username">Username: <span id="user-username-value"></span></div>
-                    <div id="user-email">Email: <span id="user-email-value"></span></div>
-                    <a id="logoutButton" class="internal btn btn-small">Log out</a>
+                <div id="myAccountLinkBox">
+                    <div id="user-pic"></div>
+                    <div id="user-info">
+                        <div id="user-name"><span id="user-name-value"></span></div>
+                        <div id="user-username">Username: <span id="user-username-value"></span></div>
+                        <div id="user-email">Email: <span id="user-email-value"></span></div>
+                    </div>
                 </div>
+                <a id="logoutButton" class="internal pull-right btn btn-small">Log out</a>
             </div>
             
             <!--Nav bar-->
@@ -125,22 +127,28 @@
             <a href="#manager" class="internal btn btn-inverse">Manager Overview</a>
         </div>
         <script>
+            reloadUserBox();
+
+            $('#myAccountLinkBox').click(function() {
+                framework.loadPage('account');
+            });
+
             $('#logoutButton').click(function() {
                 framework.user = null;
                 framework.loadPage(framework.defaultPage);
                 reloadUserBox();
             });
 
-            reloadUserBox();
+
 
             function reloadUserBox() {
                 if(framework.user) {
                     $("#user-profile-box").show();
                     $("#login-box").hide();
-                    $("#user-name-value").html('<a href="#editProfile" class="internal">'+framework.user.name+"</a>");
+                    $("#user-name-value").html(framework.user.name);
                     $("#user-username-value").text(framework.user.username);
                     $("#user-email-value").text(framework.user.email);
-                    $("#user-pic").html('<a href="#editProfile" class="internal"><img src="http://gravatar.com/avatar/'+$.md5(framework.user.email)+'?size=64&d=mm"></a>');
+                    $("#user-pic").html('<img src="http://gravatar.com/avatar/'+$.md5(framework.user.email)+'?size=64&d=mm">');
                     //Add manager link to nav bar if admin!
                     if(framework.user.admin) {
                         $("#manager-link").show();
