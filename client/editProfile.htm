@@ -45,7 +45,6 @@
                     <strong>No information was entered.</strong> Please enter some new values before clicking submit.\
                 </div>");
 
-        var container = $("#container");
         var form = $("#editUserForm");
         var inputName = $("#inputName");
         var inputEmail = $("#inputEmail");
@@ -87,18 +86,18 @@
                     success: function(msg) {
                         noDataError.remove();
                         updateError.remove();
-                        container.prepend(success);
+                        framework.container.prepend(success);
                     },
                     error: function(msg) {
                         success.remove();
                         noDataError.remove();
-                        container.prepend(updateError);
+                        framework.container.prepend(updateError);
                     }
                 });
             } else {
                 success.remove();
                 updateError.remove();
-                container.prepend(noDataError);
+                framework.container.prepend(noDataError);
             }
         });
 
