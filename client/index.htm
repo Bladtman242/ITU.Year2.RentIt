@@ -18,7 +18,7 @@
                 text-align: left;
             }
             #container {
-                padding-left: 20px;
+                padding: 0 20px;
                 text-align: left;
             }
             header {
@@ -54,7 +54,13 @@
             .navbar {
                 margin-top: 15px;
             }
-			
+			footer {
+                background: rgb(245,245,245);
+                border-top: 1px solid rgb(229,229,229);
+                text-align: center;
+                padding: 15px 15px 50px 15px;
+                margin-top: 30px;
+            }
         </style>
         <script src="framework.js"></script>
 		<script src="bootstrap/js/bootstrap.min.js"></script>
@@ -103,11 +109,12 @@
             </div>
             
             <!--Nav bar-->
-            <div class="navbar">
+            <div class="navbar" id="mainNav">
                 <div class="navbar-inner">
                     <ul class="nav">
                         <li><a href="#about" class="internal">Home</a></li>
-                        <li><a href="#page2" class="internal">Test</a></li>
+                        <li><a href="#listMovies" class="internal">Movies</a></li>
+                        <li><a href="#listSongs" class="internal">Songs</a></li>
                     </ul>
                 </div>
             </div>
@@ -115,6 +122,9 @@
         <div id="container">
             <!--Nothing-->
         </div>
+        <footer>
+            &copy; moofy 2013
+        </footer>
         <script>
             $('#logoutButton').click(function() {
                 framework.user = null;
