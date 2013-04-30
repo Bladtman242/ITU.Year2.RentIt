@@ -6,8 +6,7 @@
 <script>
     //Execute immediately
     (function () {
-        var container, success, error, buyModal, rentModal, noCreditsModal;
-        container =$('#container');
+        var success, error, buyModal, rentModal, noCreditsModal;
         success = $(
                 "<div class='alert alert-success'>\
                     <button type='button' class='close' data-dismiss='alert'>&times</button>\
@@ -43,7 +42,7 @@
                 "<div id='noCreditsModal' class='modal hide'> <div class='modal-header'>\
                     <button type='button' class='close' data-dismiss='modal'>&times</button>\
                     <div id='noCreditsModalHeader'/><h3>Not enough credits</h3></div>\
-                    <div id='noCreditsModalBody' class='modal-#container'><p>You don't seem to have enough credits. Link to credits site and stuff.</p></div>\
+                    <div id='noCreditsModalBody' class='modal-body'><p>You don't seem to have enough credits. Link to credits site and stuff.</p></div>\
                     <div class='modal-footer'>\
                         <button id='noCreditsModalCancelButton' class='btn' data-dismiss='modal'>Cancel</button>\
                     </div>\
@@ -70,11 +69,11 @@
                 async: true,
                 success: function(msg) {
                     error.remove();
-                    container.prepend(success);
+                    framework.container.prepend(success);
                 },
                 error: function(msg) {
                     success.remove();
-                    container.prepend(error);
+                    framework.container.prepend(error);
                 }
             });
             buyModal.modal('hide');
@@ -91,11 +90,11 @@
                 async: true,
                 success: function(msg) {
                     error.remove();
-                    container.prepend(success);
+                    framework.container.prepend(success);
                 },
                 error: function(msg) {
                     success.remove();
-                    container.prepend(error);
+                    framework.container.prepend(error);
                 }
             });
             rentModal.modal('hide');
@@ -112,20 +111,20 @@
         }
 
         function showNoCreditsModal() {
-            container.append(noCreditsModal);
+            framework.container.append(noCreditsModal);
             //Show the modal dialog
             noCreditsModal.modal(null);
         }
 
         function showBuyModal() {
-            container.append(buyModal);
+            framework.container.append(buyModal);
             //Show the modal dialog
             buyModal.modal(null);
         }
 
         function showRentModal() {
             //Perform first time setup
-            container.append(rentModal);
+            framework.container.append(rentModal);
             //Show the modal dialog
             rentModal.modal(null);
         }
