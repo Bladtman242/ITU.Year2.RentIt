@@ -54,7 +54,8 @@ var framework = {
                 });
             
                 //Link bindings (for internal links) - rebound on every page load as new links appear.
-                $("a.internal").click(function() { //Live: constantly looking for changes in the DOM, binding matches' onClick.
+                $("a.internal").unbind('click');
+                $("a.internal").click(function() {
                     var href = $(this).attr("href");
                     
                     //Validate link as internal
@@ -67,8 +68,8 @@ var framework = {
                     
                     //Else alert error, and allow link to function normally.
                     alert("A link with the \"internal\" class with an invalid (external-pointing) href was clicked.");
-                    return true;
-                }).fail;
+                    return false;
+                });
                 
                 //Push history frame.
                 if(pushState) history.pushState({"page": pageName}, pageName, "#"+pageName);
@@ -129,9 +130,9 @@ $(document).ready(function() {
     
     //If a page (hash) is set:
     if(location.hash != "") {
-        framework.loadPage(location.hash.substring(1),false);
+        framework.loadPage(location.hash.substring(1));
     }
     else {
-        framework.loadPage(framework.defaultPage,false);
+        framework.loadPage(framework.defaultPage);
     }
 });
