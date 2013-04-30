@@ -71,14 +71,7 @@ var framework = {
      * NOTE: Currently temp. implementation until login page is implemented.
      * TODO: Pass around the user object in the state when loading a new page.
      */
-    user: {
-        id: 1,
-        username: "SmallSon",
-        name: "Captain Jack",
-        email: "paulus@gmail.jp",
-        isManager: true,
-        balance: 1337
-    }
+    user: null
 };
 
 //Load query properties into framework.query.
