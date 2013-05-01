@@ -26,25 +26,6 @@
 <script>
     //Execute immediately
     (function () {
-        var success, updateError, noDataError;
-        success = $(
-                "<div class='alert alert-success'>\
-                    <button type='button' class='close' data-dismiss='alert'>&times;</button>\
-                    <strong>Profile updated!</strong> The profile was succesfully updated.\
-                </div>");
-
-        updateError = $(
-                "<div class='alert alert-error'>\
-                    <button type='button' class='close' data-dismiss='alert'>&times;</button>\
-                    <strong>Error!</strong> The profile was not updated.\
-                </div>");
-
-        noDataError = $(
-                "<div class='alert alert-error'>\
-                    <button type='button' class='close' data-dismiss='alert'>&times;</button>\
-                    <strong>No information was entered.</strong> Please enter some new values before clicking submit.\
-                </div>");
-
         var form = $("#editUserForm");
         var inputName = $("#inputName");
         var inputEmail = $("#inputEmail");
@@ -84,20 +65,14 @@
                     dataType: 'json',
                     async: true,
                     success: function(msg) {
-                        noDataError.remove();
-                        updateError.remove();
-                        framework.container.prepend(success);
+                        output.success('Profile updated!', 'The profile was succesfully updated.');
                     },
                     error: function(msg) {
-                        success.remove();
-                        noDataError.remove();
-                        framework.container.prepend(updateError);
+                        output.error('Error!', 'The profile was not updated.');
                     }
                 });
             } else {
-                success.remove();
-                updateError.remove();
-                framework.container.prepend(noDataError);
+                output.error('No information was entered!', 'Please enter text in the fields you want to change.');
             }
         });
 
