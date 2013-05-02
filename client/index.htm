@@ -184,7 +184,6 @@
 						if(user.success)
 						{
 							setUser(user.id);
-							reloadUserBox();
 						}
 						else
 							alert("ohoh");//output.modal("Login unsuccessful", "The login information could not be validated");
@@ -206,6 +205,7 @@
 					success: function(newUser)
 					{
 						framework.user = newUser;
+						reloadUserBox();
 					},
 					error: function(msg)
 					{
