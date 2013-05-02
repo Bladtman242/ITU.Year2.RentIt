@@ -1,20 +1,12 @@
-<style type="text/css">
 	
-	img {
-    width:100%;
-    height:auto;
-	}
-</style>
-
-<div class="carousel slide span12" id="myCarousel">
-<div class="carousel-inner" id="innercar">
-
+<div class="carousel slide span12" id="carousel">
+<div class="carousel-inner" id="innerCar">
 </div>
-<a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-<a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+<a class="carousel-control left" href="#carousel" data-slide="prev">&lsaquo;</a>
+<a class="carousel-control right" href="#carousel" data-slide="next">&rsaquo;</a>
 </div>
 <script>
-$("#innercar").append(createCarousel());
+$("#innerCar").append(createCarousel());
 function createCarousel()
 {
     var s= "";
@@ -25,76 +17,7 @@ function createCarousel()
                 dataType: 'json',
                 async: false,
                 success: function(movs) {
-					var length = movs.length;
-					if(length == 0) return;
-					var rest = length % 3;					
-					s+="<div class='item active'>\
-							<ul class='thumbnails'>\
-								<li class='span4'>\
-									<div class='thumbnail'>\
-										<a class='internal' href='#movie?movieid="+movs[0].id+"'><img src='"+movs[0].coverUri+"' alt='' border='0' /></a>\
-									</div>\
-								</li>";	
-					for (var i=1; i<length - rest; i++)
-					{ 
-						if(i%3 == 0)
-						{
-							s += "<div class='item'>\
-									<ul class='thumbnails'>\
-										<li class='span4'>\
-											<div class='thumbnail'>\
-												<a class='internal' href='#movie?movieid="+movs[i].id+"'><img src='"+movs[i].coverUri+"' alt='' border='0' /></a>\
-											</div>\
-										</li>";	
-						}
-						if(i%3 == 1)
-						{
-							s+= "<li class='span4'>\
-											<div class='thumbnail'>\
-												<a class='internal' href='#movie?movieid="+movs[i].id+"'><img src='"+movs[i].coverUri+"' alt='' border='0' /></a>\
-											</div>\
-										</li>";
-						}
-						if(i%3 == 2)
-						{
-							s+=		   "<li class='span4'>\
-											<div class='thumbnail'>\
-												<a class='internal' href='#movie?movieid="+movs[i].id+"'><img src='"+movs[i].coverUri+"' alt='' border='0' /></a>\
-											</div>\
-										</li>\
-									</ul>\
-								</div>";
-						}
-					}
-					if(rest == 1)
-					{
-						s += "<div class='item'>\
-									<ul class='thumbnails'>\
-										<li class='span4'>\
-											<div class='thumbnail'>\
-												<a class='internal' href='#movie?movieid="+movs[length-1].id+"'><img src='"+movs[length-1].coverUri+"' alt='' border='0' /></a>\
-											</div>\
-										</li>\
-									</ul>\
-								</div>";
-					}
-					else if (rest == 2)
-					{
-						s += "<div class='item'>\
-									<ul class='thumbnails'>\
-										<li class='span4'>\
-											<div class='thumbnail'>\
-												<a class='internal' href='#movie?movieid="+movs[length-2].id+"'><img src='"+movs[length-2].coverUri+"' alt='' border='0' /></a>\
-											</div>\
-										</li>\
-										<li class='span4'>\
-											<div class='thumbnail'>\
-												<a class='internal' href='#movie?movieid="+movs[length-1].id+"'><img src='"+movs[length-1].coverUri+"' alt='' border='0' /></a>\
-											</div>\
-										</li>\
-									</ul>\
-								</div>";
-					}
+					s=createMoviesCarousel(movs);
                 },
                 error: function(msg) {
                     alert("failed to connect to server, please try again");
@@ -103,6 +26,82 @@ function createCarousel()
 		
 	
 	
-	return $(s);
+	return s;
 }
+function createMoviesCarousel(movs)
+{
+		var length = movs.length;
+		var s = "";
+		if(length == 0) return;
+		var rest = length % 3;					
+		s+="<div class='item active'>\
+				<ul class='thumbnails'>\
+					<li class='span4'>\
+						<div class='thumbnail'>\
+							<a class='internal' href='#movie?movieid="+movs[0].id+"'><img class='carouselElem' src='"+movs[0].coverUri+"' alt='' border='0'/></a>\
+						</div>\
+					</li>";	
+		for (var i=1; i<length - rest; i++)
+		{ 
+			if(i%3 == 0)
+			{
+				s += "<div class='item'>\
+						<ul class='thumbnails'>\
+							<li class='span4'>\
+								<div class='thumbnail'>\
+									<a class='internal' href='#movie?movieid="+movs[i].id+"'><img class='carouselElem' src='"+movs[i].coverUri+"' alt='' border='0'/></a>\
+								</div>\
+							</li>";	
+			}
+			if(i%3 == 1)
+			{
+				s+= "<li class='span4'>\
+							<div class='thumbnail'>\
+								<a class='internal' href='#movie?movieid="+movs[i].id+"'><img class='carouselElem' src='"+movs[i].coverUri+"' alt='' border='0'/></a>\
+							</div>\
+					</li>";
+			}
+			if(i%3 == 2)
+			{
+				s+=		   "<li class='span4'>\
+								<div class='thumbnail'>\
+									<a class='internal' href='#movie?movieid="+movs[i].id+"'><img class='carouselElem' src='"+movs[i].coverUri+"' alt='' border='0'/></a>\
+								</div>\
+							</li>\
+						</ul>\
+					</div>";
+			}
+			}
+			if(rest == 1)
+			{
+				s += "<div class='item'>\
+						<ul class='thumbnails'>\
+							<li class='span4'>\
+								<div class='thumbnail'>\
+									<a class='internal' href='#movie?movieid="+movs[length-1].id+"'><img class='carouselElem' src='"+movs[length-1].coverUri+"' alt='' border='0'/></a>\
+								</div>\
+							</li>\
+						</ul>\
+					</div>";
+			}
+			else if (rest == 2)
+			{
+				s += "<div class='item'>\
+							<ul class='thumbnails'>\
+								<li class='span4'>\
+									<div class='thumbnail'>\
+										<a class='internal' href='#movie?movieid="+movs[length-2].id+"'><img class='carouselElem' src='"+movs[length-2].coverUri+"' alt='' border='0'/></a>\
+									</div>\
+								</li>\
+								<li class='span4'>\
+									<div class='thumbnail'>\
+										<a class='internal' href='#movie?movieid="+movs[length-1].id+"'><img class='carouselElem' src='"+movs[length-1].coverUri+"' alt='' border='0'/></a>\
+									</div>\
+								</li>\
+							</ul>\
+						</div>";
+			}
+			return $(s);
+}
+	
 </script>
