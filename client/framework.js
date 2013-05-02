@@ -5,7 +5,7 @@ var framework = {
     /**
      * Name of default page to be loaded if none is specified.
      */
-    defaultPage: "about",
+    defaultPage: "home",
     
     /**
      * Title of site.
