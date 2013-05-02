@@ -55,6 +55,12 @@
             .navbar {
                 margin-top: 15px;
             }
+            #manager-link {
+                bottom: 0;
+                right: 0;
+                margin: 18px 15px;
+                position: fixed;
+            }
 			footer {
                 background: rgb(245,245,245);
                 border-top: 1px solid rgb(229,229,229);
@@ -126,6 +132,7 @@
         <div id="container">
             <!--Nothing-->
         </div>
+        <a id="manager-link" href="#manager" class="internal btn btn-inverse">Manager Overview</a>
         <footer>
             &copy; moofy 2013
         </footer>
@@ -171,6 +178,7 @@
                 else {
                     $("#user-profile-box").hide();
                     $("#login-box").show();
+                    $("#manager-link").hide();
                 }
             }
 			$("#signinSubmit").click(function() {
