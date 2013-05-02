@@ -1,0 +1,195 @@
+<!--Nav pills-->
+<ul id="accountNavigation" class="nav nav-pills">
+    <li class="active">
+        <a id="accountOverview" href="#">Account overview</a>
+    </li>
+    <li><a id="accountEdit" href="#">Edit profile</a></li>
+    <li><a id="accountBalance" href="#">Add balance</a></li>
+</ul>
+
+<!--Content-->
+<div id="account-content">
+    <!--Content added dynamically-->
+</div>
+
+<script>
+    var content, overview, edit, balance;
+    content = $('#account-content');
+    overview = $('');
+    edit = $('<form id="editUserForm" class="form-horizontal">\
+                    <legend>Edit profile</legend>\
+                    <div class="control-group">\
+                        <label class="control-label" for="inputName">Name (optional)</label>\
+                        <div class="controls">\
+                            <div class="input-prepend">\
+                                <span class="add-on"><i class="icon-user"></i></span>\
+                                <input type="text" id="inputName" placeholder="' + framework.user.name + '"/>\
+                            </div>\
+                        </div>\
+                    </div>\
+                    <div class="control-group">\
+                        <label class="control-label" for="inputEmail">Email (optional)</label>\
+                        <div class="controls">\
+                            <div class="input-prepend">\
+                                <span class="add-on"><i class="icon-envelope"></i></span>\
+                                <input type="text" id="inputEmail" placeholder="' + framework.user.email + '"/>\
+                            </div>\
+                        </div>\
+                    </div>\
+                    <div class="control-group">\
+                        <label class="control-label" for="inputPassword">Password (optional)</label>\
+                        <div class="controls">\
+                            <div class="input-prepend">\
+                                <span class="add-on"><i class="icon-asterisk"></i></span>\
+                                <input type="password" id="inputPassword"/>\
+                            </div>\
+                        </div>\
+                    </div>\
+                    <div class="form-actions">\
+                        <input type="submit" class="btn btn-primary" value="Save changes"/>\
+                    </div>\
+            </form>');
+    balance = $('<legend>Current payment method</legend>\
+                    <img src="http://www.tbor.org/Photos/VisaMastercard.jpg" height="300px" width="200px">\
+                    <p>Visa/mastercard: XXXX-XXXX-XXXX-3457</p>\
+                    <button id="paymentMethodButton" class="btn btn-primary">Change payment method</button>\
+                <br/><br/><br/>\
+                <legend>Add credits to your account</legend>\
+                <p>Current balance: <span id="userBalance">' + framework.user.balance + '</span> $</p>\
+                <form id="balanceForm" class="form-inline">\
+                    <div class="input-prepend input-append">\
+                        <span class="add-on">$</span>\
+                        <input class="span2" id="moneyInput" type="number" required="required">\
+                        <span class="add-on">.00</span>\
+                    </div>\
+                    <input id="editUserSubmit" type="submit" class="btn btn-primary" value="Make transfer"/>\
+                </form>');
+
+    $("#accountNavigation a").click(function(e) {
+        e.preventDefault();
+        $("#accountNavigation li.active").removeClass("active");
+        var $t = $(this);
+        $t.parent().addClass("active");
+        switch(this.id) {
+            case('accountOverview'):
+                content.html(overview);
+                //TODO: Add click listeners
+                break;
+            case('accountEdit'):
+                content.html(edit);
+                //Submit handler
+                edit.submit(function() {
+                    var cleanedInputName = $("#inputName").val().trim();
+                    var cleanedInputEmail = $("#inputEmail").val().trim();
+                    var cleanedInputPassword = $("#inputPassword").val().trim();
+
+                    var submit = false;
+                    var postData = {};
+                    if(cleanedInputName) {
+                        submit = true;
+                        postData.name = cleanedInputName;
+                    }
+                    if(cleanedInputEmail) {
+                        submit = true;
+                        postData.email = cleanedInputEmail;
+                    }
+                    if(cleanedInputPassword) {
+                        submit = true;
+                        postData.password = cleanedInputPassword;
+                    }
+
+                    if (submit) {
+                        $.ajax({
+                            url: 'http://rentit.itu.dk/RentIt25/moofy.svc/users/' + framework.user.id + '/update',
+                            type: 'POST',
+                            data: JSON.stringify(postData),
+                            contentType: 'application/json; charset=utf-8',
+                            dataType: 'json',
+                            async: true,
+                            success: function(msg) {
+                                output.success('Profile updated!', 'The profile was succesfully updated.');
+                                if (cleanedInputName) framework.user.name = cleanedInputName;
+                                if (cleanedInputEmail) framework.user.email = cleanedInputEmail;
+                                if (cleanedInputPassword) framework.user.password = cleanedInputEmail;
+                                //TODO: Consider giving the framework a reference to the following function or listen on the user object for changes
+                                reloadUserBox();
+                            },
+                            error: function(msg) {
+                                output.error('Error!', 'The profile was not updated.');
+                            }
+                        });
+                    } else {
+                        output.error('No information was entered!', 'Please enter text in the fields you want to change.');
+                    }
+                    return false;
+                });
+
+                break;
+            case('accountBalance'):
+                content.html(balance);
+                $('#balanceForm').submit(function() {
+                    var money = $("#moneyInput").val().trim();
+                    var postData = {moneyAmount: money};
+                    $.ajax({
+                        url: 'http://rentit.itu.dk/RentIt25/moofy.svc/users/' + framework.user.id + '/deposit',
+                        type: 'POST',
+                        data: JSON.stringify(postData),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        async: true,
+                        success: function(msg) {
+                            if(msg.success) {
+                                framework.user.balance += +money; //The unary + operator is required to treat money as an int rather than string
+                                $('#userBalance').text(framework.user.balance);
+                                output.success('Money transfered!', 'The money was succesfully transferred.');
+                            } else {
+                                output.error('Error!', 'The money was not transfered.');
+                            }
+                        },
+                        error: function(msg) {
+                            output.error('Error!', 'The money was not transfered.');
+                        }
+                    });
+                    return false;
+                });
+
+
+
+                $('#paymentMethodButton').click(function() {
+                    output.modal('This function does not exist yet', 'You can not change your payment method in the Moofy beta experience.');
+                });
+                break;
+        }
+    });
+
+
+    /*$.ajax({
+        url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/3',
+        type: 'GET',
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        async: true,
+        success: function(movie) {
+            output.success('Profile updated!', 'The profile was succesfully updated.');
+            addMovie(movie);
+        },
+        error: function(movie) {
+            output.error('Error!', 'The profile was not updated.');
+        }
+    });*/
+
+    function addMovie(movie) {
+        alert('data-src="' + movie.coverUri +  '/300x200"');
+    var html =
+    '<li class="span4">\
+        <div class="thumbnail">\
+            <img src="' + movie.coverUri +  '" alt="">\
+            <h3>' + movie.title + '</h3>\
+            <p>' + movie.description + '</p>\
+        </div>\
+    </li>';
+
+        $('#userMovies').append(html);
+    }
+
+</script>
