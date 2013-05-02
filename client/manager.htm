@@ -31,7 +31,6 @@
                 <div class="control-group">\
                     <label class="control-label" for="inputFile">File</label>\
                     <div class="controls">\
-                        <input type="hidden" name="MAX_FILE_SIZE" value="100000" />\
                         <input type="file" id="inputFile" name="file" title="Browse for file to upload" />\
                     </div>\
                 </div>\
@@ -89,11 +88,13 @@
                 </div>\
             </div>\
             <div class="form-actions">\
-                <a id="uploadMovieSubmit" class="btn btn-primary">Create</a>\
+                <button id="uploadMovieSubmit" class="btn btn-primary">Create</button>\
             </div>\
         </form>');
     
     var upload_song = $("<p>Upload song</p>");
+    
+    var tmp_id = -1337;
     
     $("#manager-navigation a").click(function(e) {
         e.preventDefault();
@@ -108,27 +109,71 @@
                 $mng_content.html(upload_movie);
                 $("#inputFile").change(function() {
                     $("#inputFile").css('opacity','0.4');
-                    var formData = new FormData($('form')[0]);
+                    var formData = new FormData($('#fileForm')[0]);
                     $.ajax({
                         url: "http://rentit.itu.dk/RentIt25/moofy.svc/movies/upload",
                         type: 'POST',
                         success: function(data) {
                             if(data.success) {
-                                alert("YES! IT FUCKING WORKEDED! TMPID: "+data.tmpid);
+                                $("#inputFile").hide();
+                                $("#fileForm .controls").append('<span id="tmpId">FILE_TMP_ID: '+data.tmpid+'</span>');
+                                tmp_id = data.tmpid;
                             }
                             else {
-                                alert("Fileupload failed.");
+                                alert("Fileupload failed (invalid file?)");
                             }
                             $("#inputFile").css('opacity','1');
                         },
                         error: function(data) {
-                            alert("err: "+JSON.stringify(data));
+                            alert("A server or connnection error was encountered while uploading the file. Fileupload failed.");
                             $("#inputFile").css('opacity','1');
                         },
                         data: formData,
                         contentType: false,
                         processData: false,
+                        dataType: "json",
                     });
+                });
+                
+                $("#uploadMovie").submit(function() {
+                    if(tmp_id <= 0) {
+                        alert("Please upload a movie file before submitting the information!");
+                        return false;
+                    }
+                    else {
+                        var submitObject = {
+                            managerid: 1,
+                            tmpid: tmp_id,
+                            title: $("#inputTitle").val(),
+                            release: $("#inputRelease").val(),
+                            directors: $("#inputDirectors").val().split(","),
+                            genres: $("#inputGenres").val().split(","),
+                            description: $("#inputDescription").val(),
+                            rentalPrice: $("#inputRental").val(),
+                            purchasePrice: $("#inputPurchase").val(),
+                            coverUri: $("#inputCoverUri").val()
+                        };
+                        
+                        $.ajax({
+                            url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/create',
+                            type: 'POST',
+                            data: JSON.stringify(submitObject),
+                            contentType: "application/json",
+                            dataType: "json",
+                            success: function(data) {
+                                if(data.success) {
+                                    alert("Movie created - thanks a bunch, brah. In an ideal world you would've been redirected to movie #"+data.id);
+                                }
+                                else {
+                                    alert("Failed to create movie somehow :(");
+                                }
+                            },
+                            error: function(data) {
+                                alert("Connection or server error!");
+                            }
+                        });
+                        return false;
+                    }
                 });
                 break;
             case('manager-upload-song-link'):
