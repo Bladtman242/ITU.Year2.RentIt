@@ -6,8 +6,9 @@
         <script>
             jQuery || document.write("<script src=\"vendor/jquery-2.0.0.min.js\">\x3C/script>");
         </script>
+        <script src="vendor/jquery.cookie.js"></script>
         <script src="vendor/jquery.md5.js"></script>
-        <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
         <style type="text/css">
             html {
                 text-align: center;
@@ -23,6 +24,9 @@
             }
             header {
                 padding: 10px;
+            }
+            #logo {
+                cursor: pointer;
             }
             header hgroup, #login-box, #user-profile-box {
                 display: inline-block;
@@ -54,6 +58,12 @@
             .navbar {
                 margin-top: 15px;
             }
+            #manager-link {
+                bottom: 0;
+                right: 0;
+                margin: 18px 15px;
+                position: fixed;
+            }
 			footer {
                 background: rgb(245,245,245);
                 border-top: 1px solid rgb(229,229,229);
@@ -64,12 +74,12 @@
         </style>
         <script src="framework.js"></script>
         <script src="output.js"></script>
-		<script src="bootstrap/js/bootstrap.min.js"></script>
+		<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
     </head>
     <body>
         <header>
             <!--Name of the song, explosivo-->
-            <hgroup>
+            <hgroup id="logo">
                 <h1>moofy</h1>
                 <h5>super-cool rental</h5>
             </hgroup>
@@ -104,20 +114,20 @@
                     <div id="user-pic"></div>
                     <div id="user-info">
                         <div id="user-name"><span id="user-name-value"></span></div>
-                        <div id="user-username">Username: <span id="user-username-value"></span></div>
-                        <div id="user-email">Email: <span id="user-email-value"></span></div>
+                        <div id="user-username"><i class="icon-user"></i> <span id="user-username-value"></span></div>
+                        <div id="user-email"><i class="icon-envelope"></i>  <span id="user-email-value"></span></div>
                     </div>
                 </div>
-                <a id="logoutButton" class="internal pull-right btn btn-small">Log out</a>
+                <a id="logoutButton" class="pull-right btn btn-small">Log out</a>
             </div>
             
             <!--Nav bar-->
             <div class="navbar" id="mainNav">
                 <div class="navbar-inner">
                     <ul class="nav">
-                        <li><a href="#about" class="internal">Home</a></li>
-                        <li><a href="#listMovies" class="internal">Movies</a></li>
-                        <li><a href="#listSongs" class="internal">Songs</a></li>
+                        <li><a href="#about" class="internal"><i class="icon-home"></i> Home</a></li>
+                        <li><a href="#listMovies" class="internal"><i class="icon-film"></i> Movies</a></li>
+                        <li><a href="#listSongs" class="internal"><i class="icon-music"></i> Songs</a></li>
                     </ul>
                 </div>
             </div>
@@ -125,22 +135,33 @@
         <div id="container">
             <!--Nothing-->
         </div>
+        <a id="manager-link" href="#manager" class="internal btn btn-inverse">Manager Overview</a>
         <footer>
             &copy; moofy 2013
         </footer>
         <script>
-            reloadUserBox();
+            //Check if the user is logged in via cookies - else first time setup the login box
+            if((username = $.cookie('username')) && (password = $.cookie('password'))) {
+                login(username, password, true); //Login synchronously in case of direct linking to subpages requiring the user variable
+            } else {
+                reloadUserBox();
+            }
 
             $('#myAccountLinkBox').click(function() {
                 framework.loadPage('account');
             });
 
             $('#logoutButton').click(function() {
+                $.removeCookie('username');
+                $.removeCookie('password');
                 framework.user = null;
                 framework.loadPage(framework.defaultPage);
                 reloadUserBox();
             });
 
+            $('#logo').click(function() {
+                framework.loadPage(framework.defaultPage);
+            });
 
             function reloadUserBox() {
                 if(framework.user) {
@@ -161,6 +182,7 @@
                 else {
                     $("#user-profile-box").hide();
                     $("#login-box").show();
+                    $("#manager-link").hide();
                 }
             }
 			$("#signinSubmit").click(function() {
@@ -169,7 +191,7 @@
 				login(inputUsername, inputPassword);
 				return false;
 			});
-			function login(usrnm, psswrd) {
+			function login(usrnm, psswrd, sync) {
 				var postData = {};
 				postData.username=usrnm;
 				postData.password=psswrd;
@@ -179,30 +201,36 @@
 					data: JSON.stringify(postData),
 					contentType: 'application/json; charset=utf-8',
 					dataType: 'json',
-					async: true,
+					async: !sync,
 					success: function(user)
 					{
 						if(user.success)
 						{
-							setUser(user.id);
+                            //Login succesfull. Set cookies even if the next async call fails
+                            $.cookie("username", usrnm);
+                            $.cookie("password", psswrd);
+							setUser(user.id, sync);
 						}
-						else
+						else {
+                            reloadUserBox();
 							output.modal("Login unsuccessful", "The login information could not be validated");
+                        }
 					},
 					error: function(msg)
 					{
+                        reloadUserBox();
 						output.modal("Login unsuccessful", "An error occured on the server. Please try again");
 					}
 				});
 			}
 			
-			function setUser(id) {
+			function setUser(id, sync) {
 				$.ajax({
 					url: 'http://rentit.itu.dk/RentIt25/moofy.svc/users/'+id,
 					type: 'GET',
 					contentType: 'application/json; charset=utf-8',
 					dataType: 'json',
-					async: true,
+					async: !sync,
 					success: function(newUser)
 					{
 						framework.user = newUser;
@@ -210,6 +238,7 @@
 					},
 					error: function(msg)
 					{
+                        reloadUserBox();
 						alert("fail setuser");
 					}
 				});

@@ -28,7 +28,7 @@
             var callAfterValidation = function() {
                 output.modal('Are you sure?', 'Do you really want to buy this movie?', 'Buy', onBuyClick);
             };
-            validateUserBalance(framework.user.id, 1000, callAfterValidation());
+            validateUserBalance(framework.user.id, 1000, callAfterValidation);
         });
 
         $('#rentButton').click(function () {
