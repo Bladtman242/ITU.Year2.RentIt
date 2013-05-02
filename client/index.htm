@@ -105,8 +105,8 @@
                     <div id="user-pic"></div>
                     <div id="user-info">
                         <div id="user-name"><span id="user-name-value"></span></div>
-                        <div id="user-username">Username: <span id="user-username-value"></span></div>
-                        <div id="user-email">Email: <span id="user-email-value"></span></div>
+                        <div id="user-username"><i class="icon-user"></i> <span id="user-username-value"></span></div>
+                        <div id="user-email"><i class="icon-envelope"></i>  <span id="user-email-value"></span></div>
                     </div>
                 </div>
                 <a id="logoutButton" class="pull-right btn btn-small">Log out</a>
@@ -116,9 +116,9 @@
             <div class="navbar" id="mainNav">
                 <div class="navbar-inner">
                     <ul class="nav">
-                        <li><a href="#about" class="internal">Home</a></li>
-                        <li><a href="#listMovies" class="internal">Movies</a></li>
-                        <li><a href="#listSongs" class="internal">Songs</a></li>
+                        <li><a href="#about" class="internal"><i class="icon-home"></i> Home</a></li>
+                        <li><a href="#listMovies" class="internal"><i class="icon-film"></i> Movies</a></li>
+                        <li><a href="#listSongs" class="internal"><i class="icon-music"></i> Songs</a></li>
                     </ul>
                 </div>
             </div>
@@ -148,6 +148,8 @@
                 framework.loadPage(framework.defaultPage);
                 reloadUserBox();
             });
+
+
 
 
             function reloadUserBox() {
