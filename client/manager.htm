@@ -106,22 +106,27 @@
             case('manager-upload-movie-link'):
                 $mng_content.html(upload_movie);
                 $("#inputFile").change(function() {
+                    $("#inputFile").css('opacity','0.4');
                     var formData = new FormData($('form')[0]);
                     $.ajax({
                         url: "http://rentit.itu.dk/RentIt25/moofy.svc/movies/upload",
                         type: 'POST',
                         success: function(data) {
-                            alert(JSON.stringify(data));
+                            if(data.success) {
+                                alert("YES! IT FUCKING WORKEDED! TMPID: "+data.tmpid);
+                            }
+                            else {
+                                alert("Fileupload failed.");
+                            }
+                            $("#inputFile").css('opacity','1');
                         },
                         error: function(data) {
                             alert("err: "+JSON.stringify(data));
+                            $("#inputFile").css('opacity','1');
                         },
                         data: formData,
-                        cache: false,
-                        contentType: false,
                         processData: false
                     });
-                    alert("errplewding");
                 });
                 break;
             case('manager-upload-song-link'):
