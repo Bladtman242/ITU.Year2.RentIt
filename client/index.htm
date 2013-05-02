@@ -108,7 +108,7 @@
                         <div id="user-email">Email: <span id="user-email-value"></span></div>
                     </div>
                 </div>
-                <a id="logoutButton" class="internal pull-right btn btn-small">Log out</a>
+                <a id="logoutButton" class="pull-right btn btn-small">Log out</a>
             </div>
             
             <!--Nav bar-->
@@ -167,6 +167,7 @@
 				var inputPassword = $("#signPass").val();
 				var inputUsername = $("#signName").val();
 				login(inputUsername, inputPassword);
+				return false;
 			});
 			function login(usrnm, psswrd) {
 				var postData = {};
@@ -186,11 +187,11 @@
 							setUser(user.id);
 						}
 						else
-							alert("ohoh");//output.modal("Login unsuccessful", "The login information could not be validated");
+							output.modal("Login unsuccessful", "The login information could not be validated");
 					},
 					error: function(msg)
 					{
-						alert("fail login");
+						output.modal("Login unsuccessful", "An error occured on the server. Please try again");
 					}
 				});
 			}
