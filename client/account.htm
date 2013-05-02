@@ -4,7 +4,7 @@
         <a id="accountOverview" href="#">Account overview</a>
     </li>
     <li><a id="accountEdit" href="#">Edit profile</a></li>
-    <li><a id="accountBalance" href="#">Add balance</a></li>
+    <li><a id="accountBalance" href="#">Add credits</a></li>
 </ul>
 
 <!--Content-->
@@ -13,10 +13,23 @@
 </div>
 
 <script>
-    var content, overview, edit, balance;
+    var content;
     content = $('#account-content');
-    overview = $('');
-    edit = $('<form id="editUserForm" class="form-horizontal">\
+
+    //use functions because the user info might chance over time
+    function createOverview(){
+        return '<div class="row">\
+                        <div class="span2"><img src="http://gravatar.com/avatar/'+$.md5(framework.user.email)+'?size=100&d=mm" class="img-polaroid"></div>\
+                        <p>Username: <strong id="usernameSpan">' + framework.user.username + '</strong></p>\
+                        <p>Name: <strong id="nameSpan">' + framework.user.name + '</strong></p>\
+                        <p>Email: <strong id="emailSpan">' + framework.user.email + '</strong></p>\
+                        <p>Balance: <strong id="balanceSpan">' + framework.user.balance + '</strong></p>\
+                 </div>\
+                ';
+    };
+
+    function createEdit(){
+        return '<form id="editUserForm" class="form-horizontal">\
                     <legend>Edit profile</legend>\
                     <div class="control-group">\
                         <label class="control-label" for="inputName">Name (optional)</label>\
@@ -48,8 +61,11 @@
                     <div class="form-actions">\
                         <input type="submit" class="btn btn-primary" value="Save changes"/>\
                     </div>\
-            </form>');
-    balance = $('<legend>Current payment method</legend>\
+            </form>';
+    };
+
+    function createBalance(){
+        return '<legend>Current payment method</legend>\
                     <img src="http://www.tbor.org/Photos/VisaMastercard.jpg" height="300px" width="200px">\
                     <p>Visa/mastercard: XXXX-XXXX-XXXX-3457</p>\
                     <button id="paymentMethodButton" class="btn btn-primary">Change payment method</button>\
@@ -63,7 +79,8 @@
                         <span class="add-on">.00</span>\
                     </div>\
                     <input id="editUserSubmit" type="submit" class="btn btn-primary" value="Make transfer"/>\
-                </form>');
+                </form>';
+    };
 
     $("#accountNavigation a").click(function(e) {
         e.preventDefault();
@@ -72,13 +89,12 @@
         $t.parent().addClass("active");
         switch(this.id) {
             case('accountOverview'):
-                content.html(overview);
-                //TODO: Add click listeners
+                content.html(createOverview());
                 break;
             case('accountEdit'):
-                content.html(edit);
+                content.html(createEdit());
                 //Submit handler
-                edit.submit(function() {
+                $('#editUserForm').submit(function() {
                     var cleanedInputName = $("#inputName").val().trim();
                     var cleanedInputEmail = $("#inputEmail").val().trim();
                     var cleanedInputPassword = $("#inputPassword").val().trim();
@@ -107,12 +123,13 @@
                             dataType: 'json',
                             async: true,
                             success: function(msg) {
-                                output.success('Profile updated!', 'The profile was succesfully updated.');
                                 if (cleanedInputName) framework.user.name = cleanedInputName;
                                 if (cleanedInputEmail) framework.user.email = cleanedInputEmail;
                                 if (cleanedInputPassword) framework.user.password = cleanedInputEmail;
                                 //TODO: Consider giving the framework a reference to the following function or listen on the user object for changes
                                 reloadUserBox();
+                                framework.loadPage('account');
+                                output.success('Profile updated!', 'The profile was succesfully updated.');
                             },
                             error: function(msg) {
                                 output.error('Error!', 'The profile was not updated.');
@@ -126,7 +143,7 @@
 
                 break;
             case('accountBalance'):
-                content.html(balance);
+                content.html(createBalance());
                 $('#balanceForm').submit(function() {
                     var money = $("#moneyInput").val().trim();
                     var postData = {moneyAmount: money};
@@ -162,22 +179,9 @@
         }
     });
 
-
-    /*$.ajax({
-        url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/3',
-        type: 'GET',
-        contentType: 'application/json; charset=utf-8',
-        dataType: 'json',
-        async: true,
-        success: function(movie) {
-            output.success('Profile updated!', 'The profile was succesfully updated.');
-            addMovie(movie);
-        },
-        error: function(movie) {
-            output.error('Error!', 'The profile was not updated.');
-        }
-    });*/
-
+    //TODO: Parse queries to find the real page
+    content.html(createOverview());
+/*
     function addMovie(movie) {
         alert('data-src="' + movie.coverUri +  '/300x200"');
     var html =
@@ -190,6 +194,6 @@
     </li>';
 
         $('#userMovies').append(html);
-    }
+    }*/
 
 </script>
