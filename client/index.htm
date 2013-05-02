@@ -25,6 +25,9 @@
             header {
                 padding: 10px;
             }
+            #logo {
+                cursor: pointer;
+            }
             header hgroup, #login-box, #user-profile-box {
                 display: inline-block;
                 vertical-align: top;
@@ -76,7 +79,7 @@
     <body>
         <header>
             <!--Name of the song, explosivo-->
-            <hgroup>
+            <hgroup id="logo">
                 <h1>moofy</h1>
                 <h5>super-cool rental</h5>
             </hgroup>
@@ -156,8 +159,9 @@
                 reloadUserBox();
             });
 
-
-
+            $('#logo').click(function() {
+                framework.loadPage(framework.defaultPage);
+            });
 
             function reloadUserBox() {
                 if(framework.user) {
