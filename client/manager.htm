@@ -26,14 +26,18 @@
         <p>If you wish to promote a user or demote another manager, go to the particular user\'s\
         profile and click the corresponding link.</p>');
     
-    var upload_movie = $('<form id="uploadMovie" class="form-horizontal">\
-            <legend>Create new movie</legend>\
-            <div class="control-group">\
-                <label class="control-label" for="inputFile">File</label>\
-                <div class="controls">\
-                    <input type="file" id="inputFile" title="Browse for file to upload" />\
+    var upload_movie = $('<form id="fileForm" class="form-horizontal" enctype="multipart/form-data">\
+                <legend>Upload movie file</legend>\
+                <div class="control-group">\
+                    <label class="control-label" for="inputFile">File</label>\
+                    <div class="controls">\
+                        <input type="hidden" name="MAX_FILE_SIZE" value="100000" />\
+                        <input type="file" id="inputFile" name="file" title="Browse for file to upload" />\
+                    </div>\
                 </div>\
-            </div>\
+            </form>\
+            <form id="uploadMovie" class="form-horizontal">\
+            <legend>Create new movie</legend>\
             <div class="control-group">\
                 <label class="control-label" for="inputTitle">Title</label>\
                 <div class="controls">\
@@ -102,6 +106,30 @@
                 break;
             case('manager-upload-movie-link'):
                 $mng_content.html(upload_movie);
+                $("#inputFile").change(function() {
+                    $("#inputFile").css('opacity','0.4');
+                    var formData = new FormData($('form')[0]);
+                    $.ajax({
+                        url: "http://rentit.itu.dk/RentIt25/moofy.svc/movies/upload",
+                        type: 'POST',
+                        success: function(data) {
+                            if(data.success) {
+                                alert("YES! IT FUCKING WORKEDED! TMPID: "+data.tmpid);
+                            }
+                            else {
+                                alert("Fileupload failed.");
+                            }
+                            $("#inputFile").css('opacity','1');
+                        },
+                        error: function(data) {
+                            alert("err: "+JSON.stringify(data));
+                            $("#inputFile").css('opacity','1');
+                        },
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                    });
+                });
                 break;
             case('manager-upload-song-link'):
                 $mng_content.html(upload_song);
