@@ -1,11 +1,4 @@
-<style type="text/css">
 	
-	img {
-    width:100%;
-    height:auto;
-	}
-</style>
-
 <div class="carousel slide span12" id="carousel">
 <div class="carousel-inner" id="innerCar">
 </div>
@@ -45,7 +38,7 @@ function createMoviesCarousel(movs)
 				<ul class='thumbnails'>\
 					<li class='span4'>\
 						<div class='thumbnail'>\
-							<a class='internal' href='#movie?movieid="+movs[0].id+"'><img src='"+movs[0].coverUri+"' alt='' border='0' /></a>\
+							<a class='internal' href='#movie?movieid="+movs[0].id+"'><img class='carouselElem' src='"+movs[0].coverUri+"' alt='' border='0'/></a>\
 						</div>\
 					</li>";	
 		for (var i=1; i<length - rest; i++)
@@ -56,7 +49,7 @@ function createMoviesCarousel(movs)
 						<ul class='thumbnails'>\
 							<li class='span4'>\
 								<div class='thumbnail'>\
-									<a class='internal' href='#movie?movieid="+movs[i].id+"'><img src='"+movs[i].coverUri+"' alt='' border='0' /></a>\
+									<a class='internal' href='#movie?movieid="+movs[i].id+"'><img class='carouselElem' src='"+movs[i].coverUri+"' alt='' border='0'/></a>\
 								</div>\
 							</li>";	
 			}
@@ -64,7 +57,7 @@ function createMoviesCarousel(movs)
 			{
 				s+= "<li class='span4'>\
 							<div class='thumbnail'>\
-								<a class='internal' href='#movie?movieid="+movs[i].id+"'><img src='"+movs[i].coverUri+"' alt='' border='0' /></a>\
+								<a class='internal' href='#movie?movieid="+movs[i].id+"'><img class='carouselElem' src='"+movs[i].coverUri+"' alt='' border='0'/></a>\
 							</div>\
 					</li>";
 			}
@@ -72,7 +65,7 @@ function createMoviesCarousel(movs)
 			{
 				s+=		   "<li class='span4'>\
 								<div class='thumbnail'>\
-									<a class='internal' href='#movie?movieid="+movs[i].id+"'><img src='"+movs[i].coverUri+"' alt='' border='0' /></a>\
+									<a class='internal' href='#movie?movieid="+movs[i].id+"'><img class='carouselElem' src='"+movs[i].coverUri+"' alt='' border='0'/></a>\
 								</div>\
 							</li>\
 						</ul>\
@@ -85,7 +78,7 @@ function createMoviesCarousel(movs)
 						<ul class='thumbnails'>\
 							<li class='span4'>\
 								<div class='thumbnail'>\
-									<a class='internal' href='#movie?movieid="+movs[length-1].id+"'><img src='"+movs[length-1].coverUri+"' alt='' border='0' /></a>\
+									<a class='internal' href='#movie?movieid="+movs[length-1].id+"'><img class='carouselElem' src='"+movs[length-1].coverUri+"' alt='' border='0'/></a>\
 								</div>\
 							</li>\
 						</ul>\
@@ -97,12 +90,12 @@ function createMoviesCarousel(movs)
 							<ul class='thumbnails'>\
 								<li class='span4'>\
 									<div class='thumbnail'>\
-										<a class='internal' href='#movie?movieid="+movs[length-2].id+"'><img src='"+movs[length-2].coverUri+"' alt='' border='0' /></a>\
+										<a class='internal' href='#movie?movieid="+movs[length-2].id+"'><img class='carouselElem' src='"+movs[length-2].coverUri+"' alt='' border='0'/></a>\
 									</div>\
 								</li>\
 								<li class='span4'>\
 									<div class='thumbnail'>\
-										<a class='internal' href='#movie?movieid="+movs[length-1].id+"'><img src='"+movs[length-1].coverUri+"' alt='' border='0' /></a>\
+										<a class='internal' href='#movie?movieid="+movs[length-1].id+"'><img class='carouselElem' src='"+movs[length-1].coverUri+"' alt='' border='0'/></a>\
 									</div>\
 								</li>\
 							</ul>\
