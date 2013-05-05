@@ -1,13 +1,27 @@
-	
+<h3>Highest Rated Movies</h3>	
 <div class="carousel slide span12" id="carousel">
 <div class="carousel-inner" id="innerCar">
 </div>
 <a class="carousel-control left" href="#carousel" data-slide="prev">&lsaquo;</a>
 <a class="carousel-control right" href="#carousel" data-slide="next">&rsaquo;</a>
 </div>
+<div class="pagination" style="margin-left:auto;margin-right:auto;display: block;">
+	<ul id="pagin">
+	</ul>
+</div>
+<div class="container">  
+      <ul class="thumbnails" id="thumbs">
+	  </ul>  
+<hr>  
+</div>
 <script>
-$("#innerCar").append(createCarousel());
-function createCarousel()
+var curCont, curPage, pages;
+var thumbs = $("#thumbs");
+
+$("#innerCar").append(initMovPage);
+createThumbContent(curCont);
+setPage(1);
+function initMovPage()
 {
     var s= "";
 	 $.ajax({
@@ -17,15 +31,15 @@ function createCarousel()
                 dataType: 'json',
                 async: false,
                 success: function(movs) {
-					s=createMoviesCarousel(movs);
+					curCont = movs;
+					movs.sort(function(a,b){return b.avgRating - a.avgRating})
+					s=createMoviesCarousel(movs);					
                 },
                 error: function(msg) {
                     alert("failed to connect to server, please try again");
                 }
             });
-		
-	
-	
+
 	return s;
 }
 function createMoviesCarousel(movs)
@@ -33,7 +47,7 @@ function createMoviesCarousel(movs)
 		var length = movs.length;
 		var s = "";
 		if(length == 0) return;
-		var rest = length % 3;					
+		var rest = length<9 ? length % 3 : 0;					
 		s+="<div class='item active'>\
 				<ul class='thumbnails'>\
 					<li class='span4'>\
@@ -41,7 +55,7 @@ function createMoviesCarousel(movs)
 							<a class='internal' href='#movie?movieid="+movs[0].id+"'><img class='carouselElem' src='"+movs[0].coverUri+"' alt='' border='0'/></a>\
 						</div>\
 					</li>";	
-		for (var i=1; i<length - rest; i++)
+		for (var i=1; i<9 && i<length - rest; i++)
 		{ 
 			if(i%3 == 0)
 			{
@@ -103,5 +117,45 @@ function createMoviesCarousel(movs)
 			}
 			return $(s);
 }
-	
+function createThumbContent(movs)
+{	
+	var nrOfPages = (movs.length%12)==0 ? movs.length/12: movs.length/12 + 1;
+	var pagi = "<li><a href='javascript:prevPage()'>Prev</a></li>";
+	var ps = new Array();
+	for(var i = 1; i<=nrOfPages; i++)
+	{
+		pagi += "<li><a href='javascript:setPage("+i+")'>"+i+"</a></li>";
+	}
+	pagi+="<li><a href='javascript:nextPage()'>Next</a></li>";
+	$("#pagin").append($(pagi));
+	for(var i = 0; i<movs.length; i++)
+	{	
+		var listString="<li class='span3'><div class='thumbnail'><a class='internal' href='#movie?movieid="+movs[i].id+"'><img class='thumbListElem' src='"+movs[i].coverUri+"' alt='' border='0'/></a><div class='caption thumbCapt'><h5>"+movs[i].title+"</h5><p>Rating:&thinsp;"+movs[i].avgRating+"</p></div></div></li>";
+		if (ps[Math.floor(i/12)]) {
+			ps[Math.floor(i/12)]+= listString;
+		} 
+		else {
+			ps[Math.floor(i/12)] = listString;
+		}
+	}
+	pages = ps;
+	curPage=1;
+}
+function nextPage()
+{
+	thumbs.empty();
+	thumbs.append(pages[++curPage] || pages[0]);
+}
+function prevPage()
+{
+	thumbs.empty();
+	curPage = curPage-1<0 ? pages.length-1 : curPage-1;
+	thumbs.append(pages[curPage]);
+}
+function setPage(nr)
+{
+	thumbs.empty();
+	curPage = nr-1;
+	thumbs.append(pages[curPage]);
+}
 </script>
