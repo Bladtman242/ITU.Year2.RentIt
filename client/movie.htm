@@ -1,10 +1,31 @@
-<html>
 <script>
+var container = $("#container");
+container.append(sjolo());
+
+function sjolo()
+{
+	var s = "";
+	$.ajax({
+                url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/1',
+                type: 'GET',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                async: false,
+                success: function(data) {
+					s=movie(data);
+                },
+                error: function(msg) {
+                    alert("Movie not found");
+                }
+            });
+	return s;
+}
+function movie(data)
+{
+	var s = "";
+	s+="<img src='" + data.coverUri + "' class='pull-left' width='450px' \
+		<p><font size='6'>" + data.title + "</font><font size='5'> - " + data.release + "</font></p><br>\
+		<p><b>" + data.genres + "</b></p><p>" + data.description + "</p><p><b>Directors:</b> " + data.directors + "</p>";
+	return $(s);
+}
 </script>
-<img src="/Users/Niels/Downloads/pic.png" class="pull-left" width="450px" style="padding">
-<p><font size="7">Title</font><font size="6"> - 2013</font></p><br>
-<p><b>Genre1, Genre2, Genre8</b></p>
-<p>Description blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab blablab</p>
-<p><b>Directors:</b> ua ua</p>
-</div>
-</html>
