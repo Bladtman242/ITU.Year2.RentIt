@@ -1,12 +1,12 @@
 <script>
 var container = $("#container");
-container.append(sjolo());
+container.append(sjolo(33));
 
-function sjolo()
+function sjolo(id)
 {
 	var s = "";
 	$.ajax({
-                url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/1',
+                url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/' + id,
                 type: 'GET',
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
@@ -23,9 +23,13 @@ function sjolo()
 function movie(data)
 {
 	var s = "";
-	s+="<img src='" + data.coverUri + "' class='pull-left' width='450px' \
-		<p><font size='6'>" + data.title + "</font><font size='5'> - " + data.release + "</font></p><br>\
-		<p><b>" + data.genres + "</b></p><p>" + data.description + "</p><p><b>Directors:</b> " + data.directors + "</p>";
+	s+="<img src='" + data.coverUri + "' class='pull-left' width='350px' style='padding: 3px; border: 1px solid #ddd; margin: 10px;'>\
+		<div style='padding: 3px; margin: 10px;'>\
+		<br><p><font size='6'>" + data.title + "</font><font size='5'> - " + data.release + "</font></p><br>\
+		<p><b>" + data.genres + "</b></p><p>" + data.description + "</p><p><b>Directors:</b> " + data.directors + "</p>\
+		Imagine you could click >>here<< and buy this shit at this price: " + data.purchasePrice + "\
+		<br>… and rent it at this price: " + data.rentalPrice + "\
+		</div>";
 	return $(s);
 }
 </script>
