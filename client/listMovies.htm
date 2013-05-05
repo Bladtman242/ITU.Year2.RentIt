@@ -5,7 +5,7 @@
 <a class="carousel-control left" href="#carousel" data-slide="prev">&lsaquo;</a>
 <a class="carousel-control right" href="#carousel" data-slide="next">&rsaquo;</a>
 </div>
-<div class="pagination" style="margin-left:auto;margin-right:auto;display: block;">
+<div class="pagination" >
 	<ul id="pagin">
 	</ul>
 </div>
@@ -130,7 +130,7 @@ function createThumbContent(movs)
 	$("#pagin").append($(pagi));
 	for(var i = 0; i<movs.length; i++)
 	{	
-		var listString="<li class='span3'><div class='thumbnail'><a class='internal' href='#movie?movieid="+movs[i].id+"'><img class='thumbListElem' src='"+movs[i].coverUri+"' alt='' border='0'/></a><div class='caption thumbCapt'><h5>"+movs[i].title+"</h5><p>Rating:&thinsp;"+movs[i].avgRating+"</p></div></div></li>";
+		var listString="<li class='span3'><div class='thumbnail'><a class='internal' href='#movie?movieid="+movs[i].id+"'><img class='thumbListElem' src='"+movs[i].coverUri+"' alt='' border='0' title='"+movs[i].title+"' /></a><div class='caption thumbCapt'><h5>"+ movs[i].title+"</h5>Rating:&thinsp;"+movs[i].avgRating+"</div></div></li>";
 		if (ps[Math.floor(i/12)]) {
 			ps[Math.floor(i/12)]+= listString;
 		} 
@@ -144,7 +144,7 @@ function createThumbContent(movs)
 function nextPage()
 {
 	thumbs.empty();
-	thumbs.append(pages[++curPage] || pages[0]);
+	thumbs.append(pages[++curPage] || pages[(curPage = 0)]);
 }
 function prevPage()
 {
