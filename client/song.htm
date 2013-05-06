@@ -1,8 +1,7 @@
 <script>
 var container = $("#container");
-var id = 5;
-var mjson = getMovieJSON(id);
-
+var id = 52;
+var mjson = getSongJSON(id);
 container.append(sjolo(id));
 
 	$('#buyButton').click(function () {
@@ -10,7 +9,7 @@ container.append(sjolo(id));
 	    var onBuyClick = function() {
 	        var postData = JSON.stringify({ userId: framework.user.id});
 	        $.ajax({
-	            url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/' + id + '/purchase',
+	            url: 'http://rentit.itu.dk/RentIt25/moofy.svc/songs/' + id + '/purchase',
 	            type: 'POST',
 	            data: postData,
 	            contentType: 'application/json; charset=utf-8',
@@ -26,7 +25,7 @@ container.append(sjolo(id));
 	        });
 	    };
 	    var callAfterValidation = function() {
-	        output.modal('Are you sure?', 'Do you really want to buy this movie?', 'Buy', onBuyClick);
+	        output.modal('Are you sure?', 'Do you really want to buy this song?', 'Buy', onBuyClick);
 	    };
 	    validateUserBalance(mjson.purchasePrice, callAfterValidation);
 	});
@@ -36,7 +35,7 @@ container.append(sjolo(id));
 	    var onRentClick = function() {
 	        var postData = JSON.stringify({ userId: framework.user.id});
 	        $.ajax({
-	            url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/' + id + '/rent',
+	            url: 'http://rentit.itu.dk/RentIt25/moofy.svc/songs/' + id + '/rent',
 	            type: 'POST',
 	            data: postData,
 	            contentType: 'application/json; charset=utf-8',
@@ -52,7 +51,7 @@ container.append(sjolo(id));
 	        });
 	    };
 	    var callAfterValidation = function() {
-	        output.modal('Are you sure?', 'Do you really want to rent this movie?', 'Rent', onRentClick);
+	        output.modal('Are you sure?', 'Do you really want to rent this song?', 'Rent', onRentClick);
 	    };
 	    validateUserBalance(mjson.rentalPrice, callAfterValidation);
 	});
@@ -65,12 +64,12 @@ function validateUserBalance(creditsNeeded, func) {
         }
 }
 
-function getMovieJSON(id)
+function getSongJSON(id)
 {
 	var json = "";
 	$.ajax
 	({
-		url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/' + id,
+		url: 'http://rentit.itu.dk/RentIt25/moofy.svc/songs/' + id,
 		type: 'GET',
 		dataType: 'json',
 		contentType: 'application/json; charset=utf-8',
@@ -81,7 +80,7 @@ function getMovieJSON(id)
 		},
 		error: function(msg)
 		{
-			alert("Movie not found");
+			alert("Song not found");
 		}
 	});
     return json;
@@ -92,7 +91,7 @@ function sjolo(id)
 	var s = "";
 	$.ajax
 	({
-		url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/' + id,
+		url: 'http://rentit.itu.dk/RentIt25/moofy.svc/songs/' + id,
 		type: 'GET',
 		dataType: 'json',
 		contentType: 'application/json; charset=utf-8',
@@ -103,7 +102,7 @@ function sjolo(id)
 		},
 		error: function(msg)
 		{
-			alert("Movie not found");
+			alert("Song not found");
 		}
 	});
 	return s;
@@ -113,19 +112,18 @@ function movie(data)
 	var s = "";
 	var votes = " votes";
 	if (data.numberOfVotes = 1) votes = " vote";
-	s+="<div style='height:450px'>\
-		<img src='" + data.coverUri + "' class='pull-left' style='width: 350px; height: 450px; padding: 3px; border: 1px solid #ddd; margin: 10px;'>\
+	s+="<div style='height:400px'>\
+		<img src='" + data.coverUri + "' class='pull-left' style='width: 400px; height: 400px; padding: 3px; border: 1px solid #ddd; margin: 10px;'>\
 		<div style='padding: 3px; margin: 10px;'><br>\
-		<p><font size='6'>" + data.title + "</font><font size='5'> - " + data.release + "</font></p>\
-		<p style='padding-top:15px'><b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + votes + "</p>\
-		<p><b>" + data.genres + "</b></p>\
+		<p><font size='6'>" + data.title + "</font></p>\
+		<p><font size='4'>" + data.album + " - " + data.artists + "</font></p>\
 		<hr>\
-		<p>" + data.description + "</p><p><b>Directors:</b> " + data.directors + "</p>\
+		<p><b>" + data.genres + "</p>\
+		<p>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + votes + "</p>\
 		<hr>\
 		<a id='buyButton' class='btn'>Buy - " + data.purchasePrice + " moneys</a>\
 		<a id='rentButton' class='btn'>Rent - " + data.rentalPrice + " moneys</a>\
 		</div></div>";
 	return $(s);
 }
-
 </script>
