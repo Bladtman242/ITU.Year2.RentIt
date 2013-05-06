@@ -1,23 +1,111 @@
 <script>
 var container = $("#container");
-container.append(sjolo(20));
+var id = 4;
+var mjson = getMovieJSON(id);
+
+container.append(sjolo(id));
+
+	$('#buyButton').click(function () {
+	    //TODO: Get actual user id and credits for current item
+	    var onBuyClick = function() {
+	        var postData = JSON.stringify({ userId: framework.user.id});
+	        $.ajax({
+	            url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/' + id + '/purchase',
+	            type: 'POST',
+	            data: postData,
+	            contentType: 'application/json; charset=utf-8',
+	            dataType: 'json',
+	            async: true,
+	            success: function(msg) {
+	                output.success('Success!', 'The item was bought.');
+	                framework.user.balance -= mjson.purchasePrice;
+	            },
+	            error: function(msg) {
+	                output.error('Error!', 'An error occured. Please try again.');
+	            }
+	        });
+	    };
+	    var callAfterValidation = function() {
+	        output.modal('Are you sure?', 'Do you really want to buy this movie?', 'Buy', onBuyClick);
+	    };
+	    validateUserBalance(mjson.purchasePrice, callAfterValidation);
+	});
+
+	$('#rentButton').click(function () {
+	    //TODO: Get actual user id and credits for current item
+	    var onRentClick = function() {
+	        var postData = JSON.stringify({ userId: framework.user.id});
+	        $.ajax({
+	            url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/' + id + '/rent',
+	            type: 'POST',
+	            data: postData,
+	            contentType: 'application/json; charset=utf-8',
+	            dataType: 'json',
+	            async: true,
+	            success: function(msg) {
+	                output.success('Success!', 'The item was rented.');
+	                framework.user.balance -= mjson.rentalPrice;
+	            },
+	            error: function(msg) {
+	                output.error('Error!', 'An error occured. Please try again.');
+	            }
+	        });
+	    };
+	    var callAfterValidation = function() {
+	        output.modal('Are you sure?', 'Do you really want to rent this movie?', 'Rent', onRentClick);
+	    };
+	    validateUserBalance(mjson.rentalPrice, callAfterValidation);
+	});
+
+function validateUserBalance(creditsNeeded, func) {
+    if (framework.user.balance >= creditsNeeded) {
+            func();
+        } else {
+            output.modal('Not enough credits', "You don't seem to have enough credits. Link to account site or something.");
+        }
+}
+
+function getMovieJSON(id)
+{
+	var json = "";
+	$.ajax
+	({
+		url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/' + id,
+		type: 'GET',
+		dataType: 'json',
+		contentType: 'application/json; charset=utf-8',
+		async: false,
+		success: function(data) 
+		{
+			json=data;
+		},
+		error: function(msg)
+		{
+			alert("Movie not found");
+		}
+	});
+    return json;
+}
 
 function sjolo(id)
 {
 	var s = "";
-	$.ajax({
-                url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/' + id,
-                type: 'GET',
-                dataType: 'json',
-                contentType: 'application/json; charset=utf-8',
-                async: false,
-                success: function(data) {
-					s=movie(data);
-                },
-                error: function(msg) {
-                    alert("Movie not found");
-                }
-            });
+	$.ajax
+	({
+		url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/' + id,
+		type: 'GET',
+		dataType: 'json',
+		contentType: 'application/json; charset=utf-8',
+		async: false,
+		success: function(data) 
+		{
+			s=movie(data);
+		},
+		error: function(msg)
+		{
+			alert("Movie not found");
+		}
+	});
 	return s;
 }
 function movie(data)
@@ -34,9 +122,10 @@ function movie(data)
 		<hr>\
 		<p>" + data.description + "</p><p><b>Directors:</b> " + data.directors + "</p>\
 		<hr>\
-		<button type='button' style='height:25px; width:130px'>Buy - " + data.purchasePrice + " moneys</button>\
-		<button type='button' style='height:25px; width:130px'>Rent - " + data.rentalPrice + " moneys</button>\
+		<a id='buyButton' class='btn'>Buy - " + data.purchasePrice + " moneys</a>\
+		<a id='rentButton' class='btn'>Rent - " + data.rentalPrice + " moneys</a>\
 		</div></div>";
 	return $(s);
 }
+
 </script>
