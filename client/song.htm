@@ -1,12 +1,12 @@
 <script>
 var container = $("#container");
-container.append(sjolo(20));
+container.append(sjolo(50));
 
 function sjolo(id)
 {
 	var s = "";
 	$.ajax({
-                url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/' + id,
+                url: 'http://rentit.itu.dk/RentIt25/moofy.svc/songs/' + id,
                 type: 'GET',
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
@@ -15,7 +15,7 @@ function sjolo(id)
 					s=movie(data);
                 },
                 error: function(msg) {
-                    alert("Movie not found");
+                    alert("Song not found");
                 }
             });
 	return s;
@@ -25,14 +25,14 @@ function movie(data)
 	var s = "";
 	var votes = " votes";
 	if (data.numberOfVotes = 1) votes = " vote";
-	s+="<div style='height:450px'>\
-		<img src='" + data.coverUri + "' class='pull-left' style='width: 350px; height: 450px; padding: 3px; border: 1px solid #ddd; margin: 10px;'>\
+	s+="<div style='height:400px'>\
+		<img src='" + data.coverUri + "' class='pull-left' style='width: 400px; height: 400px; padding: 3px; border: 1px solid #ddd; margin: 10px;'>\
 		<div style='padding: 3px; margin: 10px;'><br>\
-		<p><font size='6'>" + data.title + "</font><font size='5'> - " + data.release + "</font></p>\
-		<p style='padding-top:15px'><b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + votes + "</p>\
-		<p><b>" + data.genres + "</b></p>\
+		<p><font size='6'>" + data.title + "</font></p>\
+		<p><font size='4'>" + data.album + " - " + data.artists + "</font></p>\
 		<hr>\
-		<p>" + data.description + "</p><p><b>Directors:</b> " + data.directors + "</p>\
+		<p><b>" + data.genres + "</p>\
+		<p>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + votes + "</p>\
 		<hr>\
 		<button type='button' style='height:25px; width:130px'>Buy - " + data.purchasePrice + " moneys</button>\
 		<button type='button' style='height:25px; width:130px'>Rent - " + data.rentalPrice + " moneys</button>\
