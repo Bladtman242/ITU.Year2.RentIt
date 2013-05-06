@@ -1,6 +1,6 @@
 <script>
 var container = $("#container");
-container.append(sjolo(33));
+container.append(sjolo(4));
 
 function sjolo(id)
 {
@@ -27,8 +27,8 @@ function movie(data)
 		<div style='padding: 3px; margin: 10px;'>\
 		<br><p><font size='6'>" + data.title + "</font><font size='5'> - " + data.release + "</font></p><br>\
 		<p><b>" + data.genres + "</b></p><p>" + data.description + "</p><p><b>Directors:</b> " + data.directors + "</p>\
-		Imagine you could click >>here<< and buy this shit at this price: " + data.purchasePrice + "\
-		<br>… and rent it at this price: " + data.rentalPrice + "\
+		<button type='button'>Buy - " + data.purchasePrice + " moneys</button>\
+		<button type='button'>Rent - " + data.rentalPrice + " moneys</button>\
 		</div>";
 	return $(s);
 }
