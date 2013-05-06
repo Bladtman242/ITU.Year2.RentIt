@@ -1,0 +1,42 @@
+<script>
+var container = $("#container");
+container.append(sjolo(64));
+
+function sjolo(id)
+{
+	var s = "";
+	$.ajax({
+                url: 'http://rentit.itu.dk/RentIt25/moofy.svc/songs/' + id,
+                type: 'GET',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                async: false,
+                success: function(data) {
+					s=movie(data);
+                },
+                error: function(msg) {
+                    alert("Song not found");
+                }
+            });
+	return s;
+}
+function movie(data)
+{
+	var s = "";
+	var votes = " votes";
+	if (data.numberOfVotes = 1) votes = " vote";
+	s+="<div style='height:400px'>\
+		<img src='" + data.coverUri + "' class='pull-left' style='width: 400px; height: 400px; padding: 3px; border: 1px solid #ddd; margin: 10px;'>\
+		<div style='padding: 3px; margin: 10px;'><br>\
+		<p><font size='6'>" + data.title + "</font></p>\
+		<p><font size='4'>" + data.album + " - " + data.artists + "</font></p>\
+		<hr>\
+		<p><b>" + data.genres + "</p>\
+		<p>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + votes + "</p>\
+		<hr>\
+		<button type='button'>Buy - " + data.purchasePrice + " moneys</button>\
+		<button type='button'>Rent - " + data.rentalPrice + " moneys</button>\
+		</div></div>";
+	return $(s);
+}
+</script>
