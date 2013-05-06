@@ -1,6 +1,6 @@
 <script>
 var container = $("#container");
-container.append(sjolo(22));
+container.append(sjolo(20));
 
 function sjolo(id)
 {
@@ -29,7 +29,7 @@ function movie(data)
 		<img src='" + data.coverUri + "' class='pull-left' style='width: 350px; height: 450px; padding: 3px; border: 1px solid #ddd; margin: 10px;'>\
 		<div style='padding: 3px; margin: 10px;'><br>\
 		<p><font size='6'>" + data.title + "</font><font size='5'> - " + data.release + "</font></p>\
-		<p><b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + votes + "</p>\
+		<p style='padding-top:15px'><b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + votes + "</p>\
 		<p><b>" + data.genres + "</b></p>\
 		<hr>\
 		<p>" + data.description + "</p><p><b>Directors:</b> " + data.directors + "</p>\
