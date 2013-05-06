@@ -1,6 +1,6 @@
 <script>
 var container = $("#container");
-container.append(sjolo(4));
+container.append(sjolo(22));
 
 function sjolo(id)
 {
@@ -23,13 +23,20 @@ function sjolo(id)
 function movie(data)
 {
 	var s = "";
-	s+="<img src='" + data.coverUri + "' class='pull-left' width='350px' style='padding: 3px; border: 1px solid #ddd; margin: 10px;'>\
-		<div style='padding: 3px; margin: 10px;'>\
-		<br><p><font size='6'>" + data.title + "</font><font size='5'> - " + data.release + "</font></p><br>\
-		<p><b>" + data.genres + "</b></p><p>" + data.description + "</p><p><b>Directors:</b> " + data.directors + "</p>\
+	var votes = " votes";
+	if (data.numberOfVotes = 1) votes = " vote";
+	s+="<div style='height:450px'>\
+		<img src='" + data.coverUri + "' class='pull-left' style='width: 350px; height: 450px; padding: 3px; border: 1px solid #ddd; margin: 10px;'>\
+		<div style='padding: 3px; margin: 10px;'><br>\
+		<p><font size='6'>" + data.title + "</font><font size='5'> - " + data.release + "</font></p>\
+		<p><b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + votes + "</p>\
+		<p><b>" + data.genres + "</b></p>\
+		<hr>\
+		<p>" + data.description + "</p><p><b>Directors:</b> " + data.directors + "</p>\
+		<hr>\
 		<button type='button'>Buy - " + data.purchasePrice + " moneys</button>\
 		<button type='button'>Rent - " + data.rentalPrice + " moneys</button>\
-		</div>";
+		</div></div>";
 	return $(s);
 }
 </script>
