@@ -5,9 +5,15 @@
 <a class="carousel-control left" href="#carousel" data-slide="prev">&lsaquo;</a>
 <a class="carousel-control right" href="#carousel" data-slide="next">&rsaquo;</a>
 </div>
-<div class="pagination" >
-	<ul id="pagin">
-	</ul>
+<div >
+	<div class="pagination" id="paginDiv">
+		<ul id="pagin" >
+		</ul>
+	</div>
+	<form class="form-search" id="searchForm">
+		<input id="searchInput" type="text" class="input-medium search-query">
+		<button id="searchSubmit" type="submit" class="btn btn-primary">Search</button>
+	</form>
 </div>
 <div class="container">  
       <ul class="thumbnails" id="thumbs">
@@ -36,7 +42,7 @@ function initMovPage()
 					s=createMoviesCarousel(movs);					
                 },
                 error: function(msg) {
-                    alert("failed to connect to server, please try again");
+                    output.error("Error!","failed to connect to server, please try again");
                 }
             });
 
@@ -127,7 +133,9 @@ function createThumbContent(movs)
 		pagi += "<li><a href='javascript:setPage("+i+")'>"+i+"</a></li>";
 	}
 	pagi+="<li><a href='javascript:nextPage()'>Next</a></li>";
-	$("#pagin").append($(pagi));
+	var pagin = $("#pagin");
+	pagin.empty();
+	pagin.append($(pagi));
 	for(var i = 0; i<movs.length; i++)
 	{	
 		var listString="<li class='span3'><div class='thumbnail'><a class='internal' href='#movie?movieid="+movs[i].id+"'><img class='thumbListElem' src='"+movs[i].coverUri+"' alt='' border='0' title='"+movs[i].title+"' /></a><div class='caption thumbCapt'><h5>"+ movs[i].title+"</h5>Rating:&thinsp;"+movs[i].avgRating+"</div></div></li>";
@@ -158,4 +166,25 @@ function setPage(nr)
 	curPage = nr-1;
 	thumbs.append(pages[curPage]);
 }
+$("#searchSubmit").click(function() {
+	var val = $("#searchInput").val().trim();
+	var s = val ? "/"+val : "";
+	$.ajax({
+                url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/filter'+s,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function(movs) {
+					curCont = movs;	
+					createThumbContent(curCont);
+					setPage(1);
+                },
+                error: function(msg) {
+                    output.error("Error!","failed to connect to server, please try again");
+                }
+            });
+	return false;
+});
+	
 </script>
