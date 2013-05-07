@@ -1,8 +1,8 @@
 <script>
 var container = $("#container");
 var id = 5;
-var mjson = getMovieJSON(id);
-container.append(displayMovie(id));
+var data = getMovieJSON(id);
+container.append(displayMovie(data));
 
 	$('#buyButton').click(function () {
 	    //TODO: Get actual user id and credits for current item
@@ -17,7 +17,7 @@ container.append(displayMovie(id));
 	            async: true,
 	            success: function(msg) {
 	                output.success('Success!', 'The item was bought.');
-	                framework.user.balance -= mjson.purchasePrice;
+	                framework.user.balance -= data.purchasePrice;
 	            },
 	            error: function(msg) {
 	                output.error('Error!', 'An error occured. Please try again.');
@@ -27,7 +27,7 @@ container.append(displayMovie(id));
 	    var callAfterValidation = function() {
 	        output.modal('Are you sure?', 'Do you really want to buy this movie?', 'Buy', onBuyClick);
 	    };
-	    validateUserBalance(mjson.purchasePrice, callAfterValidation);
+	    validateUserBalance(data.purchasePrice, callAfterValidation);
 	});
 
 	$('#rentButton').click(function () {
@@ -43,7 +43,7 @@ container.append(displayMovie(id));
 	            async: true,
 	            success: function(msg) {
 	                output.success('Success!', 'The item was rented.');
-	                framework.user.balance -= mjson.rentalPrice;
+	                framework.user.balance -= data.rentalPrice;
 	            },
 	            error: function(msg) {
 	                output.error('Error!', 'An error occured. Please try again.');
@@ -53,7 +53,7 @@ container.append(displayMovie(id));
 	    var callAfterValidation = function() {
 	        output.modal('Are you sure?', 'Do you really want to rent this movie?', 'Rent', onRentClick);
 	    };
-	    validateUserBalance(mjson.rentalPrice, callAfterValidation);
+	    validateUserBalance(data.rentalPrice, callAfterValidation);
 	});
 
 function validateUserBalance(creditsNeeded, func) {
@@ -86,28 +86,7 @@ function getMovieJSON(id)
     return json;
 }
 
-function displayMovie(id)
-{
-	var s = "";
-	$.ajax
-	({
-		url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/' + id,
-		type: 'GET',
-		dataType: 'json',
-		contentType: 'application/json; charset=utf-8',
-		async: false,
-		success: function(data) 
-		{
-			s=movie(data);
-		},
-		error: function(msg)
-		{
-			alert("Movie not found");
-		}
-	});
-	return s;
-}
-function movie(data)
+function displayMovie(data)
 {
 	var s = "";
 	var votes = " votes";
@@ -124,7 +103,7 @@ function movie(data)
 		<a id='buyButton' class='btn'>Buy - " + data.purchasePrice + " moneys</a>\
 		<a id='rentButton' class='btn'>Rent - " + data.rentalPrice + " moneys</a>\
 		</div></div>";
-	return $(s);
+	return s;
 }
 
 </script>
