@@ -3,6 +3,15 @@ var container = $("#container");
 var id = 50;
 var data = getSongJSON(id);
 container.append(displaySong(data));
+$('#star').raty({ 
+	score: 0,
+	path: 'vendor/raty-2.5.2/lib/img/',
+	number: 10,
+	click: function(score)
+	{
+		alert(score);
+	}
+	});
 
 	$('#buyButton').click(function () {
 	    //TODO: Get actual user id and credits for current item
@@ -97,11 +106,12 @@ function displaySong(id)
 		<p><font size='6'>" + data.title + "</font></p>\
 		<p><font size='4'>" + data.album + " - " + data.artists + "</font></p>\
 		<hr>\
+		<div id='star' class='pull-right'></div><div class='pull-right' style='padding-right:8px'><b>Your vote:</b></div>\
+		<p><b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + votes + "</p>\
 		<p><b>" + data.genres + "</p>\
-		<p>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + votes + "</p>\
 		<hr>\
 		<a id='buyButton' class='btn'>Buy - " + data.purchasePrice + " moneys</a>\
-		<a id='rentButton' class='btn'>Rent - " + data.rentalPrice + " moneys</a>\
+		<a id='rentButton' class='btn'>Rent - " + data.rentalPrice + " moneys</a></b>\
 		</div></div>";
 	return s;
 }
