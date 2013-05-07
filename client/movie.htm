@@ -99,7 +99,7 @@ function displayMovie(data)
 {
 	var s = "";
 	var votes = " votes";
-	if (data.numberOfVotes = 1) votes = " vote";
+	if (data.numberOfVotes == 1) votes = " vote";
 	s+="<div style='height:450px'>\
 		<img src='" + data.coverUri + "' class='pull-left' style='width: 350px; height: 450px; padding: 3px; border: 1px solid #ddd; margin: 10px;'>\
 		<div style='padding: 3px; margin: 10px;'><br>\
