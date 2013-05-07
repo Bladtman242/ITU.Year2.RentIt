@@ -2,8 +2,7 @@
 var container = $("#container");
 var id = 5;
 var mjson = getMovieJSON(id);
-
-container.append(sjolo(id));
+container.append(displayMovie(id));
 
 	$('#buyButton').click(function () {
 	    //TODO: Get actual user id and credits for current item
@@ -87,7 +86,7 @@ function getMovieJSON(id)
     return json;
 }
 
-function sjolo(id)
+function displayMovie(id)
 {
 	var s = "";
 	$.ajax

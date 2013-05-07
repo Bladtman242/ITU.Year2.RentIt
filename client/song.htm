@@ -1,8 +1,8 @@
 <script>
 var container = $("#container");
-var id = 52;
+var id = 50;
 var mjson = getSongJSON(id);
-container.append(sjolo(id));
+container.append(displaySong(id));
 
 	$('#buyButton').click(function () {
 	    //TODO: Get actual user id and credits for current item
@@ -86,7 +86,7 @@ function getSongJSON(id)
     return json;
 }
 
-function sjolo(id)
+function displaySong(id)
 {
 	var s = "";
 	$.ajax
