@@ -1,0 +1,197 @@
+<h3>Highest Rated Songs</h3>	
+<div class="carousel slide span12" id="carousel">
+<div class="carousel-inner" id="innerCar">
+</div>
+<a class="carousel-control left" href="#carousel" data-slide="prev">&lsaquo;</a>
+<a class="carousel-control right" href="#carousel" data-slide="next">&rsaquo;</a>
+</div>
+<div >
+	<div class="pagination" id="paginDiv">
+		<ul id="pagin" >
+		</ul>
+	</div>
+	<form class="form-search" id="searchForm">
+		<input id="searchInput" type="text" class="input-medium search-query">
+		<button id="searchSubmit" type="submit" class="btn btn-primary">Search</button>
+	</form>
+</div>
+<div class="container">  
+      <ul class="thumbnails" id="thumbs">
+	  </ul>  
+<hr>  
+</div>
+<script>
+var curCont, curPage, pages;
+var thumbs = $("#thumbs");
+
+$("#innerCar").append(initMovPage);
+createThumbContent(curCont);
+setPage(1);
+function initMovPage()
+{
+    var s= "";
+	 $.ajax({
+                url: 'http://rentit.itu.dk/RentIt25/moofy.svc/songs/filter',
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function(songs) {
+					curCont = songs;
+					songs.sort(function(a,b){return b.avgRating - a.avgRating})
+					s=createMoviesCarousel(songs);					
+                },
+                error: function(msg) {
+                    output.error("Error!","failed to connect to server, please try again");
+                }
+            });
+
+	return s;
+}
+function createMoviesCarousel(songs)
+{
+		var length = songs.length;
+		var s = "";
+		if(length == 0) return;
+		var rest = length<9 ? length % 3 : 0;					
+		s+="<div class='item active'>\
+				<ul class='thumbnails'>\
+					<li class='span4'>\
+						<div class='thumbnail'>\
+							<a class='internal' href='#song?songid="+songs[0].id+"'><img class='carouselElem' src='"+songs[0].coverUri+"' alt='' border='0'/></a>\
+							<h4>"+songs[0].title+"</h4>\
+						</div>\
+					</li>";	
+		for (var i=1; i<9 && i<length - rest; i++)
+		{ 
+			if(i%3 == 0)
+			{
+				s += "<div class='item'>\
+						<ul class='thumbnails'>\
+							<li class='span4'>\
+								<div class='thumbnail'>\
+									<a class='internal' href='#songs?songid="+songs[i].id+"'><img class='carouselElem' src='"+songs[i].coverUri+"' alt='' border='0'/></a>\
+									<h4>"+songs[i].title+"</h4>\
+								</div>\
+							</li>";	
+			}
+			if(i%3 == 1)
+			{
+				s+= "<li class='span4'>\
+							<div class='thumbnail'>\
+								<a class='internal' href='#songs?songid="+songs[i].id+"'><img class='carouselElem' src='"+songs[i].coverUri+"' alt='' border='0'/></a>\
+								<h4>"+songs[i].title+"</h4>\
+							</div>\
+					</li>";
+			}
+			if(i%3 == 2)
+			{
+				s+=		   "<li class='span4'>\
+								<div class='thumbnail'>\
+									<a class='internal' href='#songs?songid="+songs[i].id+"'><img class='carouselElem' src='"+songs[i].coverUri+"' alt='' border='0'/></a>\
+									<h4>"+songs[i].title+"</h4>\
+								</div>\
+							</li>\
+						</ul>\
+					</div>";
+			}
+			}
+			if(rest == 1)
+			{
+				s += "<div class='item'>\
+						<ul class='thumbnails'>\
+							<li class='span4'>\
+								<div class='thumbnail'>\
+									<a class='internal' href='#songs?songid="+songs[length-1].id+"'><img class='carouselElem' src='"+songs[length-1].coverUri+"' alt='' border='0'/></a>\
+									<h4>"+songs[length-1].title+"</h4>\
+								</div>\
+							</li>\
+						</ul>\
+					</div>";
+			}
+			else if (rest == 2)
+			{
+				s += "<div class='item'>\
+							<ul class='thumbnails'>\
+								<li class='span4'>\
+									<div class='thumbnail'>\
+										<a class='internal' href='#songs?songid="+songs[length-2].id+"'><img class='carouselElem' src='"+songs[length-2].coverUri+"' alt='' border='0'/></a>\
+										<h4>"+songs[length-1].title+"</h4>\
+									</div>\
+								</li>\
+								<li class='span4'>\
+									<div class='thumbnail'>\
+										<a class='internal' href='#songs?songid="+songs[length-1].id+"'><img class='carouselElem' src='"+songs[length-1].coverUri+"' alt='' border='0'/></a>\
+										<h4>"+songs[length-1].title+"</h4>\
+									</div>\
+								</li>\
+							</ul>\
+						</div>";
+			}
+			return $(s);
+}
+function createThumbContent(songs)
+{	
+	var nrOfPages = (songs.length%12)==0 ? songs.length/12: songs.length/12 + 1;
+	var pagi = "<li><a href='javascript:prevPage()'>Prev</a></li>";
+	var ps = new Array();
+	for(var i = 1; i<=nrOfPages; i++)
+	{
+		pagi += "<li><a href='javascript:setPage("+i+")'>"+i+"</a></li>";
+	}
+	pagi+="<li><a href='javascript:nextPage()'>Next</a></li>";
+	var pagin = $("#pagin");
+	pagin.empty();
+	pagin.append($(pagi));
+	for(var i = 0; i<songs.length; i++)
+	{	
+		var listString="<li class='span3'><div class='thumbnail'><a class='internal' href='#songs?songid="+songs[i].id+"'><img class='thumbListElem' src='"+songs[i].coverUri+"' alt='' border='0' title='"+songs[i].title+"' /></a><div class='caption thumbCapt'><h5>"+ songs[i].title+"</h5>Rating:&thinsp;"+songs[i].avgRating+"</div></div></li>";
+		if (ps[Math.floor(i/12)]) {
+			ps[Math.floor(i/12)]+= listString;
+		} 
+		else {
+			ps[Math.floor(i/12)] = listString;
+		}
+	}
+	pages = ps;
+	curPage=1;
+}
+function nextPage()
+{
+	thumbs.empty();
+	thumbs.append(pages[++curPage] || pages[(curPage = 0)]);
+}
+function prevPage()
+{
+	thumbs.empty();
+	curPage = curPage-1<0 ? pages.length-1 : curPage-1;
+	thumbs.append(pages[curPage]);
+}
+function setPage(nr)
+{
+	thumbs.empty();
+	curPage = nr-1;
+	thumbs.append(pages[curPage]);
+}
+$("#searchSubmit").click(function() {
+	var val = $("#searchInput").val().trim();
+	var s = val ? "/"+val : "";
+	$.ajax({
+                url: 'http://rentit.itu.dk/RentIt25/moofy.svc/songs/filter'+s,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function(songs) {
+					curCont = songs;	
+					createThumbContent(curCont);
+					setPage(1);
+                },
+                error: function(msg) {
+                    output.error("Error!","failed to connect to server, please try again");
+                }
+            });
+	return false;
+});
+	
+</script>
