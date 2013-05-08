@@ -8,6 +8,7 @@
         </script>
         <script src="vendor/jquery.cookie.js"></script>
         <script src="vendor/jquery.md5.js"></script>
+		<script src="vendor/raty-2.5.2/lib/jquery.raty.min.js"></script>
         <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
         <style type="text/css">
             html {
@@ -89,16 +90,6 @@
 				overflow:hidden; 
 				text-overflow:ellipsis;
 			}
-			#paginDiv{
-				display:inline-block;
-				padding-top:10px;
-				vertical-allign:middle;
-			}
-			#searchForm{
-				display:inline-block;
-				padding-left:452px;
-				vertical-allign:middle;
-			}
         </style>
         <script src="framework.js"></script>
         <script src="output.js"></script>
@@ -119,13 +110,13 @@
                         <div class="control-group">
                             <label class="control-label" for="username">Username</label>
                             <div class="controls">
-                                <input id="signName" name="username" type="text" placeholder="Username">
+                                <input id="signName" name="username" type="text" placeholder="JohnDoe1337">
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="control-label" for="password">Password</label>
                             <div class="controls">
-                                <input id="signPass" name="password" type="password" placeholder="Password">
+                                <input id="signPass" name="password" type="password" placeholder="secretive">
                             </div>
                         </div>
                         <div class="control-group">
@@ -154,8 +145,8 @@
                 <div class="navbar-inner">
                     <ul class="nav">
                         <li><a href="#home" class="internal"><i class="icon-home"></i> Home</a></li>
-                        <li><a href="#listMovies" class="internal"><i class="icon-film"></i> Movies</a></li>
-                        <li><a href="#listSongs" class="internal"><i class="icon-music"></i> Songs</a></li>
+                        <li><a href="#movie" class="internal"><i class="icon-film"></i> Movies</a></li>
+                        <li><a href="#song" class="internal"><i class="icon-music"></i> Songs</a></li>
                         <li><a href="#account" class="internal"><i class="icon-user"></i> Account</a></li>
                         <li><a href="#about" class="internal"><i class="icon-question-sign"></i> About</a></li>
                     </ul>
@@ -273,6 +264,7 @@
 					}
 				});
 			}
+			
         </script>
     </body>
 </html>

@@ -239,12 +239,12 @@ namespace moofy.Backend {
                                                 "OR description LIKE '%" + filter + "%' " +
                                                 "OR Files.id IN (" +
                                                     "SELECT fid FROM GenreFile " +
-                                                    "WHERE gid =(" +
+                                                    "WHERE gid IN (" +
                                                         "SELECT id FROM Genre " +
                                                         "WHERE name Like '%" + filter + "%' )) " +
                                                 "OR Song.id IN (" +
                                                     "SELECT sid FROM SongArtist " +
-                                                    "WHERE aid =(" +
+                                                    "WHERE aid IN(" +
                                                          "SELECT id FROM Director " +
                                                          "WHERE name Like '%" + filter + "%')))"
                                                 , connection);

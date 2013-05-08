@@ -1,0 +1,118 @@
+<script>
+var container = $("#container");
+var id = 50;
+var data = getSongJSON(id);
+container.append(displaySong(data));
+$('#star').raty({ 
+	score: 0,
+	path: 'vendor/raty-2.5.2/lib/img/',
+	number: 10,
+	click: function(score)
+	{
+		alert(score);
+	}
+	});
+
+	$('#buyButton').click(function () {
+	    //TODO: Get actual user id and credits for current item
+	    var onBuyClick = function() {
+	        var postData = JSON.stringify({ userId: framework.user.id});
+	        $.ajax({
+	            url: 'http://rentit.itu.dk/RentIt25/moofy.svc/songs/' + id + '/purchase',
+	            type: 'POST',
+	            data: postData,
+	            contentType: 'application/json; charset=utf-8',
+	            dataType: 'json',
+	            async: true,
+	            success: function(msg) {
+	                output.success('Success!', 'The item was bought.');
+	                framework.user.balance -= data.purchasePrice;
+	            },
+	            error: function(msg) {
+	                output.error('Error!', 'An error occured. Please try again.');
+	            }
+	        });
+	    };
+	    var callAfterValidation = function() {
+	        output.modal('Are you sure?', 'Do you really want to buy this song?', 'Buy', onBuyClick);
+	    };
+	    validateUserBalance(data.purchasePrice, callAfterValidation);
+	});
+
+	$('#rentButton').click(function () {
+	    //TODO: Get actual user id and credits for current item
+	    var onRentClick = function() {
+	        var postData = JSON.stringify({ userId: framework.user.id});
+	        $.ajax({
+	            url: 'http://rentit.itu.dk/RentIt25/moofy.svc/songs/' + id + '/rent',
+	            type: 'POST',
+	            data: postData,
+	            contentType: 'application/json; charset=utf-8',
+	            dataType: 'json',
+	            async: true,
+	            success: function(msg) {
+	                output.success('Success!', 'The item was rented.');
+	                framework.user.balance -= data.rentalPrice;
+	            },
+	            error: function(msg) {
+	                output.error('Error!', 'An error occured. Please try again.');
+	            }
+	        });
+	    };
+	    var callAfterValidation = function() {
+	        output.modal('Are you sure?', 'Do you really want to rent this song?', 'Rent', onRentClick);
+	    };
+	    validateUserBalance(data.rentalPrice, callAfterValidation);
+	});
+
+function validateUserBalance(creditsNeeded, func) {
+    if (framework.user.balance >= creditsNeeded) {
+            func();
+        } else {
+            output.modal('Not enough credits', "You don't seem to have enough credits. Link to account site or something.");
+        }
+}
+
+function getSongJSON(id)
+{
+	var json = "";
+	$.ajax
+	({
+		url: 'http://rentit.itu.dk/RentIt25/moofy.svc/songs/' + id,
+		type: 'GET',
+		dataType: 'json',
+		contentType: 'application/json; charset=utf-8',
+		async: false,
+		success: function(data) 
+		{
+			json=data;
+		},
+		error: function(msg)
+		{
+			alert("Song not found");
+		}
+	});
+    return json;
+}
+
+function displaySong(id)
+{
+	var s = "";
+	var votes = " votes";
+	if (data.numberOfVotes == 1) votes = " vote";
+	s+="<div style='height:400px'>\
+		<img src='" + data.coverUri + "' class='pull-left' style='width: 400px; height: 400px; padding: 3px; border: 1px solid #ddd; margin: 10px;'>\
+		<div style='padding: 3px; margin: 10px;'><br>\
+		<p><font size='6'>" + data.title + "</font></p>\
+		<p><font size='4'>" + data.album + " - " + data.artists + "</font></p>\
+		<hr>\
+		<div id='star' class='pull-right'></div><div class='pull-right' style='padding-right:8px'><b>Your vote:</b></div>\
+		<p><b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + votes + "</p>\
+		<p><b>" + data.genres + "</p>\
+		<hr>\
+		<a id='buyButton' class='btn'>Buy - " + data.purchasePrice + " moneys</a>\
+		<a id='rentButton' class='btn'>Rent - " + data.rentalPrice + " moneys</a></b>\
+		</div></div>";
+	return s;
+}
+</script>
