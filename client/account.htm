@@ -13,6 +13,11 @@
 </div>
 
 <script>
+    if(!framework.user) {
+        framework.loadPage(framework.defaultPage);
+        output.error('Login required.', 'You need to log in to see this page');
+    } else {
+
     var content;
     content = $('#account-content');
 
@@ -195,5 +200,5 @@
 
         $('#userMovies').append(html);
     }*/
-
+    }
 </script>

@@ -75,6 +75,7 @@ var framework = {
                 if(pushState) history.pushState({"page": pageName}, pageName, "#"+pageName);
             });
         },
+
     
     /**
      * The currently logged in user, null if none is logged in.
