@@ -70,7 +70,7 @@ function createMoviesCarousel(songs)
 						<ul class='thumbnails'>\
 							<li class='span4'>\
 								<div class='thumbnail'>\
-									<a class='internal' href='#songs?songid="+songs[i].id+"'><img class='carouselElem' src='"+songs[i].coverUri+"' alt='' border='0'/></a>\
+									<a class='internal' href='index.htm?songId="+songs[i].id+"#song'><img class='carouselElem' src='"+songs[i].coverUri+"' alt='' border='0'/></a>\
 									<h4>"+songs[i].title+"</h4>\
 								</div>\
 							</li>";	
@@ -79,7 +79,7 @@ function createMoviesCarousel(songs)
 			{
 				s+= "<li class='span4'>\
 							<div class='thumbnail'>\
-								<a class='internal' href='#songs?songid="+songs[i].id+"'><img class='carouselElem' src='"+songs[i].coverUri+"' alt='' border='0'/></a>\
+								<a class='internal' href='index.htm?songId="+songs[i].id+"#song'><img class='carouselElem' src='"+songs[i].coverUri+"' alt='' border='0'/></a>\
 								<h4>"+songs[i].title+"</h4>\
 							</div>\
 					</li>";
@@ -88,7 +88,7 @@ function createMoviesCarousel(songs)
 			{
 				s+=		   "<li class='span4'>\
 								<div class='thumbnail'>\
-									<a class='internal' href='#songs?songid="+songs[i].id+"'><img class='carouselElem' src='"+songs[i].coverUri+"' alt='' border='0'/></a>\
+									<a class='internal' href='index.htm?songId="+songs[i].id+"#song'><img class='carouselElem' src='"+songs[i].coverUri+"' alt='' border='0'/></a>\
 									<h4>"+songs[i].title+"</h4>\
 								</div>\
 							</li>\
@@ -102,7 +102,7 @@ function createMoviesCarousel(songs)
 						<ul class='thumbnails'>\
 							<li class='span4'>\
 								<div class='thumbnail'>\
-									<a class='internal' href='#songs?songid="+songs[length-1].id+"'><img class='carouselElem' src='"+songs[length-1].coverUri+"' alt='' border='0'/></a>\
+									<a class='internal' href='#song?songid="+songs[length-1].id+"'><img class='carouselElem' src='"+songs[length-1].coverUri+"' alt='' border='0'/></a>\
 									<h4>"+songs[length-1].title+"</h4>\
 								</div>\
 							</li>\
@@ -115,13 +115,13 @@ function createMoviesCarousel(songs)
 							<ul class='thumbnails'>\
 								<li class='span4'>\
 									<div class='thumbnail'>\
-										<a class='internal' href='#songs?songid="+songs[length-2].id+"'><img class='carouselElem' src='"+songs[length-2].coverUri+"' alt='' border='0'/></a>\
+										<a class='internal' href='#song?songid="+songs[length-2].id+"'><img class='carouselElem' src='"+songs[length-2].coverUri+"' alt='' border='0'/></a>\
 										<h4>"+songs[length-1].title+"</h4>\
 									</div>\
 								</li>\
 								<li class='span4'>\
 									<div class='thumbnail'>\
-										<a class='internal' href='#songs?songid="+songs[length-1].id+"'><img class='carouselElem' src='"+songs[length-1].coverUri+"' alt='' border='0'/></a>\
+										<a class='internal' href='#song?songid="+songs[length-1].id+"'><img class='carouselElem' src='"+songs[length-1].coverUri+"' alt='' border='0'/></a>\
 										<h4>"+songs[length-1].title+"</h4>\
 									</div>\
 								</li>\
@@ -145,7 +145,7 @@ function createThumbContent(songs)
 	pagin.append($(pagi));
 	for(var i = 0; i<songs.length; i++)
 	{	
-		var listString="<li class='span3'><div class='thumbnail'><a class='internal' href='#songs?songid="+songs[i].id+"'><img class='thumbListElem' src='"+songs[i].coverUri+"' alt='' border='0' title='"+songs[i].title+"' /></a><div class='caption thumbCapt'><h5>"+ songs[i].title+"</h5>Rating:&thinsp;"+songs[i].avgRating+"</div></div></li>";
+		var listString="<li class='span3'><div class='thumbnail'><a class='internal' href='index.htm?songId="+songs[i].id+"#song'><img class='thumbListElem' src='"+songs[i].coverUri+"' alt='' border='0' title='"+songs[i].title+"' /></a><div class='caption thumbCapt'><h5>"+ songs[i].title+"</h5>Rating:&thinsp;"+songs[i].avgRating+"</div></div></li>";
 		if (ps[Math.floor(i/12)]) {
 			ps[Math.floor(i/12)]+= listString;
 		} 

@@ -92,7 +92,76 @@
             </div>\
         </form>');
     
-    var upload_song = $("<p>Upload song</p>");
+    var upload_song = $('<form id="fileForm" class="form-horizontal" enctype="multipart/form-data">\
+                <legend>Upload song file</legend>\
+                <div class="control-group">\
+                    <label class="control-label" for="inputFile">File</label>\
+                    <div class="controls">\
+                        <input type="file" id="inputFile" name="file" title="Browse for file to upload" />\
+                    </div>\
+                </div>\
+            </form>\
+            <form id="uploadSong" class="form-horizontal">\
+            <legend>Create new song</legend>\
+            <div class="control-group">\
+                <label class="control-label" for="inputArtist">Artist</label>\
+                <div class="controls">\
+                    <input type="text" id="inputArtist" placeholder="30 Seconds to Mars" required/>\
+                </div>\
+            </div>\
+            <div class="control-group">\
+                <label class="control-label" for="inputTitle">Title</label>\
+                <div class="controls">\
+                    <input type="text" id="inputTitle" placeholder="The Sky is the Limit" required/>\
+                </div>\
+            </div>\
+            <div class="control-group">\
+                <label class="control-label" for="inputAlbum">Album</label>\
+                <div class="controls">\
+                    <input type="text" id="inputAlbum" placeholder="Music Reboot" required/>\
+                </div>\
+            </div>\
+            <div class="control-group">\
+                <label class="control-label" for="inputRelease">Release year</label>\
+                <div class="controls">\
+                    <input type="number" id="inputRelease" placeholder="2000" min="1000" max="3000" required/>\
+                </div>\
+            </div>\
+            <div class="control-group">\
+                <label class="control-label" for="inputGenres">Genres</label>\
+                <div class="controls">\
+                    <textarea id="inputGenres" placeholder="disco,dance,power-rock" required></textarea>\
+                    <span class="help-block">Comma-separated list</span>\
+                </div>\
+            </div>\
+            <div class="control-group">\
+                <label class="control-label" for="inputRental">Rental price</label>\
+                <div class="controls">\
+                    <input type="number" id="inputRental" placeholder="2" required/>\
+                </div>\
+            </div>\
+            <div class="control-group">\
+                <label class="control-label" for="inputPurchase">Purchase price</label>\
+                <div class="controls">\
+                    <input type="number" id="inputPurchase" placeholder="2" required/>\
+                </div>\
+            </div>\
+            <div class="control-group">\
+                <label class="control-label" for="inputCoverUri">Cover URI</label>\
+                <div class="controls">\
+                    <input type="url" id="inputCoverUri" placeholder="http://swaggerjagger.com/secretcoveruri.png" required/>\
+                </div>\
+            </div>\
+            <div class="control-group">\
+                <label class="control-label" for="inputDescription">Description</label>\
+                <div class="controls">\
+                    <textarea id="inputDescription" placeholder="Lorem ipsum solor dit amet..." required></textarea>\
+                </div>\
+            </div>\
+            <div class="form-actions">\
+                <button id="uploadSongSubmit" class="btn btn-primary">Create</button>\
+            </div>\
+        </form>');
     
     var tmp_id = -1337;
     
@@ -142,7 +211,7 @@
                     }
                     else {
                         var submitObject = {
-                            managerid: 1,
+                            managerid: framework.user.id,
                             tmpid: tmp_id,
                             title: $("#inputTitle").val(),
                             release: $("#inputRelease").val(),
@@ -178,6 +247,76 @@
                 break;
             case('manager-upload-song-link'):
                 $mng_content.html(upload_song);
+                
+                $("#inputFile").change(function() {
+                    $("#inputFile").css('opacity','0.4');
+                    var formData = new FormData($('#fileForm')[0]);
+                    $.ajax({
+                        url: "http://rentit.itu.dk/RentIt25/moofy.svc/songs/upload",
+                        type: 'POST',
+                        success: function(data) {
+                            if(data.success) {
+                                $("#inputFile").hide();
+                                $("#fileForm .controls").append('<span id="tmpId">FILE_TMP_ID: '+data.tmpid+'</span>');
+                                tmp_id = data.tmpid;
+                            }
+                            else {
+                                alert("Fileupload failed (invalid file?)");
+                            }
+                            $("#inputFile").css('opacity','1');
+                        },
+                        error: function(data) {
+                            alert("A server or connnection error was encountered while uploading the file. Fileupload failed.");
+                            $("#inputFile").css('opacity','1');
+                        },
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        dataType: "json",
+                    });
+                });
+                
+                $("#uploadSong").submit(function() {
+                    if(tmp_id <= 0) {
+                        alert("Please upload a song file before submitting the information!");
+                        return false;
+                    }
+                    else {
+                        var submitObject = {
+                            managerid: framework.user.id,
+                            tmpid: tmp_id,
+                            title: $("#inputTitle").val(),
+                            artist: $("#inputArtist").val(),
+                            album: $("#inputAlbum").val(),
+                            release: $("#inputRelease").val(),
+                            genres: $("#inputGenres").val().split(","),
+                            description: $("#inputDescription").val(),
+                            rentalPrice: $("#inputRental").val(),
+                            purchasePrice: $("#inputPurchase").val(),
+                            coverUri: $("#inputCoverUri").val()
+                        };
+                        
+                        $.ajax({
+                            url: 'http://rentit.itu.dk/RentIt25/moofy.svc/songs/create',
+                            type: 'POST',
+                            data: JSON.stringify(submitObject),
+                            contentType: "application/json",
+                            dataType: "json",
+                            success: function(data) {
+                                if(data.success) {
+                                    alert("Song created - thanks a bunch, brah. In an ideal world you would've been redirected to song #"+data.id);
+                                }
+                                else {
+                                    alert("Failed to create song somehow :(");
+                                }
+                            },
+                            error: function(data) {
+                                alert("Connection or server error!");
+                            }
+                        });
+                        return false;
+                    }
+                });
                 break;
         }
     });

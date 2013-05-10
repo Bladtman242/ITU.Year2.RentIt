@@ -1,6 +1,6 @@
 <script>
 var container = $("#container");
-var id = 5;
+var id = framework.query.movieId;
 var data = getMovieJSON(id);
 container.append(displayMovie(data));
 $('#star').raty({ 
@@ -9,12 +9,17 @@ $('#star').raty({
 	number: 10,
 	click: function(score)
 	{
-		var postData = JSON.stringify({ userId: framework.user.id});
-		alert(postData);
+		var postData = {};
+		if (framework.user == null)
+			output.error('Error!', 'You must be logged in to rate a movie');
+		else
+		{
+		postData.userId = framework.user.id;
+		postData.rating = score;
 	        $.ajax({
 	            url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/' + id + '/rate',
 	            type: 'POST',
-	            data: postData,
+	            data: JSON.stringify(postData),
 	            contentType: 'application/json; charset=utf-8',
 	            dataType: 'json',
 	            async: true,
@@ -25,6 +30,7 @@ $('#star').raty({
 	                output.error('Error!', 'An error occured. Please try again.');
 	            }
 	        });
+		}
 	}
 	});
 
