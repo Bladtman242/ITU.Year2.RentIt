@@ -60,12 +60,32 @@ With access to the .NET framework, we considered to make use of the Entity Frame
 
 
 \subsubsection{From Entities to Classes}
-Nævn ét eksempel på en entity -> objekt mapning. Husk - kun backend.
+Although supporting declarative and functional features, C\# has been designed with the object oriented paradigm in mind \cite{csharpecma}, and as such we decided to use an object oriented approach for our back end solution. 
 
+We created several object oriented containers (classes) capable of holding the data of our web service. An example of our internal data classes capable of holding media can be seen in Figure ~\ref{fig:orm}.
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.7]{./p1design/orm.png}
+	\caption{Example of our oject oriented representation of the datamodel.}
+	\label{fig:orm}
+\end{figure}
+
+This object oriented structure is derived from the IS-A relationship of the file concept in our database with general attributes (C\# properties) in the super class and unique attributes in the sub classes.
 
 \subsubsection{Lazy loading}
-Nævn det.
-Giv et eksempel.
+
+Our objects are designed with \emph{lazy loading} in cases where a seperate database table is needed in order to set a property. Lazy loading is a design pattern, which defers the initialization of a variable until the variable is needed for the first time. This means that when an instance of the user class is prompted to answer if the user is an administrator/manager, the answer will be loaded and stored in the object for future reference. If the user object is never asked for the value of this property, then the value will never be retrieved from the database. In practice this looks like shown in Figure ~\ref{fig:lazyload}.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=1]{./p1design/lazyload.png}
+	\caption{Example of our use of lazy loading. A property from other tables is loaded when read for the first time.}
+	\label{fig:lazyload}
+\end{figure}
+
+
+This design has potential to increase the performance of our solution in cases where, for instance, only the username of a user object is of interest, since no extra queries or joins with other database tables will be executed. In hindsight our design does not need this feature, as the lazy loaded properties are used extensively, thus causing several queries per object on the average. A solution with one query and joined tables might have been preferable, since the database would then not have to handshake, allocate connection buffers, etc. several times per object. As such, with regards to our use of lazy loading, we might have fell victim to "premature optimization" \cite{premoptim}, but we have no test measurements of the actual performance loss.
+
 
 \subsubsection{Supported workflows}
 Nævn at alt er understøttet.
