@@ -27,6 +27,32 @@ var framework = {
         _full: location.search.substring(1)
     },
     
+    loadQuery: function() {
+        framework.query._full = location.search.substring(1)
+        var qstr = framework.query._full;
+        var qstrLen = qstr.length;
+        var keyAccumulator = "";
+        var valueAccumulator = "";
+        for(var i = 0; i < qstrLen; i++) {
+            if(qstr[i] == "=") {
+                i++;
+                for(; i < qstrLen; i++) {
+                    if(qstr[i] == "&") {
+                        framework.query[keyAccumulator] = valueAccumulator;
+                        keyAccumulator = "";
+                        valueAccumulator = "";
+                        break;
+                    }
+                    valueAccumulator += qstr[i];
+                }
+            }
+            else {
+                keyAccumulator += qstr[i];
+            }
+        }
+        framework.query[keyAccumulator] = valueAccumulator;
+    },
+    
     /**
      * loadPage loads a page from its given name. The pushState arguments determines whether
      * a new history frame should be pushed (default true). This is used to preserve history.
@@ -37,6 +63,7 @@ var framework = {
             if(pushState == null) pushState = true;
             //Query default empty
             if(query == null) query = "";
+            framework.loadQuery();
             
             //Get page into #containe
             framework.container.load(pageName+".htm", function(response, status, xhr) {
@@ -113,28 +140,7 @@ var framework = {
 };
 
 //Load query properties into framework.query.
-var qstr = framework.query._full;
-var qstrLen = qstr.length;
-var keyAccumulator = "";
-var valueAccumulator = "";
-for(var i = 0; i < qstrLen; i++) {
-    if(qstr[i] == "=") {
-        i++;
-        for(; i < qstrLen; i++) {
-            if(qstr[i] == "&") {
-                framework.query[keyAccumulator] = valueAccumulator;
-                keyAccumulator = "";
-                valueAccumulator = "";
-                break;
-            }
-            valueAccumulator += qstr[i];
-        }
-    }
-    else {
-        keyAccumulator += qstr[i];
-    }
-}
-framework.query[keyAccumulator] = valueAccumulator;
+framework.loadQuery();
 
 //Handle history pop-event: Pop history frame (back/forward navigration)
 window.onpopstate = function(event) {
