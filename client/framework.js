@@ -32,9 +32,11 @@ var framework = {
      * a new history frame should be pushed (default true). This is used to preserve history.
      * If set to false, the step will not be recalled in history.
      */
-    loadPage: function(pageName,pushState) {
+    loadPage: function(pageName,pushState,query) {
             //Push State default true
             if(pushState == null) pushState = true;
+            //Query default empty
+            if(query == null) query = "";
             
             //Get page into #containe
             framework.container.load(pageName+".htm", function(response, status, xhr) {
@@ -58,9 +60,32 @@ var framework = {
                 $("a.internal").click(function() {
                     var href = $(this).attr("href");
                     
-                    //Validate link as internal
-                    if(true) {
-                        framework.loadPage(href.substring(1));
+                    var linkValid = true;
+                    
+                    //Get query and hash from href and validate.
+                    var hrefLen = href.length;
+                    var query = null;
+                    var hash = "";
+                    for(var i = 0; i < hrefLen; i++) {
+                        if(href[i] == "?") {
+                            query = "?";
+                            i++;
+                            for(; i < hrefLen; i++) {
+                                if(href[i] == "#") break;
+                                query += href[i];
+                            }
+                        }
+                        if(href[i] == "#") {
+                            i++;
+                            for(; i < hrefLen; i++) {
+                                hash += href[i];
+                            }
+                        }
+                    }
+                    if(hash == "") linkValid = false;
+                    
+                    if(linkValid) {
+                        framework.loadPage(hash,true,query);
                         
                         //Stop link from working normally
                         return false;
@@ -72,7 +97,7 @@ var framework = {
                 });
                 
                 //Push history frame.
-                if(pushState) history.pushState({"page": pageName}, pageName, "#"+pageName);
+                if(pushState) history.pushState({"page": pageName}, pageName, query+"#"+pageName);
             });
         },
     
