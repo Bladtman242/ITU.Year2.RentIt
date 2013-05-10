@@ -1,6 +1,6 @@
 <script>
 var container = $("#container");
-var id = 5;
+var id = framework.query.movieId;
 var data = getMovieJSON(id);
 container.append(displayMovie(data));
 $('#star').raty({ 
