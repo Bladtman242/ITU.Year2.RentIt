@@ -24,7 +24,7 @@ namespace moofy.Backend {
                                      "year = " + song.Year + ", " +
                                      "coverURI = '" + song.CoverUri.Replace("'", "''") + "'" +
                                      "WHERE id =" + song.Id +
-                                     "UPDATE Song SET album = '" + song.Album.Replace("'", "''") + "', " +
+                                     "UPDATE Song SET album = '" + song.Album.Replace("'", "''") + "' " +
                                      "WHERE id = " + song.Id);
 
             return command.ExecuteNonQuery() > 0;
