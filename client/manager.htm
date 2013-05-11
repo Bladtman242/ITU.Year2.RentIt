@@ -306,8 +306,6 @@
                                 coverUri: $("#inputCoverUri").val()
                             };
                             
-                            alert(JSON.stringify(submitObject));
-                            
                             $.ajax({
                                 url: 'http://rentit.itu.dk/RentIt25/moofy.svc/songs/create',
                                 type: 'POST',
@@ -325,7 +323,6 @@
                                 },
                                 error: function(data) {
                                     alert("Connection or server error!");
-                                    alert(JSON.stringify(data));
                                 }
                             });
                             return false;
