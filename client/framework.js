@@ -24,11 +24,15 @@ var framework = {
      * query.<property>; in this example query.movie will return 2.
      */
     query: {
-        _full: location.search.substring(1)
+        _full: ""
     },
     
-    loadQuery: function() {
-        framework.query._full = location.search.substring(1)
+    loadQuery: function(q) {
+        framework.query = {};
+        framework.query._full = location.search.substring(1);
+        
+        if(q) framework.query._full = q;
+        
         var qstr = framework.query._full;
         var qstrLen = qstr.length;
         var keyAccumulator = "";
@@ -62,8 +66,13 @@ var framework = {
             //Push State default true
             if(pushState == null) pushState = true;
             //Query default empty
-            if(query == null) query = "";
-            framework.loadQuery();
+            if(query == null) {
+                query = "";
+                framework.loadQuery();
+            }
+            else {
+                framework.loadQuery(query);
+            }
             
             //Get page into #containe
             framework.container.load(pageName+".htm", function(response, status, xhr) {
@@ -91,11 +100,10 @@ var framework = {
                     
                     //Get query and hash from href and validate.
                     var hrefLen = href.length;
-                    var query = null;
+                    var query = "";
                     var hash = "";
                     for(var i = 0; i < hrefLen; i++) {
                         if(href[i] == "?") {
-                            query = "?";
                             i++;
                             for(; i < hrefLen; i++) {
                                 if(href[i] == "#") break;
@@ -124,7 +132,7 @@ var framework = {
                 });
                 
                 //Push history frame.
-                if(pushState) history.pushState({"page": pageName}, pageName, query+"#"+pageName);
+                if(pushState) history.pushState({"page": pageName, "query": query}, pageName, "?"+query+"#"+pageName);
             });
         },
 
@@ -146,8 +154,12 @@ framework.loadQuery();
 //Handle history pop-event: Pop history frame (back/forward navigration)
 window.onpopstate = function(event) {
     var page = framework.defaultPage;
-    if(event.state != null) page = event.state.page;
-    framework.loadPage(page,false);
+    var query = "";
+    if(event.state != null) {
+        page = event.state.page;
+        query = query;
+    }
+    framework.loadPage(page,false,query);
 };
 
 $(document).ready(function() {
@@ -155,7 +167,7 @@ $(document).ready(function() {
     
     //If a page (hash) is set:
     if(location.hash != "") {
-        framework.loadPage(location.hash.substring(1));
+        framework.loadPage(location.hash.substring(1),true,location.search.substring(1));
     }
     else {
         framework.loadPage(framework.defaultPage);
