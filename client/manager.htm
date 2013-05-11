@@ -427,7 +427,31 @@
             $("#uploadSongSubmit").text("Update information");
             
             //Load values
-            
+            $.ajax
+            ({
+                url: 'http://rentit.itu.dk/RentIt25/moofy.svc/songs/' + framework.query.id,
+                type: 'GET',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                async: false,
+                success: function(data) 
+                {
+                    $("#inputArtist").val(data.artists.join(","));
+                    $("#inputTitle").val(data.title);
+                    $("#inputAlbum").val(data.album);
+                    $("#inputRelease").val(data.release);
+                    $("#inputGenres").val(data.genres.join(","));
+                    $("#inputRental").val(data.rentalPrice);
+                    $("#inputPurchase").val(data.purchasePrice);
+                    $("#inputCoverUri").val(data.coverUri);
+                    $("#inputDescription").val(data.description);
+                },
+                error: function(msg)
+                {
+                    alert("Movie not found :(");
+                    framework.loadPage("manager");
+                }
+            });
         }
         else {
             $("#manager-overview-link").click();

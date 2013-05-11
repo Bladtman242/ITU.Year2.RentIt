@@ -3,6 +3,12 @@ var container = $("#container");
 var id = framework.query.songId;
 var data = getSongJSON(id);
 container.append(displaySong(data));
+
+if(framework.user && framework.user.admin) {
+    //Show edit and delete buttons
+    $("#container").prepend('<div class="pull-right" style="text-align: right;"><a href="?edit=song&id='+id+'#manager" class="internal btn btn-inverse" style="margin-bottom: 5px;">Edit song</a><br><a href="#404" class="internal btn btn-primary">Delete</a></div>');
+}
+
 $('#star').raty({ 
 	score: data.avgRating,
 	path: 'vendor/raty-2.5.2/lib/img/',
