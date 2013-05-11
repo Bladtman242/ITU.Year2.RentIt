@@ -314,7 +314,8 @@
                                 dataType: "json",
                                 success: function(data) {
                                     if(data.success) {
-                                        alert("Song created - thanks a bunch, brah. In an ideal world you would've been redirected to song #"+data.id);
+                                        alert("Song created - thanks a bunch, brah. You will now be redirected to song #"+data.id);
+                                        framework.loadPage("song",true,"songId="+data.id);
                                     }
                                     else {
                                         alert("Failed to create song somehow :(");

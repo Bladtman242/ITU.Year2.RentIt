@@ -27,9 +27,11 @@ var framework = {
         _full: ""
     },
     
-    loadQuery: function() {
+    loadQuery: function(q) {
         framework.query = {};
         framework.query._full = location.search.substring(1);
+        
+        if(q) framework.query._full = q;
         
         var qstr = framework.query._full;
         var qstrLen = qstr.length;
@@ -64,8 +66,13 @@ var framework = {
             //Push State default true
             if(pushState == null) pushState = true;
             //Query default empty
-            if(query == null) query = "";
-            framework.loadQuery();
+            if(query == null) {
+                query = "";
+                framework.loadQuery();
+            }
+            else {
+                framework.loadQuery(query);
+            }
             
             //Get page into #containe
             framework.container.load(pageName+".htm", function(response, status, xhr) {
