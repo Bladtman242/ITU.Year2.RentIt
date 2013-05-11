@@ -3,6 +3,12 @@ var container = $("#container");
 var id = framework.query.movieId;
 var data = getMovieJSON(id);
 container.append(displayMovie(data));
+
+if(framework.user && framework.user.admin) {
+    //Show edit and delete buttons
+    $("#container").prepend('<div class="pull-right" style="text-align: right;"><a href="?edit=movie&id='+id+'#manager" class="internal btn btn-inverse" style="margin-bottom: 5px;">Edit movie</a><br><a href="#404" class="internal btn btn-primary">Delete</a></div>');
+}
+
 $('#star').raty({ 
 	score: data.avgRating,
 	path: 'vendor/raty-2.5.2/lib/img/',
@@ -128,9 +134,9 @@ function displayMovie(data)
 		<p><font size='6'>" + data.title + "</font><font size='5'> - " + data.release + "</font></p>\
 		<div id='star' class='pull-right' style='padding-top:15px'></div><div class='pull-right' style='padding-top:15px; padding-right:8px'><b>Your vote:</b></div>\
 		<p style='padding-top:15px'><b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + votes + "</p>\
-		<p><b>" + data.genres + "</b></p>\
+		<p><b>" + data.genres.join(", ") + "</b></p>\
 		<hr>\
-		<p>" + data.description + "</p><p><b>Directors:</b> " + data.directors + "</p>\
+		<p>" + data.description + "</p><p><b>Directors:</b> " + data.directors.join(", ") + "</p>\
 		<hr>\
 		<b><a id='buyButton' class='btn'>Buy - " + data.purchasePrice + " moneys</a>\
 		<a id='rentButton' class='btn'>Rent - " + data.rentalPrice + " moneys</a></b>\
