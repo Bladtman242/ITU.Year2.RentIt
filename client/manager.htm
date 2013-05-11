@@ -235,7 +235,8 @@
                                 dataType: "json",
                                 success: function(data) {
                                     if(data.success) {
-                                        alert("Movie created - thanks a bunch, brah. In an ideal world you would've been redirected to movie #"+data.id);
+                                        alert("Movie created - thanks a bunch, brah. You will now be redirected to movie #"+data.id);
+                                        framework.loadPage("movie",true,"movieId="+data.id);
                                     }
                                     else {
                                         alert("Failed to create movie somehow :(");
@@ -369,11 +370,48 @@
                 error: function(msg)
                 {
                     alert("Movie not found :(");
+                    framework.loadPage("manager");
                 }
             });
             
             $("#uploadMovie").submit(function() {
-                alert("submitting, brah");
+                //Get data
+                var submitObject = {
+                    managerid: framework.user.id,
+                    title: $("#inputTitle").val(),
+                    release: $("#inputRelease").val(),
+                    directors: $("#inputDirectors").val().split(","),
+                    genres: $("#inputGenres").val().split(","),
+                    description: $("#inputDescription").val(),
+                    rentalPrice: $("#inputRental").val(),
+                    purchasePrice: $("#inputPurchase").val(),
+                    coverUri: $("#inputCoverUri").val()
+                };
+                
+                $("#uploadMovie").css('opacity',0.8);
+                
+                //Post it!
+                $.ajax({
+                    url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/'+framework.query.id+'/update',
+                    type: 'POST',
+                    data: JSON.stringify(submitObject),
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function(data) {
+                        if(data.success) {
+                            alert("Movie updated!");
+                        }
+                        else {
+                            alert("Failed to update movie somehow :(");
+                        }
+                        $("#uploadMovie").css('opacity',1);
+                    },
+                    error: function(data) {
+                        alert("Connection or server error!");
+                        $("#uploadMovie").css('opacity',1);
+                    }
+                });
+                
                 return false;
             });
         }

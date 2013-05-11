@@ -29,7 +29,8 @@ var framework = {
     
     loadQuery: function() {
         framework.query = {};
-        framework.query._full = location.search.substring(1)
+        framework.query._full = location.search.substring(1);
+        
         var qstr = framework.query._full;
         var qstrLen = qstr.length;
         var keyAccumulator = "";
@@ -92,7 +93,7 @@ var framework = {
                     
                     //Get query and hash from href and validate.
                     var hrefLen = href.length;
-                    var query = null;
+                    var query = "";
                     var hash = "";
                     for(var i = 0; i < hrefLen; i++) {
                         if(href[i] == "?") {
@@ -149,7 +150,7 @@ window.onpopstate = function(event) {
     var query = "";
     if(event.state != null) {
         page = event.state.page;
-        query = event.state.query;
+        query = query;
     }
     framework.loadPage(page,false,query);
 };
