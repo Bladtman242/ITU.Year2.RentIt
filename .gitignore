@@ -1,10 +1,11 @@
 # Latex
-*.pdf
+report.pdf
 *.log #also under build results actually
 *.toc
 *.aux
 *.out
 *.idea
+report.synctex.gz
 
 *.gz
 
