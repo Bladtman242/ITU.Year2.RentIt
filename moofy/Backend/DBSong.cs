@@ -187,7 +187,7 @@ namespace moofy.Backend {
                 if (tmpUri == null) return null;
                 string uri = tmpUri.ToString();
                 //Add the file information into to Files table
-                command.CommandText = "INSERT INTO Files" +
+                command.CommandText = "INSERT INTO Files " +
                                       "(title, rentPrice, buyPrice, URI, year, description, coverURI, viewCount) " +
                                       "VALUES('" +
                                       song.Title.Replace("'", "''") + "', " +

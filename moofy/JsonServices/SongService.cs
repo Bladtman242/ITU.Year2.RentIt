@@ -176,7 +176,7 @@ namespace moofy.JsonServices {
         }
 
         public SuccessFlagId CreateSong(int managerid, int tmpid, string title, string description, int release, string artist, string album, string[] genres, int rentalPrice, int purchasePrice, string coverUri) {
-             Song song = new Song()
+            Song song = new Song()
             {
                 Title = title,
                 Year = (short)release,
@@ -186,6 +186,9 @@ namespace moofy.JsonServices {
                 BuyPrice = purchasePrice,
                 CoverUri = coverUri
             };
+            //TODO: REMOVE THIS
+            //throw new ArgumentException("Something is going wrong. heres a print to help you... Title: " + song.Title + "; Year:" + song.Year + "; Desc:" + song.Description + "; Album:" + song.Album + "; RentPrice:" + song.RentPrice + ";Purrprice:" + song.BuyPrice + ";coverURI:" + song.CoverUri);
+
             db.Open();
             IList<string> genr = new List<string>(genres);
             Song song1 = db.CreateSong(managerid, tmpid, genr, song, new List<string>{artist});
