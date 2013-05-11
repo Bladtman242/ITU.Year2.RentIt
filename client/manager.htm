@@ -296,7 +296,7 @@
                                 managerid: framework.user.id,
                                 tmpid: tmp_id,
                                 title: $("#inputTitle").val(),
-                                artist: $("#inputArtist").val(),
+                                artists: $("#inputArtist").val().split(","),
                                 album: $("#inputAlbum").val(),
                                 release: $("#inputRelease").val(),
                                 genres: $("#inputGenres").val().split(","),
@@ -305,6 +305,8 @@
                                 purchasePrice: $("#inputPurchase").val(),
                                 coverUri: $("#inputCoverUri").val()
                             };
+                            
+                            alert(JSON.stringify(submitObject));
                             
                             $.ajax({
                                 url: 'http://rentit.itu.dk/RentIt25/moofy.svc/songs/create',
@@ -323,6 +325,7 @@
                                 },
                                 error: function(data) {
                                     alert("Connection or server error!");
+                                    alert(JSON.stringify(data));
                                 }
                             });
                             return false;
@@ -451,6 +454,48 @@
                     alert("Movie not found :(");
                     framework.loadPage("manager");
                 }
+            });
+            
+            $("#uploadSong").submit(function() {
+                //Get data
+                var submitObject = {
+                    managerid: framework.user.id,
+                    title: $("#inputTitle").val(),
+                    artists: $("#inputArtist").val().split(","),
+                    album: $("#inputAlbum").val(),
+                    release: $("#inputRelease").val(),
+                    genres: $("#inputGenres").val().split(","),
+                    description: $("#inputDescription").val(),
+                    rentalPrice: $("#inputRental").val(),
+                    purchasePrice: $("#inputPurchase").val(),
+                    coverUri: $("#inputCoverUri").val()
+                };
+                
+                $("#uploadSong").css('opacity',0.8);
+                
+                //Post it!
+                $.ajax({
+                    url: 'http://rentit.itu.dk/RentIt25/moofy.svc/songs/'+framework.query.id+'/update',
+                    type: 'POST',
+                    data: JSON.stringify(submitObject),
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function(data) {
+                        if(data.success) {
+                            alert("Song updated! Data saved.");
+                        }
+                        else {
+                            alert("Failed to update song somehow :(");
+                        }
+                        $("#uploadSong").css('opacity',1);
+                    },
+                    error: function(data) {
+                        alert("Connection or server error!");
+                        $("#uploadSong").css('opacity',1);
+                    }
+                });
+                
+                return false;
             });
         }
         else {
