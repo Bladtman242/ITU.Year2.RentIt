@@ -175,153 +175,227 @@
                 $mng_content.html(overview);
                 break;
             case('manager-upload-movie-link'):
+            
                 $mng_content.html(upload_movie);
-                $("#inputFile").change(function() {
-                    $("#inputFile").css('opacity','0.4');
-                    var formData = new FormData($('#fileForm')[0]);
-                    $.ajax({
-                        url: "http://rentit.itu.dk/RentIt25/moofy.svc/movies/upload",
-                        type: 'POST',
-                        success: function(data) {
-                            if(data.success) {
-                                $("#inputFile").hide();
-                                $("#fileForm .controls").append('<span id="tmpId">FILE_TMP_ID: '+data.tmpid+'</span>');
-                                tmp_id = data.tmpid;
-                            }
-                            else {
-                                alert("Fileupload failed (invalid file?)");
-                            }
-                            $("#inputFile").css('opacity','1');
-                        },
-                        error: function(data) {
-                            alert("A server or connnection error was encountered while uploading the file. Fileupload failed.");
-                            $("#inputFile").css('opacity','1');
-                        },
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        dataType: "json",
-                    });
-                });
                 
-                $("#uploadMovie").submit(function() {
-                    if(tmp_id <= 0) {
-                        alert("Please upload a movie file before submitting the information!");
-                        return false;
-                    }
-                    else {
-                        var submitObject = {
-                            managerid: framework.user.id,
-                            tmpid: tmp_id,
-                            title: $("#inputTitle").val(),
-                            release: $("#inputRelease").val(),
-                            directors: $("#inputDirectors").val().split(","),
-                            genres: $("#inputGenres").val().split(","),
-                            description: $("#inputDescription").val(),
-                            rentalPrice: $("#inputRental").val(),
-                            purchasePrice: $("#inputPurchase").val(),
-                            coverUri: $("#inputCoverUri").val()
-                        };
-                        
+                if(!framework.query.edit) {
+                    
+                    $("#inputFile").change(function() {
+                        $("#inputFile").css('opacity','0.4');
+                        var formData = new FormData($('#fileForm')[0]);
                         $.ajax({
-                            url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/create',
+                            url: "http://rentit.itu.dk/RentIt25/moofy.svc/movies/upload",
                             type: 'POST',
-                            data: JSON.stringify(submitObject),
-                            contentType: "application/json",
-                            dataType: "json",
                             success: function(data) {
                                 if(data.success) {
-                                    alert("Movie created - thanks a bunch, brah. In an ideal world you would've been redirected to movie #"+data.id);
+                                    $("#inputFile").hide();
+                                    $("#fileForm .controls").append('<span id="tmpId">FILE_TMP_ID: '+data.tmpid+'</span>');
+                                    tmp_id = data.tmpid;
                                 }
                                 else {
-                                    alert("Failed to create movie somehow :(");
+                                    alert("Fileupload failed (invalid file?)");
                                 }
+                                $("#inputFile").css('opacity','1');
                             },
                             error: function(data) {
-                                alert("Connection or server error!");
-                            }
+                                alert("A server or connnection error was encountered while uploading the file. Fileupload failed.");
+                                $("#inputFile").css('opacity','1');
+                            },
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            dataType: "json",
                         });
-                        return false;
-                    }
-                });
+                    });
+                    
+                    $("#uploadMovie").submit(function() {
+                        if(tmp_id <= 0) {
+                            alert("Please upload a movie file before submitting the information!");
+                            return false;
+                        }
+                        else {
+                            var submitObject = {
+                                managerid: framework.user.id,
+                                tmpid: tmp_id,
+                                title: $("#inputTitle").val(),
+                                release: $("#inputRelease").val(),
+                                directors: $("#inputDirectors").val().split(","),
+                                genres: $("#inputGenres").val().split(","),
+                                description: $("#inputDescription").val(),
+                                rentalPrice: $("#inputRental").val(),
+                                purchasePrice: $("#inputPurchase").val(),
+                                coverUri: $("#inputCoverUri").val()
+                            };
+                            
+                            $.ajax({
+                                url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/create',
+                                type: 'POST',
+                                data: JSON.stringify(submitObject),
+                                contentType: "application/json",
+                                dataType: "json",
+                                success: function(data) {
+                                    if(data.success) {
+                                        alert("Movie created - thanks a bunch, brah. In an ideal world you would've been redirected to movie #"+data.id);
+                                    }
+                                    else {
+                                        alert("Failed to create movie somehow :(");
+                                    }
+                                },
+                                error: function(data) {
+                                    alert("Connection or server error!");
+                                }
+                            });
+                            return false;
+                        }
+                    });
+                    
+                }
+                    
                 break;
             case('manager-upload-song-link'):
                 $mng_content.html(upload_song);
                 
-                $("#inputFile").change(function() {
-                    $("#inputFile").css('opacity','0.4');
-                    var formData = new FormData($('#fileForm')[0]);
-                    $.ajax({
-                        url: "http://rentit.itu.dk/RentIt25/moofy.svc/songs/upload",
-                        type: 'POST',
-                        success: function(data) {
-                            if(data.success) {
-                                $("#inputFile").hide();
-                                $("#fileForm .controls").append('<span id="tmpId">FILE_TMP_ID: '+data.tmpid+'</span>');
-                                tmp_id = data.tmpid;
-                            }
-                            else {
-                                alert("Fileupload failed (invalid file?)");
-                            }
-                            $("#inputFile").css('opacity','1');
-                        },
-                        error: function(data) {
-                            alert("A server or connnection error was encountered while uploading the file. Fileupload failed.");
-                            $("#inputFile").css('opacity','1');
-                        },
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        dataType: "json",
-                    });
-                });
+                if(!framework.query.edit) {
                 
-                $("#uploadSong").submit(function() {
-                    if(tmp_id <= 0) {
-                        alert("Please upload a song file before submitting the information!");
-                        return false;
-                    }
-                    else {
-                        var submitObject = {
-                            managerid: framework.user.id,
-                            tmpid: tmp_id,
-                            title: $("#inputTitle").val(),
-                            artist: $("#inputArtist").val(),
-                            album: $("#inputAlbum").val(),
-                            release: $("#inputRelease").val(),
-                            genres: $("#inputGenres").val().split(","),
-                            description: $("#inputDescription").val(),
-                            rentalPrice: $("#inputRental").val(),
-                            purchasePrice: $("#inputPurchase").val(),
-                            coverUri: $("#inputCoverUri").val()
-                        };
-                        
+                    $("#inputFile").change(function() {
+                        $("#inputFile").css('opacity','0.4');
+                        var formData = new FormData($('#fileForm')[0]);
                         $.ajax({
-                            url: 'http://rentit.itu.dk/RentIt25/moofy.svc/songs/create',
+                            url: "http://rentit.itu.dk/RentIt25/moofy.svc/songs/upload",
                             type: 'POST',
-                            data: JSON.stringify(submitObject),
-                            contentType: "application/json",
-                            dataType: "json",
                             success: function(data) {
                                 if(data.success) {
-                                    alert("Song created - thanks a bunch, brah. In an ideal world you would've been redirected to song #"+data.id);
+                                    $("#inputFile").hide();
+                                    $("#fileForm .controls").append('<span id="tmpId">FILE_TMP_ID: '+data.tmpid+'</span>');
+                                    tmp_id = data.tmpid;
                                 }
                                 else {
-                                    alert("Failed to create song somehow :(");
+                                    alert("Fileupload failed (invalid file?)");
                                 }
+                                $("#inputFile").css('opacity','1');
                             },
                             error: function(data) {
-                                alert("Connection or server error!");
-                            }
+                                alert("A server or connnection error was encountered while uploading the file. Fileupload failed.");
+                                $("#inputFile").css('opacity','1');
+                            },
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            dataType: "json",
                         });
-                        return false;
-                    }
-                });
+                    });
+                    
+                    $("#uploadSong").submit(function() {
+                        if(tmp_id <= 0) {
+                            alert("Please upload a song file before submitting the information!");
+                            return false;
+                        }
+                        else {
+                            var submitObject = {
+                                managerid: framework.user.id,
+                                tmpid: tmp_id,
+                                title: $("#inputTitle").val(),
+                                artist: $("#inputArtist").val(),
+                                album: $("#inputAlbum").val(),
+                                release: $("#inputRelease").val(),
+                                genres: $("#inputGenres").val().split(","),
+                                description: $("#inputDescription").val(),
+                                rentalPrice: $("#inputRental").val(),
+                                purchasePrice: $("#inputPurchase").val(),
+                                coverUri: $("#inputCoverUri").val()
+                            };
+                            
+                            $.ajax({
+                                url: 'http://rentit.itu.dk/RentIt25/moofy.svc/songs/create',
+                                type: 'POST',
+                                data: JSON.stringify(submitObject),
+                                contentType: "application/json",
+                                dataType: "json",
+                                success: function(data) {
+                                    if(data.success) {
+                                        alert("Song created - thanks a bunch, brah. In an ideal world you would've been redirected to song #"+data.id);
+                                    }
+                                    else {
+                                        alert("Failed to create song somehow :(");
+                                    }
+                                },
+                                error: function(data) {
+                                    alert("Connection or server error!");
+                                }
+                            });
+                            return false;
+                        }
+                    });
+                    
+                }
+                
                 break;
         }
     });
     
-    $mng_content.html(overview);
+    if(framework.query.edit) {
+        if(!framework.query.id) {
+            alert("No id set! Oopsie!");
+        }
+        else if(framework.query.edit == "movie") {
+            $("#manager-upload-movie-link").click(); //load html
+            
+            //modify html for editing
+            $("#fileForm").hide();
+            $("legend").hide();
+            $("#container h1").text("Edit movie");
+            $("#manager-navigation").hide();
+            $("#uploadMovieSubmit").text("Update information");
+            
+            //Load values
+            $.ajax
+            ({
+                url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/' + framework.query.id,
+                type: 'GET',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                async: false,
+                success: function(data) 
+                {
+                    $("#inputTitle").val(data.title);
+                    $("#inputRelease").val(data.release);
+                    $("#inputGenres").val(data.genres.join(","));
+                    $("#inputDirectors").val(data.directors.join(","));
+                    $("#inputRental").val(data.rentalPrice);
+                    $("#inputPurchase").val(data.purchasePrice);
+                    $("#inputCoverUri").val(data.coverUri);
+                    $("#inputDescription").val(data.description);
+                },
+                error: function(msg)
+                {
+                    alert("Movie not found :(");
+                }
+            });
+            
+            $("#uploadMovie").submit(function() {
+                alert("submitting, brah");
+                return false;
+            });
+        }
+        else if(framework.query.edit == "song") {
+            $("#manager-upload-song-link").click();
+            
+            //modify html for editing
+            $("#fileForm").hide();
+            $("legend").hide();
+            $("#container h1").text("Edit song");
+            $("#manager-navigation").hide();
+            $("#uploadSongSubmit").text("Update information");
+            
+            //Load values
+            
+        }
+        else {
+            $("#manager-overview-link").click();
+            alert("Illegal value for edit paramenter...");
+        }
+    }
+    else $("#manager-overview-link").click();
 </script>
 
 

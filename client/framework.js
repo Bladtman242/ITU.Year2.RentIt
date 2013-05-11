@@ -24,10 +24,11 @@ var framework = {
      * query.<property>; in this example query.movie will return 2.
      */
     query: {
-        _full: location.search.substring(1)
+        _full: ""
     },
     
     loadQuery: function() {
+        framework.query = {};
         framework.query._full = location.search.substring(1)
         var qstr = framework.query._full;
         var qstrLen = qstr.length;
@@ -95,7 +96,6 @@ var framework = {
                     var hash = "";
                     for(var i = 0; i < hrefLen; i++) {
                         if(href[i] == "?") {
-                            query = "?";
                             i++;
                             for(; i < hrefLen; i++) {
                                 if(href[i] == "#") break;
@@ -124,7 +124,7 @@ var framework = {
                 });
                 
                 //Push history frame.
-                if(pushState) history.pushState({"page": pageName}, pageName, query+"#"+pageName);
+                if(pushState) history.pushState({"page": pageName, "query": query}, pageName, "?"+query+"#"+pageName);
             });
         },
 
@@ -146,8 +146,12 @@ framework.loadQuery();
 //Handle history pop-event: Pop history frame (back/forward navigration)
 window.onpopstate = function(event) {
     var page = framework.defaultPage;
-    if(event.state != null) page = event.state.page;
-    framework.loadPage(page,false);
+    var query = "";
+    if(event.state != null) {
+        page = event.state.page;
+        query = event.state.query;
+    }
+    framework.loadPage(page,false,query);
 };
 
 $(document).ready(function() {
@@ -155,7 +159,7 @@ $(document).ready(function() {
     
     //If a page (hash) is set:
     if(location.hash != "") {
-        framework.loadPage(location.hash.substring(1));
+        framework.loadPage(location.hash.substring(1),true,location.search.substring(1));
     }
     else {
         framework.loadPage(framework.defaultPage);
