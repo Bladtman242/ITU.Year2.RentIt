@@ -62,7 +62,7 @@ var framework = {
      * a new history frame should be pushed (default true). This is used to preserve history.
      * If set to false, the step will not be recalled in history.
      */
-    loadPage: function(pageName,pushState,query) {
+    loadPage: function(pageName,pushState,query, callBack) {
             //Push State default true
             if(pushState == null) pushState = true;
             //Query default empty
@@ -76,7 +76,6 @@ var framework = {
             
             //Get page into #containe
             framework.container.load(pageName+".htm", function(response, status, xhr) {
-            
                 if(status == "error") {
                     framework.loadPage("404");
                     return;
@@ -133,6 +132,11 @@ var framework = {
                 
                 //Push history frame.
                 if(pushState) history.pushState({"page": pageName, "query": query}, pageName, "?"+query+"#"+pageName);
+
+                //Call potential callback
+                if(callBack != null) {
+                    callBack();
+                }
             });
         },
 
