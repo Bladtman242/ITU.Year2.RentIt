@@ -30,31 +30,12 @@
 </form>
 
 <script>
-	function createErrorMessage(msg)
-	{
-		return $(
-                "<div class='alert alert-error'>\
-                    <button type='button' class='close' data-dismiss='alert'>&times;</button>\
-                    <strong>Error!</strong> "+msg+"\
-                </div>");
-	}
+	
 	
     //Execute immediately
     (function (){
-		var success, connectionError, errorMsg;
-        success = $(
-                "<div class='alert alert-success'>\
-                    <button type='button' class='close' data-dismiss='alert'>&times;</button>\
-                    <strong>Profile Created!</strong> The profile was succesfully created.\
-                </div>");
-
-        connectionError = $(
-                "<div class='alert alert-error'>\
-                    <button type='button' class='close' data-dismiss='alert'>&times;</button>\
-                    <strong>Error!</strong> A connection-error occured, please try again.\
-                </div>");
 		
-		errorMsg = createErrorMessage("init msg");
+		
 		var container = $("#container");
         var form = $("#createUserForm");
         var inputName = $("#inputName");
@@ -85,28 +66,21 @@
                 success: function(flag) {
 					if(flag.success)
 					{
-						connectionError.remove();
-						errorMsg.remove();
-						container.prepend(success);
-						setUser(parseInt(flag.message.split(":")[1]));
-                        framework.loadPage(framework.defaultPage);
+						output.success("Profile Created","The profile was succesfully created.");
+						setUser(parseInt(flag.message), true);
 					}
 					else 
 					{
-						errorMsg = createErrorMessage(flag.message);
-						connectionError.remove();
-						success.remove();
-						container.prepend(errorMsg);
+						output.error("Error!", flag.message);
 					}
                 },
                 error: function(msg) {
-                    success.remove();
-                    errorMsg.remove();
-                    container.prepend(connectionError);
+                    output.error("Error!", "There was a problem connecting to the server");
                 }
             });
-            
+           return false; 
         });
+		
 
     })();
 

@@ -27,6 +27,11 @@ var thumbs = $("#thumbs");
 $("#innerCar").append(initMovPage);
 createThumbContent(curCont);
 setPage(1);
+$('#carousel').carousel({
+        interval: 4500
+    });
+
+$('#carousel').carousel('cycle');
 function initMovPage()
 {
     var s= "";

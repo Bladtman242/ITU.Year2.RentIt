@@ -13,28 +13,27 @@
 </div>
 
 <script>
-    if(!framework.user) {
-        framework.loadPage(framework.defaultPage);
-        output.error('Login required.', 'You need to log in to see this page');
+    if (!framework.user) {
+        framework.loadPage(framework.defaultPage, null, null, function() {output.error('Login required.', 'You need to log in to see this page');});
     } else {
 
-    var content;
-    content = $('#account-content');
+        var content;
+        content = $('#account-content');
 
-    //use functions because the user info might chance over time
-    function createOverview(){
-        return '<div class="row">\
-                        <div class="span2"><img src="http://gravatar.com/avatar/'+$.md5(framework.user.email)+'?size=100&d=mm" class="img-polaroid"></div>\
+        //use functions because the user info might chance over time
+        function createOverview() {
+            return '<div class="row">\
+                        <div class="span2"><img src="http://gravatar.com/avatar/' + $.md5(framework.user.email) + '?size=100&d=mm" class="img-polaroid"></div>\
                         <p>Username: <strong id="usernameSpan">' + framework.user.username + '</strong></p>\
                         <p>Name: <strong id="nameSpan">' + framework.user.name + '</strong></p>\
                         <p>Email: <strong id="emailSpan">' + framework.user.email + '</strong></p>\
                         <p>Balance: <strong id="balanceSpan">' + framework.user.balance + '</strong></p>\
                  </div>\
                 ';
-    };
+        };
 
-    function createEdit(){
-        return '<form id="editUserForm" class="form-horizontal">\
+        function createEdit() {
+            return '<form id="editUserForm" class="form-horizontal">\
                     <legend>Edit profile</legend>\
                     <div class="control-group">\
                         <label class="control-label" for="inputName">Name (optional)</label>\
@@ -67,10 +66,10 @@
                         <input type="submit" class="btn btn-primary" value="Save changes"/>\
                     </div>\
             </form>';
-    };
+        };
 
-    function createBalance(){
-        return '<legend>Current payment method</legend>\
+        function createBalance() {
+            return '<legend>Current payment method</legend>\
                     <img src="http://www.tbor.org/Photos/VisaMastercard.jpg" height="300px" width="200px">\
                     <p>Visa/mastercard: XXXX-XXXX-XXXX-3457</p>\
                     <button id="paymentMethodButton" class="btn btn-primary">Change payment method</button>\
@@ -85,120 +84,119 @@
                     </div>\
                     <input id="editUserSubmit" type="submit" class="btn btn-primary" value="Make transfer"/>\
                 </form>';
-    };
+        };
 
-    $("#accountNavigation a").click(function(e) {
-        e.preventDefault();
-        $("#accountNavigation li.active").removeClass("active");
-        var $t = $(this);
-        $t.parent().addClass("active");
-        switch(this.id) {
-            case('accountOverview'):
-                content.html(createOverview());
-                break;
-            case('accountEdit'):
-                content.html(createEdit());
-                //Submit handler
-                $('#editUserForm').submit(function() {
-                    var cleanedInputName = $("#inputName").val().trim();
-                    var cleanedInputEmail = $("#inputEmail").val().trim();
-                    var cleanedInputPassword = $("#inputPassword").val().trim();
+        $("#accountNavigation a").click(function (e) {
+            e.preventDefault();
+            $("#accountNavigation li.active").removeClass("active");
+            var $t = $(this);
+            $t.parent().addClass("active");
+            switch (this.id) {
+                case('accountOverview'):
+                    content.html(createOverview());
+                    break;
+                case('accountEdit'):
+                    content.html(createEdit());
+                    //Submit handler
+                    $('#editUserForm').submit(function () {
+                        var cleanedInputName = $("#inputName").val().trim();
+                        var cleanedInputEmail = $("#inputEmail").val().trim();
+                        var cleanedInputPassword = $("#inputPassword").val().trim();
 
-                    var submit = false;
-                    var postData = {};
-                    if(cleanedInputName) {
-                        submit = true;
-                        postData.name = cleanedInputName;
-                    }
-                    if(cleanedInputEmail) {
-                        submit = true;
-                        postData.email = cleanedInputEmail;
-                    }
-                    if(cleanedInputPassword) {
-                        submit = true;
-                        postData.password = cleanedInputPassword;
-                    }
+                        var submit = false;
+                        var postData = {};
+                        if (cleanedInputName) {
+                            submit = true;
+                            postData.name = cleanedInputName;
+                        }
+                        if (cleanedInputEmail) {
+                            submit = true;
+                            postData.email = cleanedInputEmail;
+                        }
+                        if (cleanedInputPassword) {
+                            submit = true;
+                            postData.password = cleanedInputPassword;
+                        }
 
-                    if (submit) {
+                        if (submit) {
+                            $.ajax({
+                                url: 'http://rentit.itu.dk/RentIt25/moofy.svc/users/' + framework.user.id + '/update',
+                                type: 'POST',
+                                data: JSON.stringify(postData),
+                                contentType: 'application/json; charset=utf-8',
+                                dataType: 'json',
+                                async: true,
+                                success: function (msg) {
+                                    if (cleanedInputName) framework.user.name = cleanedInputName;
+                                    if (cleanedInputEmail) framework.user.email = cleanedInputEmail;
+                                    if (cleanedInputPassword) framework.user.password = cleanedInputEmail;
+                                    //TODO: Consider giving the framework a reference to the following function or listen on the user object for changes
+                                    reloadUserBox();
+                                    framework.loadPage('account');
+                                    output.success('Profile updated!', 'The profile was succesfully updated.');
+                                },
+                                error: function (msg) {
+                                    output.error('Error!', 'The profile was not updated.');
+                                }
+                            });
+                        } else {
+                            output.error('No information was entered!', 'Please enter text in the fields you want to change.');
+                        }
+                        return false;
+                    });
+
+                    break;
+                case('accountBalance'):
+                    content.html(createBalance());
+                    $('#balanceForm').submit(function () {
+                        var money = $("#moneyInput").val().trim();
+                        var postData = {moneyAmount: money};
                         $.ajax({
-                            url: 'http://rentit.itu.dk/RentIt25/moofy.svc/users/' + framework.user.id + '/update',
+                            url: 'http://rentit.itu.dk/RentIt25/moofy.svc/users/' + framework.user.id + '/deposit',
                             type: 'POST',
                             data: JSON.stringify(postData),
                             contentType: 'application/json; charset=utf-8',
                             dataType: 'json',
                             async: true,
-                            success: function(msg) {
-                                if (cleanedInputName) framework.user.name = cleanedInputName;
-                                if (cleanedInputEmail) framework.user.email = cleanedInputEmail;
-                                if (cleanedInputPassword) framework.user.password = cleanedInputEmail;
-                                //TODO: Consider giving the framework a reference to the following function or listen on the user object for changes
-                                reloadUserBox();
-                                framework.loadPage('account');
-                                output.success('Profile updated!', 'The profile was succesfully updated.');
+                            success: function (msg) {
+                                if (msg.success) {
+                                    framework.user.balance += +money; //The unary + operator is required to treat money as an int rather than string
+                                    $('#userBalance').text(framework.user.balance);
+                                    output.success('Money transfered!', 'The money was succesfully transferred.');
+                                } else {
+                                    output.error('Error!', 'The money was not transfered.');
+                                }
                             },
-                            error: function(msg) {
-                                output.error('Error!', 'The profile was not updated.');
-                            }
-                        });
-                    } else {
-                        output.error('No information was entered!', 'Please enter text in the fields you want to change.');
-                    }
-                    return false;
-                });
-
-                break;
-            case('accountBalance'):
-                content.html(createBalance());
-                $('#balanceForm').submit(function() {
-                    var money = $("#moneyInput").val().trim();
-                    var postData = {moneyAmount: money};
-                    $.ajax({
-                        url: 'http://rentit.itu.dk/RentIt25/moofy.svc/users/' + framework.user.id + '/deposit',
-                        type: 'POST',
-                        data: JSON.stringify(postData),
-                        contentType: 'application/json; charset=utf-8',
-                        dataType: 'json',
-                        async: true,
-                        success: function(msg) {
-                            if(msg.success) {
-                                framework.user.balance += +money; //The unary + operator is required to treat money as an int rather than string
-                                $('#userBalance').text(framework.user.balance);
-                                output.success('Money transfered!', 'The money was succesfully transferred.');
-                            } else {
+                            error: function (msg) {
                                 output.error('Error!', 'The money was not transfered.');
                             }
-                        },
-                        error: function(msg) {
-                            output.error('Error!', 'The money was not transfered.');
-                        }
+                        });
+                        return false;
                     });
-                    return false;
-                });
 
 
+                    $('#paymentMethodButton').click(function () {
+                        output.modal('This function does not exist yet', 'You can not change your payment method in the Moofy beta experience.');
+                    });
+                    break;
+            }
+        });
 
-                $('#paymentMethodButton').click(function() {
-                    output.modal('This function does not exist yet', 'You can not change your payment method in the Moofy beta experience.');
-                });
-                break;
-        }
-    });
+        //TODO: Parse queries to find the real page
+        content.html(createOverview());
+        /*
+         function addMovie(movie) {
+         alert('data-src="' + movie.coverUri +  '/300x200"');
+         var html =
+         '<li class="span4">\
+         <div class="thumbnail">\
+         <img src="' + movie.coverUri +  '" alt="">\
+         <h3>' + movie.title + '</h3>\
+         <p>' + movie.description + '</p>\
+         </div>\
+         </li>';
 
-    //TODO: Parse queries to find the real page
-    content.html(createOverview());
-/*
-    function addMovie(movie) {
-        alert('data-src="' + movie.coverUri +  '/300x200"');
-    var html =
-    '<li class="span4">\
-        <div class="thumbnail">\
-            <img src="' + movie.coverUri +  '" alt="">\
-            <h3>' + movie.title + '</h3>\
-            <p>' + movie.description + '</p>\
-        </div>\
-    </li>';
-
-        $('#userMovies').append(html);
-    }*/
+         $('#userMovies').append(html);
+         }*/
     }
 </script>
