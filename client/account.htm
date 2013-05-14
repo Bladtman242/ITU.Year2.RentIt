@@ -14,7 +14,9 @@
 
 <script>
     if (!framework.user) {
-        framework.loadPage(framework.defaultPage, null, null, function() {output.error('Login required.', 'You need to log in to see this page');});
+        framework.loadPage(framework.defaultPage, null, null, function() {
+            output.error('Login required.', 'You need to log in to see this page');
+        });
     } else {
 
         var content;
