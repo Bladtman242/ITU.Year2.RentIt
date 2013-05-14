@@ -140,6 +140,10 @@ namespace moofy.JsonServices {
             }
         }
 
+        public MovieWrapper[] SortMovies(string sortBy) {
+            return FilterAndSortMovies("", sortBy);
+        }
+
         public SuccessFlagUpload UploadMovie(Stream fileStream) {
 
             try

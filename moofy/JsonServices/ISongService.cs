@@ -57,6 +57,12 @@ namespace moofy.JsonServices {
         SongWrapper[] FilterAndSortSongs(string filter, string sortBy);
 
         [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "filter/?sortBy={sortBy}")]
+        SongWrapper[] SortSongs(string sortBy);
+
+        [OperationContract]
         [WebInvoke(Method = "POST",
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "upload")]

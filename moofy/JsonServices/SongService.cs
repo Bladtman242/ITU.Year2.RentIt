@@ -157,6 +157,10 @@ namespace moofy.JsonServices {
             }
         }
 
+        public SongWrapper[] SortSongs(string sortBy) {
+            return FilterAndSortSongs("", sortBy);
+        }
+
         public SuccessFlagUpload UploadSong(Stream fileStream) {
             db.Open();
             int id;
