@@ -66,8 +66,10 @@
                 success: function(flag) {
 					if(flag.success)
 					{
-						output.success("Profile Created","The profile was succesfully created.");
 						setUser(parseInt(flag.message), true);
+                        framework.loadPage(framework.defaultPage, null, null, function() {
+                            output.success("Profile Created","The profile was succesfully created.");
+                        });
 					}
 					else 
 					{

@@ -138,9 +138,10 @@ function displayMovie(data)
 		<hr>\
 		<p>" + data.description + "</p><p><b>Directors:</b> " + data.directors.join(", ") + "</p>\
 		<hr>\
-		<b><a id='buyButton' class='btn'>Buy - " + data.purchasePrice + " moneys</a>\
-		<a id='rentButton' class='btn'>Rent - " + data.rentalPrice + " moneys</a></b>\
-		</div></div>";
+		<div class='btn-group'>\
+		<button id='buyButton' class='btn'>Buy - " + data.purchasePrice + " moneys</button>\
+		<button id='rentButton' class='btn'>Rent - " + data.rentalPrice + " moneys</button>\
+		</div></div></div>";
 	return s;
 }
 
