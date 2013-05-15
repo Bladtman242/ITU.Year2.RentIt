@@ -241,12 +241,12 @@ namespace moofy.Backend {
                                                     "SELECT fid FROM GenreFile " +
                                                     "WHERE gid IN (" +
                                                         "SELECT id FROM Genre " +
-                                                        "WHERE name Like '%" + filter + "%' )) " +
+                                                        "WHERE name LIKE '%" + filter + "%' )) " +
                                                 "OR Song.id IN (" +
                                                     "SELECT sid FROM SongArtist " +
                                                     "WHERE aid IN(" +
-                                                         "SELECT id FROM Director " +
-                                                         "WHERE name Like '%" + filter + "%')))"
+                                                         "SELECT id FROM Artist " +
+                                                         "WHERE name LIKE '%" + filter + "%')))"
                                                 , connection);
             SqlDataReader reader = command.ExecuteReader();
 
