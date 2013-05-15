@@ -1,0 +1,45 @@
+<script>
+var container = $("#container");
+var id = framework.query.movieId;
+var data = getMovieJSON(id);
+container.append(movie(data));
+
+function movie(data)
+{
+	var s = "";
+	s+="<center><video width='480' height='320' controls autoplay>\
+			<source src='" + data.downloadLink + "' type='video/mp4'>\
+			Your browser does not support the video tag.\
+		</video></center>";
+	return s;
+}	
+function getMovieJSON(id)
+{
+	var json = "";
+	var postData = {};
+	if (framework.user == null)
+		output.error('Error!', 'You must be logged in to watch a movie');
+	else
+	{
+		postData.userId = framework.user.id;
+		$.ajax
+		({
+			url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/' + id + '/download?userId=1',
+			type: 'GET',
+			data: JSON.stringify(postData),
+			dataType: 'json',
+			contentType: 'application/json; charset=utf-8',
+			async: false,
+			success: function(data) 
+			{
+				json=data;
+			},
+			error: function(msg)
+			{
+				alert("Movie not found --- id "+id);
+			}
+		});
+	}
+    return json;
+}
+</script>
