@@ -1,4 +1,3 @@
-Den her side kan vises
 <script>
 var container = $("#container");
 var id = framework.query.movieId;
@@ -8,6 +7,10 @@ container.append(movie(data));
 function movie(data)
 {
 	var s = "";
+	s+="<center><video width='480' height='320' controls autoplay>\
+			<source src='" + data.downloadLink + "' type='video/mp4'>\
+			Your browser does not support the video tag.\
+		</video></center>";
 	return s;
 }	
 function getMovieJSON(id)
