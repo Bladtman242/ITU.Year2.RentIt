@@ -2,7 +2,7 @@
 var container = $("#container");
 var id = framework.query.songId;
 var data = getSongJSON(id);
-container.append(displaySong(data));
+container.append(displaySong());
 
 if(framework.user && framework.user.admin) {
     //Show edit and delete buttons
@@ -52,6 +52,7 @@ $('#star').raty({
 	            dataType: 'json',
 	            async: true,
 	            success: function(msg) {
+	                location.reload();
 	                output.success('Success!', 'Your rating has been submitted.');
 	            },
 	            error: function(msg) {
@@ -144,10 +145,54 @@ function getSongJSON(id)
     return json;
 }
 
-function displaySong(id)
+function userSongs(userId)
+{
+	var json = "";
+	$.ajax
+	({
+		url: 'http://rentit.itu.dk/RentIt25/moofy.svc/users/' + userId + '/songs/current',
+		type: 'GET',
+		dataType: 'json',
+		contentType: 'application/json; charset=utf-8',
+		async: false,
+		success: function(data) 
+		{
+			json=data;
+		},
+		error: function(msg)
+		{
+			alert("Invalid user");
+		}
+	});
+    return json;
+}
+
+function displaySong()
 {
 	var s = "";
 	var votes = " votes";
+	var buttons ="<div class='btn-group'>\
+					<button id='buyButton' class='btn'>Buy - " + data.purchasePrice + " moneys</button>\
+					<button id='rentButton' class='btn'>Rent - " + data.rentalPrice + " moneys</button>\
+				  </div>";
+	
+	// check if user owns movie
+	var userOwnsSong = false;
+	if (framework.user)
+	{
+		var songs = userSongs(framework.user.id);
+		for (var i = 0; i < songs.length; i++)
+		{
+			alert(songs[i].id);
+			if (songs[i].id == id) userOwnsSong = true;
+		}
+	}
+		
+	// decide which buttons to show, depending on whether the user is allowed to watch the movie or not
+	if (userOwnsSong)
+		buttons = "<a class='internal btn btn-primary' href='?movieId=" + id + "#showMovie'>Listen to Song (lyder mega dumt jo)</a>"
+
+	// create site contents
 	if (data.numberOfVotes == 1) votes = " vote";
 	s+="<div style='height:400px'>\
 		<img src='" + data.coverUri + "' class='pull-left' style='width: 400px; height: 400px; padding: 3px; border: 1px solid #ddd; margin: 10px;'>\
@@ -159,10 +204,9 @@ function displaySong(id)
 		<p><b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + votes + "</p>\
 		<p><b>" + data.genres + "</p>\
 		<hr>\
-		<div class='btn-group'>\
-		<button id='buyButton' class='btn'>Buy - " + data.purchasePrice + " moneys</button>\
-		<button id='rentButton' class='btn'>Rent - " + data.rentalPrice + " moneys</button>\
-		</div></div></div>";
+		" + buttons + "\
+		</div></div>";
 	return s;
 }
+
 </script>
