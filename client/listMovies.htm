@@ -6,7 +6,18 @@
 <a class="carousel-control right" href="#carousel" data-slide="next">&rsaquo;</a>
 </div>
 <div >
-	
+    <div id="sortBy" class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Sort by <b class="caret"></b></a>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a id="titleSort" href="#">Title</a></li>
+            <li><a id="releaseSort" href="#">Release</a></li>
+            <li><a id="directorSort" href="#">Director</a></li>
+            <li><a id="genreSort" href="#">Genre</a></li>
+            <li><a id="descriptionSort" href="#">Description</a></li>
+            <li class="divider"></li>
+            <li><a id="noSort" href="#">Clear to default</a></li>
+        </ul>
+    </div>
 	<form class="form-search" id="searchForm">
 		<input id="searchInput" type="text" class="input-medium search-query">
 		<button id="searchSubmit" type="submit" class="btn btn-primary">Search</button>
@@ -43,7 +54,7 @@ function initMovPage()
                 dataType: 'json',
                 async: false,
                 success: function(movs) {
-					curCont = movs;
+					curCont = movs.slice(); //Slice makes a copy as to not make the content affected by the below sort.
 					movs.sort(function(a,b){return b.avgRating - a.avgRating})
 					s=createMoviesCarousel(movs);					
                 },
@@ -172,9 +183,11 @@ function setPage(nr)
 	curPage = nr-1;
 	thumbs.append(pages[curPage]);
 }
+
+var currentFilter = "";
 $("#searchSubmit").click(function() {
-	var val = $("#searchInput").val().trim();
-	var s = val ? "/"+val : "";
+	currentFilter = $("#searchInput").val().trim();
+	var s = currentFilter ? "/"+currentFilter : "";
 	$.ajax({
                 url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/filter'+s,
                 type: 'GET',
@@ -191,6 +204,32 @@ $("#searchSubmit").click(function() {
                 }
             });
 	return false;
+});
+$("#sortBy li a").click(function(e) {
+    e.preventDefault();
+    var id = $(this).attr("id");
+    var sortParam = id.substr(0, id.lastIndexOf('Sort'));
+    if (sortParam === 'no') {
+        var url = 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/filter';
+    } else {
+        var url = 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/filter/'+currentFilter+'?sortBy='+sortParam;
+    }
+    $.ajax({
+        url: url ,
+        type: 'GET',
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        async: false,
+        success: function(movs) {
+            curCont = movs;
+            createThumbContent(curCont);
+            setPage(1);
+        },
+        error: function(msg) {
+            output.error("Error!","failed to connect to server, please try again");
+        }
+    });
+    $('#sortBy .dropdown-toggle').dropdown();
 });
 	
 </script>

@@ -6,7 +6,29 @@ container.append(displaySong());
 
 if(framework.user && framework.user.admin) {
     //Show edit and delete buttons
-    $("#container").prepend('<div class="pull-right" style="text-align: right;"><a href="?edit=song&id='+id+'#manager" class="internal btn btn-inverse" style="margin-bottom: 5px;">Edit song</a><br><a href="#404" class="internal btn btn-primary">Delete</a></div>');
+    $("#container").prepend('<div class="pull-right" style="text-align: right;"><a href="?edit=song&id='+id+'#manager" class="internal btn btn-inverse" style="margin-bottom: 5px;">Edit song</a><br><a href="#" id="delete-song-button" class="btn btn-primary">Delete</a></div>');
+    //Delete song click
+    $("#delete-song-button").click(function() {
+        $.ajax({
+            url: 'http://rentit.itu.dk/RentIt25/moofy.svc/songs/' + id + '/delete',
+            type: 'POST',
+            data: JSON.stringify({ managerid: framework.user.id }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function(data) {
+                if(data.success) {
+                    alert("Deleted song...");
+                    framework.loadPage("listSongs");
+                }
+                else {
+                    alert("Failed to delete song - "+data.message);
+                }
+            },
+            error: function(msg) {
+                alert("Failed to delete song... (server or connection error)");
+            }
+        });
+    });
 }
 
 $('#star').raty({ 

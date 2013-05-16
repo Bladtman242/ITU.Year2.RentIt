@@ -6,7 +6,29 @@ container.append(displayMovie(data));
 
 if(framework.user && framework.user.admin) {
     //Show edit and delete buttons
-    $("#container").prepend('<div class="pull-right" style="text-align: right;"><a href="?edit=movie&id='+id+'#manager" class="internal btn btn-inverse" style="margin-bottom: 5px;">Edit movie</a><br><a href="#404" class="internal btn btn-primary">Delete</a></div>');
+    $("#container").prepend('<div class="pull-right" style="text-align: right;"><a href="?edit=movie&id='+id+'#manager" class="internal btn btn-inverse" style="margin-bottom: 5px;">Edit movie</a><br><a href="#" id="delete-movie-button" class="btn btn-primary">Delete</a></div>');
+    //Delete movie click
+    $("#delete-movie-button").click(function() {
+        $.ajax({
+            url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/' + id + '/delete',
+            type: 'POST',
+            data: JSON.stringify({ managerid: framework.user.id }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function(data) {
+                if(data.success) {
+                    alert("Deleted movie...");
+                    framework.loadPage("listMovies");
+                }
+                else {
+                    alert("Failed to delete movie - "+data.message);
+                }
+            },
+            error: function(msg) {
+                alert("Failed to delete movie... (server or connection error)");
+            }
+        });
+    });
 }
 
 $('#star').raty({ 
