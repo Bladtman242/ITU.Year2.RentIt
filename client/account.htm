@@ -13,16 +13,20 @@
 </div>
 
 <script>
-    if (!framework.user) {
+    if (!framework.user) { //If the user is not logged in
         framework.loadPage(framework.defaultPage, null, null, function() {
             output.error('Login required.', 'You need to log in to see this page');
         });
-    } else {
+    } else { //If the user is logged in, display the page
 
         var content;
         content = $('#account-content');
 
-        //use functions because the user info might chance over time
+        //We wrap the content in functions as to always use the latest data
+        /**
+         * Creates the conctent of the overview page
+         * @returns {string} The html of the overview page
+         */
         function createOverview() {
             return '<div class="row">\
                         <div class="span2"><img src="http://gravatar.com/avatar/' + $.md5(framework.user.email) + '?size=100&d=mm" class="img-polaroid"></div>\
@@ -34,6 +38,10 @@
                 ';
         };
 
+        /**
+         * Creates the conctent of the edit page
+         * @returns {string} The html of the edit page
+         */
         function createEdit() {
             return '<form id="editUserForm" class="form-horizontal">\
                     <legend>Edit profile</legend>\
@@ -70,6 +78,10 @@
             </form>';
         };
 
+        /**
+         * Creates the conctent of the balance page
+         * @returns {string} The html of the balance page
+         */
         function createBalance() {
             return '<legend>Current payment method</legend>\
                     <img src="http://www.tbor.org/Photos/VisaMastercard.jpg" height="300px" width="200px">\
@@ -88,11 +100,11 @@
                 </form>';
         };
 
+        //Adds a click listener to the navigation of the account page.
         $("#accountNavigation a").click(function (e) {
-            e.preventDefault();
-            $("#accountNavigation li.active").removeClass("active");
-            var $t = $(this);
-            $t.parent().addClass("active");
+            e.preventDefault(); //Prevent the default click listener, since this is a a-tag.
+            $("#accountNavigation li.active").removeClass("active"); //Remove the active styling of every account navigation tab, ...
+            $(this).parent().addClass("active"); //and it it again to the parent of the clicked link
             switch (this.id) {
                 case('accountOverview'):
                     content.html(createOverview());
@@ -129,13 +141,17 @@
                                 dataType: 'json',
                                 async: true,
                                 success: function (msg) {
-                                    if (cleanedInputName) framework.user.name = cleanedInputName;
-                                    if (cleanedInputEmail) framework.user.email = cleanedInputEmail;
-                                    if (cleanedInputPassword) framework.user.password = cleanedInputEmail;
-                                    //TODO: Consider giving the framework a reference to the following function or listen on the user object for changes
-                                    reloadUserBox();
-                                    framework.loadPage('account');
-                                    output.success('Profile updated!', 'The profile was succesfully updated.');
+                                    if (msg.success) {
+                                        if (cleanedInputName) framework.user.name = cleanedInputName;
+                                        if (cleanedInputEmail) framework.user.email = cleanedInputEmail;
+                                        if (cleanedInputPassword) framework.user.password = cleanedInputEmail;
+                                        //TODO: Consider giving the framework a reference to the following function or listen on the user object for changes
+                                        reloadUserBox();
+                                        framework.loadPage('account');
+                                        output.success('Profile updated!', 'The profile was successfully updated.');
+                                    } else {
+                                        output.error('Error!', 'The profile was not updated.');
+                                    }
                                 },
                                 error: function (msg) {
                                     output.error('Error!', 'The profile was not updated.');
@@ -166,11 +182,11 @@
                                     $('#userBalance').text(framework.user.balance);
                                     output.success('Money transfered!', 'The money was succesfully transferred.');
                                 } else {
-                                    output.error('Error!', 'The money was not transfered.');
+                                    output.error('Error!', 'The money was not transferred.');
                                 }
                             },
                             error: function (msg) {
-                                output.error('Error!', 'The money was not transfered.');
+                                output.error('Error!', 'The money was not transferred.');
                             }
                         });
                         return false;
@@ -183,22 +199,6 @@
                     break;
             }
         });
-
-        //TODO: Parse queries to find the real page
         content.html(createOverview());
-        /*
-         function addMovie(movie) {
-         alert('data-src="' + movie.coverUri +  '/300x200"');
-         var html =
-         '<li class="span4">\
-         <div class="thumbnail">\
-         <img src="' + movie.coverUri +  '" alt="">\
-         <h3>' + movie.title + '</h3>\
-         <p>' + movie.description + '</p>\
-         </div>\
-         </li>';
-
-         $('#userMovies').append(html);
-         }*/
     }
 </script>
