@@ -95,5 +95,8 @@ var output = new function(){
             framework.container.prepend(templateModal);
             templateModal.modal(null);
         }
+        $('.modal a').click(function() {
+            $('.modal').modal('hide'); //Hide the modal window, when clicking on a link
+        });
     };
 };
