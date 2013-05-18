@@ -9,6 +9,9 @@
     <div id="sortBy" class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Sort by <b class="caret"></b></a>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a id="avgRatingSort" href="#">Most popular</a></li>
+            <li><a id="viewCountSort" href="#">Most viewed</a></li>
+            <li class="divider"></li>
             <li><a id="titleSort" href="#">Title</a></li>
             <li><a id="releaseSort" href="#">Release</a></li>
             <li><a id="directorSort" href="#">Director</a></li>
@@ -36,35 +39,40 @@
 var curCont, curPage, pages;
 var thumbs = $("#thumbs");
 
-$("#innerCar").append(initMovPage);
-createThumbContent(curCont);
-setPage(1);
-$('#carousel').carousel({
-        interval: 4500
-    });
+$.ajax({
+    url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/filter/?sortBy=avgRating',
+    type: 'GET',
+    contentType: 'application/json; charset=utf-8',
+    dataType: 'json',
+    async: true,
+    success: function(movs) {
+        $("#innerCar").append(createMoviesCarousel(movs));
+        $('#carousel').carousel({
+            interval: 4500
+        });
+        $('#carousel').carousel('cycle');
+    },
+    error: function(msg) {
+        output.error("Error!","failed to connect to server, please try again");
+    }
+});
 
-$('#carousel').carousel('cycle');
-function initMovPage()
-{
-    var s= "";
-	 $.ajax({
-                url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/filter',
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'json',
-                async: false,
-                success: function(movs) {
-					curCont = movs.slice(); //Slice makes a copy as to not make the content affected by the below sort.
-					movs.sort(function(a,b){return b.avgRating - a.avgRating})
-					s=createMoviesCarousel(movs);					
-                },
-                error: function(msg) {
-                    output.error("Error!","failed to connect to server, please try again");
-                }
-            });
+$.ajax({
+    url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/filter',
+    type: 'GET',
+    contentType: 'application/json; charset=utf-8',
+    dataType: 'json',
+    async: true,
+    success: function(movs) {
+        curCont = movs;
+        createThumbContent(curCont);
+        setPage(1);
+    },
+    error: function(msg) {
+        output.error("Error!","failed to connect to server, please try again");
+    }
+});
 
-	return s;
-}
 function createMoviesCarousel(movs)
 {
 		var length = movs.length;

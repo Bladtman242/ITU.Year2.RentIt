@@ -42,6 +42,15 @@ namespace moofy.Backend {
             Array.Sort(files, (f1, f2) => f1.RentPrice.CompareTo(f2.RentPrice));
         }
 
+        protected static void ByRating(File[] files) {
+            Array.Sort(files, (f1, f2) => -1 * f1.AverageRating.CompareTo(f2.AverageRating)); // *-1 to order descending
+        }
+
+        protected static void ByViews(File[] files) {
+            Array.Sort(files, (f1, f2) => -1 * f1.ViewCount.CompareTo(f2.ViewCount));  // *-1 to order descending
+            
+        }
+
         protected static void ByDirector(Movie[] movs) {
             Array.Sort(movs, (m1, m2) => m1.Directors.First().CompareTo(m2.Directors.First())); //This is a pretty useless sort.
         }
@@ -69,6 +78,18 @@ namespace moofy.Backend {
                 case "release":
                 case "year":
                     ByYear(files);
+                    break;
+                case "averagerating":
+                case "averageratings":
+                case "avgrating":
+                case "avgratings":
+                    ByRating(files);
+                    break;
+                case "views":
+                case "view":
+                case "viewcount":
+                case "viewcounts":
+                    ByViews(files);
                     break;
                 default:
                     throw new ArgumentException(property + " is undefined");
