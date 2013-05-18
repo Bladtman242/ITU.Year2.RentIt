@@ -11,17 +11,15 @@ told us that they were required by their professor to include songs in their
 service that this became part of our requirements. The Singaporean team also
 made suggestions that media files include ratings and view count to allow us to
 sort by rating and popularity. In general, the requirements were almost
-exclusively changed on request by the Singaporean team. We, the ITU team,
-naturally had few additions to our initial specification.
-
-There are two types of primary actors: users and managers. A manager’s rights are a
-superset of a regular user’s rights. In addition, managers do not have to
-purchase anything.
+exclusively changed on request from the Singaporean team. We, the ITU team,
+had few additions to our initial specification.
 
 \label{sec:requirements}
-In this document, the word "user" shall refer to an existing, registered user.
-The word artifact shall refer to a movie or song. (I.e. the products available
-for rent/purchase in the system)
+In the following requirements document, the word "user" shall refer to an
+existing, registered user. Artifact shall refer to a movie or song. (I.e. the
+products available for rent/purchase in the system) There are two types of
+primary actors: users and managers. A manager’s rights are a superset of a
+regular user's. In addition, managers do not have to purchase anything. 
 
 \textbf{Users:}
 \begin{enumerate}
@@ -38,7 +36,7 @@ for rent/purchase in the system)
 \item A movie must have properties describing its title, year of
 	release, director(s), and genre(s).
 \item A song must have properties describing its title, year of
-	release, artist(s), album title,  and genre(s).
+	release, artist(s), album title, and genre(s).
 \item Additionally, an artifact must have properties to describe its unique id,
 	an URI pointing to an image (E.g. cover image for movies), an average
 	user-rating, a textual description, a purchase price, a rental price,
@@ -62,7 +60,7 @@ for rent/purchase in the system)
 \textbf{Managers:}
 \begin{enumerate}
 \item A manager's rights extend those of the user, so that a manager can do
-	everything the user can, without purchase.
+	everything the user can, albeit without purchase.
 \item A manager must be able to upload movies/songs
 \item A manager must be able to create and edit the properties of an artifact,
 	except for the \emph{extrinsic} properties; average rating and view
