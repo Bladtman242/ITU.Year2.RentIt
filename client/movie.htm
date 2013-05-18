@@ -75,6 +75,8 @@ $('#star').raty({
 	            async: true,
 	            success: function(msg) {
 	                output.success('Success!', 'The item was bought.');
+	                $('#buttonsDiv').empty();
+	                $('#buttonsDiv').append("<a class='internal btn btn-primary' href='?movieId=" + id + "#showMovie'>Watch Movie</a>");
 	                framework.user.balance -= data.purchasePrice;
 	            },
 	            error: function(msg) {
@@ -101,6 +103,8 @@ $('#star').raty({
 	            async: true,
 	            success: function(msg) {
 	                output.success('Success!', 'The item was rented.');
+	                $('#buttonsDiv').empty();
+	                $('#buttonsDiv').append("<a class='internal btn btn-primary' href='?movieId=" + id + "#showMovie'>Watch Movie</a>");
 	                framework.user.balance -= data.rentalPrice;
 	            },
 	            error: function(msg) {
@@ -200,7 +204,9 @@ function displayMovie(data)
 		<hr>\
 		<p>" + data.description + "</p><p><b>Directors:</b> " + data.directors.join(", ") + "</p>\
 		<hr>\
+		<div id='buttonsDiv'>\
 		" + buttons + "\
+		</div>\
 		</div></div>";
 	return s;
 }
