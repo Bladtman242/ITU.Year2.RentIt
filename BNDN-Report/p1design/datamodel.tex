@@ -2,7 +2,7 @@
 \subsubsection{Data Model and Back-end Structures}
 \label{sec:datamodel}
 
-With the overall requirements set we began working on the data model of the system with an initial focus on the database entities and relationships. The database entity-relationship model was sketched in LucidChart \footnote{Lucidchart is a web-based diagramming software which allows users to collaborate and work together in real time to create flowcharts, organisational charts, website wireframes, UML designs, mind maps, software prototypes, and many other diagram types.} using the notation from Database Management Systems \cite{dbbook}. The complete E-R  model is shown in Figure ~\ref{fig:erd}.
+With the overall requirements set we began working on the data model of the system with an initial focus on the database entities and relationships. The database entity-relationship model was sketched in LucidChart \footnote{Lucidchart is a web-based diagramming software which allows users to collaborate and work together in real time to create flowcharts, organisational charts, website wireframes, UML designs, mind maps, software prototypes, and many other diagram types.} using the notation from Database Management Systems \cite{dbbook}. The complete E-R model is shown in Figure ~\ref{fig:erd}.
 
 \begin{figure}[t]
 	\centering
@@ -14,7 +14,7 @@ With the overall requirements set we began working on the data model of the syst
 Our E-R model follows a naming scheme, where each table is named after the real domain object it represents (singularized), with junction tables named by a concatenation of the tables linked. The naming scheme of junction tables are shown in Figure ~\ref{fig:junctionfigure}.
 
 
-\begin{figure}[h]
+\begin{figure}[hbt]
 	\centering
 	\includegraphics[scale=0.5]{./p1design/junctionfigure.png}
 	\caption{Example of concatenated naming for junction tables.}
@@ -42,7 +42,7 @@ This will however create a lot of duplicate columns in different tables. If we w
 The realization that several columns of information is shared across the media suggest for an inheritance based approach, where the shared columns are placed in a “super table”, while every media table will take part in an IS-A relationship with said “super table”. This is the design that can be seen in Figure ~\ref{fig:erd}.
 
 With our minds set on centralizing the common media attributes in the Files super table, we noted that both a movie director and a song artist could be gathered under a common label "Creator". The Files table would then be connected to a "person" table, which would store both song artists and movie directors.
-\begin{figure}[h]
+\begin{figure}[hbt]
 	\centering
 	\centerline{\includegraphics[scale=0.52]{./p1design/dilemma.png}}
 	\caption{Example of the dilemma cases}
@@ -63,7 +63,7 @@ With access to the .NET framework, we considered to make use of the Entity Frame
 Although supporting declarative and functional features, C\# has been designed with the object oriented paradigm in mind \cite{csharpecma}, and as such we decided to use an object oriented approach for our back-end solution. 
 
 We created several object oriented containers (classes) capable of holding the data of our web service. An example of our internal data classes capable of holding media can be seen in Figure ~\ref{fig:orm}.
-\begin{figure}[h]
+\begin{figure}[hbt]
 	\centering
 	\includegraphics[scale=0.7]{./p1design/orm.png}
 	\caption{Example of our oject oriented representation of the datamodel.}
@@ -76,7 +76,7 @@ This object oriented structure is derived from the IS-A relationship of the file
 
 Our objects are designed with \emph{lazy loading} in cases where a seperate database table is needed in order to set a property. Lazy loading is a design pattern, which defers the initialization of a variable until the variable is needed for the first time. This means that when an instance of the user class is prompted to answer if the user is an administrator/manager, the answer will be loaded and stored in the object for future reference. If the user object is never asked for the value of this property, then the value will never be retrieved from the database. In practice this looks like shown in Figure ~\ref{fig:lazyload}.
 
-\begin{figure}[h]
+\begin{figure}[hbt]
 	\centering
 	\includegraphics[scale=1]{./p1design/lazyload.png}
 	\caption{Example of our use of lazy loading. A property from other tables is loaded when read for the first time.}
@@ -88,14 +88,18 @@ This design has potential to increase the performance of our solution in cases w
 
 
 \subsubsection{Supported workflows}
-Our datamodel supports all the workflows presented in our use cases, and it does so by abstracting over the database design and relying on object oriented container classes, which can be retrieved by a few calls to our database access layer. An example use of the back-end is shown here in the context of the following use case from Appendix ~\ref{app:usecases}.
+Our datamodel supports all the workflows presented in our use cases, and it
+does so by abstracting over the database design and relying on object oriented
+container classes, which can be retrieved by a few calls to our database access
+layer. An example use of the back-end is shown here in the context of the
+following requirement:
 
 \begin{itemize}
 \item A user must be able to locate a specific movie/song through text search, matching movies with any property matching the text string.
 \end{itemize}
 
 Our back-end supports the above use case through only 4 lines as seen in Figure ~\ref{fig:moviesearch}.
-\begin{figure}[h]
+\begin{figure}[hbt]
 	\centering
 	\includegraphics[scale=1]{./p1design/moviesearch.png}
 	\caption{Example use of our back-end structure in the context of a use case.}
