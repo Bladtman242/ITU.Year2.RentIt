@@ -6,10 +6,9 @@ container.append(movie(data));
 
 function movie(data)
 {
-	alert(data.downloadLink);
 	var s = "";
-	s+="<center><video width='480' height='320' controls autoplay>\
-			<source src='" + data.downloadLink + "' type='video/mp4'>\
+	s+="<center><video width='480' height='320' controls autoplay >\
+			<source src='http://" + data.downloadLink + "' type='video/mp4'>\
 		</video></center>";
 	return s;
 }	
@@ -24,7 +23,7 @@ function getMovieJSON(id)
 		postData.userId = framework.user.id;
 		$.ajax
 		({
-			url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/' + id + '/download?userId=1',
+			url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/' + id + '/download?userId=' + framework.user.id,
 			type: 'GET',
 			data: JSON.stringify(postData),
 			dataType: 'json',
