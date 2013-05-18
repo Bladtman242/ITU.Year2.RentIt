@@ -54,9 +54,13 @@ namespace moofy.Backend {
                                                 "CREATE TABLE UserFileRating (uid INT NOT NULL, fid INT NOT NULL, rating FLOAT NOT NULL, PRIMARY KEY (uid, fid), FOREIGN KEY (uid) REFERENCES Users(id), FOREIGN KEY (fid) REFERENCES Files(id)) "+
                                                 "CREATE TABLE Admin (id INT PRIMARY KEY NOT NULL, FOREIGN KEY (id) REFERENCES Users(id)) "+
                                                 "INSERT INTO StagedFile VALUES('path') " +
-                                                "INSERT INTO Users (userName, password, name, email, balance) VALUES('SmallSon', 'password', 'John Doe', 'nben@itu.dk', 0), " +
-                                                "('Bigson', 'stortpassword', 'Ikke John Doe', 'lol@itu.dk', 872043) " +
-                                                "INSERT INTO Admin VALUES(1) "+
+                                                "INSERT INTO Users (userName, password, name, email, balance) VALUES('SmallSon', 'password', 'John Doe', 'john@itu.dk', 0), " +
+                                                "('Bigson', 'stortpassword', 'Ikke John Doe', 'lol@itu.dk', 872043), " +
+                                                "('DeletionUser', 'password', 'Captain delete', 'dtu@itu.dk', 2323), " +
+                                                "('User4', 'password', 'Jack', 'dsatu@itu.dk', 0), " +
+                                                "('User5', 'password', 'Joe', 'dtsdasu@itu.dk', 0), " +
+                                                "('User6', 'password', 'Joe Admin', 'ku@itu.dk', 0) " +
+                                                "INSERT INTO Admin VALUES(1), (6) "+
                                                 "INSERT INTO Files VALUES('Life of a Small Son', 10, 25, '', 2013, 'Tells the sad tale of director John Doe''s life as a small son', 'http://4.bp.blogspot.com/-1tmYxvB58CY/UFjMqzTdQKI/AAAAAAAAH_M/g7kWAu4Y4kc/s1600/600px-No_image_available.svg.png',0)," +
                                                 "('Life of a Small Son Title Track (Small Son)', 2, 5, 'rentit.itu.dk/RentIt25/downloads/flute.mp3', 2013, 'Awesome flutez', 'http://4.bp.blogspot.com/-1tmYxvB58CY/UFjMqzTdQKI/AAAAAAAAH_M/g7kWAu4Y4kc/s1600/600px-No_image_available.svg.png',0), "+
                                                 "('A', 1, 2, '', 2912, 'Hej', 'URILOL', 4000), " +
@@ -70,7 +74,8 @@ namespace moofy.Backend {
                                                 "INSERT INTO Artist VALUES ('Vanilla Ice'), ('Xzibit') "+
                                                 "INSERT INTO SongArtist VALUES (2,1),(4,2) "+
                                                 "INSERT INTO Genre VALUES('Dance') "+
-                                                "INSERT INTO GenreFile VALUES(1,2)",
+                                                "INSERT INTO GenreFile VALUES(1,2) " + 
+                                                "INSERT INTO UserFileRating VALUES(1,1, 10)",
                                                 connection);
             command.ExecuteNonQuery();
         }

@@ -41,6 +41,9 @@ namespace moofy.Backend {
         /// <returns>A bool indicating wether the rating was successfully added to the database</returns>
         public bool RateFile(int userId, int fileId, int rating)
         {
+            if(GetUser(userId) == null || (GetMovie(fileId)==null && GetSong(fileId)==null)) {
+                return false;
+            }
             SqlCommand command;
             if (GetRating(userId, fileId) >= 0)
             {
@@ -102,6 +105,9 @@ namespace moofy.Backend {
         /// <param name="promoteeId">The user to be promoted</param>
         /// <returns>succes flag</returns>
         public bool PromotetoAdmin(int promoterId, int promoteeId) {
+            if (GetUser(promoterId) == null || GetUser(promoteeId) == null) {
+                return false;
+            }
             SqlCommand command = new SqlCommand("SELECT * FROM Admin WHERE id =" + promoterId, connection);
             if (command.ExecuteScalar() != null) {
                 command.CommandText = "INSERT INTO Admin VALUES(" + promoteeId + ")";
@@ -117,7 +123,6 @@ namespace moofy.Backend {
         /// <param name="userId">The Id of the user who will have the amount deposited</param>
         /// <returns>success flag</returns>
         public bool Deposit(int amount, int userId) {
-
             SqlCommand command = new SqlCommand("UPDATE Users " +
                                                 "SET balance = balance + " + amount +
                                                 "WHERE id = " + userId,
