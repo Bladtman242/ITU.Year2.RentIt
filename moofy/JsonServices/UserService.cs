@@ -117,7 +117,7 @@ namespace moofy.JsonServices {
             User u = db.GetUser(uid);
             IList<Purchase> purchases = u.Movies;
             foreach (Purchase p in purchases) {
-                if (p.EndTime < DateTime.Now)
+                if (p.EndTime > DateTime.Now)
                     movieList.Add(db.GetMovie(p.File.Id).ToWrapper());
             }
             db.Close();

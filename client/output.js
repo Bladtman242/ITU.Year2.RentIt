@@ -4,6 +4,7 @@
  * This library provides a set of methods for outputting messages to the user. Requires Twitter bootstrap for correct styling.
  */
 var output = new function(){
+    var container = $('#container'); //The container for the output
     //Private DOM element templates initialized on startup. This makes the functions of the library faster, because the DOM node is already created.
     //Since this library is tied up with our (AJAX-based) framework, this happens only once, as the user navigation does not reload the page.
     var templateErrorAlert = $(
@@ -53,7 +54,7 @@ var output = new function(){
         templateErrorAlert.children().eq(1).html(bold);
         templateErrorAlert.children().eq(2).html(nonBold);
         $('.alert').remove();
-        framework.container.prepend(templateErrorAlert);
+        container.prepend(templateErrorAlert);
     };
 
     /**
@@ -65,7 +66,7 @@ var output = new function(){
         templateSuccessAlert.children().eq(1).html(bold);
         templateSuccessAlert.children().eq(2).html(nonBold);
         $('.alert').remove();
-        framework.container.prepend(templateSuccessAlert);
+        container.prepend(templateSuccessAlert);
     };
 
     /***
@@ -87,16 +88,20 @@ var output = new function(){
                 templateActionModal.modal('hide'); //Hide the modal window
                 actionFunction();
             });
-            framework.container.prepend(templateActionModal);
+            container.prepend(templateActionModal);
             templateActionModal.modal(null);
         }else { //Use the one with the cancel button only
             templateModal.children().eq(0).children().eq(1).text(header);
             templateModal.children().eq(1).html(body);
-            framework.container.prepend(templateModal);
+            container.prepend(templateModal);
             templateModal.modal(null);
         }
-        $('.modal a').click(function() {
+        //The below is not needed in the moofy project, since modal hiding has been implemented in the framework.js instead.
+        //Uncomment this if used in other projects with AJAX loading
+        /*
+         $('.modal a').click(function() {
             $('.modal').modal('hide'); //Hide the modal window, when clicking on a link
-        });
+         });
+         */
     };
 };
