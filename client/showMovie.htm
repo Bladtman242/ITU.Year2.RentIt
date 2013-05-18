@@ -8,8 +8,8 @@ function movie(data)
 {
 	alert(data.downloadLink);
 	var s = "";
-	s+="<center><video width='480' height='320' controls autoplay>\
-			<source src='" + data.downloadLink + "' type='video/mp4'>\
+	s+="<center><video width='480' height='320' controls autoplay >\
+			<source src='http://" + data.downloadLink + "' type='video/mp4'>\
 		</video></center>";
 	return s;
 }	
