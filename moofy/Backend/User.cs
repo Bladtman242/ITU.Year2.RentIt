@@ -5,9 +5,8 @@ using System.Text;
 
 namespace moofy.Backend {
     public class User {
-        private int id;
         private bool? isAdmin;
-        private IList<Purchase> purchases, songs, movies;
+        private IList<Purchase> songs, movies;
         private DBAccess db;
 
         public User() {
