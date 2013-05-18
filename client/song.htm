@@ -120,6 +120,7 @@ function validateUserBalance(creditsNeeded, func) {
             func();
         } else {
             output.modal('Not enough credits', 'You don\'t seem to have enough credits. Visit your <a href="#account" class="internal"><i class="icon-user"></i> account page</a> to add credits.');
+            framework.rebindInternalLinks();
         }
 }
 
