@@ -89,8 +89,21 @@ var framework = {
                         $(this).parent().removeClass('active');
                     }
                 });
-            
-                //Link bindings (for internal links) - rebound on every page load as new links appear.
+                
+                framework.rebindInternalLinks();
+                
+                //Push history frame.
+                if(pushState) history.pushState({"page": pageName, "query": query}, pageName, "?"+query+"#"+pageName);
+
+                //Call potential callback
+                if(callBack != null) {
+                    callBack();
+                }
+            });
+        },
+    
+    rebindInternalLinks: function() {
+            //Link bindings (for internal links) - rebound on every page load as new links appear.
                 $("a.internal").unbind('click');
                 $("a.internal").click(function() {
                     var href = $(this).attr("href");
@@ -126,18 +139,9 @@ var framework = {
                     }
                     
                     //Else alert error, and allow link to function normally.
-                    alert("A link with the \"internal\" class with an invalid (external-pointing) href was clicked.");
+                    alert("A link with the \"internal\" class with an invalid href was clicked.");
                     return false;
                 });
-                
-                //Push history frame.
-                if(pushState) history.pushState({"page": pageName, "query": query}, pageName, "?"+query+"#"+pageName);
-
-                //Call potential callback
-                if(callBack != null) {
-                    callBack();
-                }
-            });
         },
 
     
@@ -157,13 +161,11 @@ framework.loadQuery();
 
 //Handle history pop-event: Pop history frame (back/forward navigration)
 window.onpopstate = function(event) {
-    var page = framework.defaultPage;
-    var query = "";
     if(event.state != null) {
         page = event.state.page;
         query = query;
+        framework.loadPage(page,false,query);
     }
-    framework.loadPage(page,false,query);
 };
 
 $(document).ready(function() {
