@@ -32,31 +32,40 @@ describing the artifacts from the system's perspective. Examples are id, and
 view count. These parameters are completely determined by the system, and are
 present regardless of actor interaction.
 
+\textbf{Artifacts:}
+\begin{enumerate}
+\item A movie must have intrinsic properties describing its title, year of
+	release, director(s), and genre(s).
+\item A song must have intrinsic properties describing its title, year of
+	release, artist(s), album title, and genre(s).
+\item An artifact must have an extrinsic property describing its unique id.
+\item An artifact must have an intrinsic property to describe an URI pointing to
+	an image (E.g. cover image for movies).
+\item An artifact must have a property to describe its average
+	user-rating. This property is intrinsic (determined by actors, may be
+	non-present) but only individual ratings are set by by actors, the
+	average is maintained by the system, and it must not be an option for an
+	actor to edit the average directly.
+\item An artifact must have an intrinsic property for a textual description.
+\item An artifact must have a property to describe both a purchase price, and a
+	rental price. These are intrinsic (determined by the actors) but their
+	presence must be enforced by the system.
+\item An artifact must have properties to describe its view count. I.e. number
+	if times the artifact has been viewed or downloaded.
+\newcounter{enumTemp}
+\setcounter{enumTemp}{\theenumi}
+\end{enumerate}
+
 \textbf{Users:}
 \begin{enumerate}
+\setcounter{enumi}{\theenumTemp}
 \item A (non) user must be able to register an account.
 \item A user must be able to login to her account.
 \item A user must be able to edit her account.
+\item A user must be able to close her account.
+\item A previous user must be able to reopen her closed account.
 \item A user may deposit money into her account, to be used for later
 	purchases.
-\item A user must be able to overview artifacts, sorted by the following
-	criteria: lexicographic, release date, genre, rating, and
-	popularity (most viewed/bought).
-\item A user must be able to locate a specific artifact through text search,
-	listing artifacts where any property matches the search string.
-\item A movie must have properties describing its title, year of
-	release, director(s), and genre(s).
-\item A song must have properties describing its title, year of
-	release, artist(s), album title, and genre(s).
-\item An artifact must have a property describing its unique id.
-\item An artifact must have a property to describe an URI pointing to an image
-	(E.g. cover image for movies).
-\item An artifact must have a property to describe its average user-rating.
-\item An artifact must have a property for a textual description.
-\item An artifact must have a property to describe both a purchase price, and a
-	rental price.
-\item An artifact must have properties to describe its view count. I.e. the sum
-	of the times the artifact has been rented and purchased.
 \item A user must be able to purchase an artifact, which will then be associated
 	with her account, for as long as the artifact is available on the
 	service.
@@ -67,6 +76,11 @@ present regardless of actor interaction.
 	This cannot be registered as a new rating, but must be an alteration of
 	the old one, so that a user can only give the same artifact \emph{one}
 	rating.
+\item A user must be able to overview artifacts, sorted by the following
+	criteria: lexicographic, release date, genre, rating, and
+	popularity (per view count).
+\item A user must be able to locate a specific artifact through text search,
+	listing artifacts where any property matches the search string.
 \item A user must be able to watch any artifact associated with her account
 	in the browser, as long as it is still available through the service.
 \item A user must be able to download any artifact associated with her account,
@@ -77,7 +91,6 @@ present regardless of actor interaction.
 \item A user must be able to find all artifacts that are currently associated
 	with her account, as long it is still available through the service (I.e.
 	artifacts that are available to the user at the given time).
-\newcounter{enumTemp}
 \setcounter{enumTemp}{\theenumi}
 \end{enumerate}
 \textbf{Managers:}
@@ -86,7 +99,7 @@ present regardless of actor interaction.
 \item A manager's rights extend those of the user, so that a manager can do
 	everything the user can, albeit without purchase.
 \item A manager must be able to upload movies/songs
-\item A manager must be able to create and edit the properties of an artifact,
+\item A manager must be able to create and edit the properties of any artifact,
 	except for the \emph{extrinsic} properties; average rating and view
 	count.
 \item A manager must be able to delete movies/songs from the service.
