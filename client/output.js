@@ -1,8 +1,11 @@
 //Framework object, "namespace" for all framework functions.
 
-
+/**
+ * This library provides a set of methods for outputting messages to the user. Requires Twitter bootstrap for correct styling.
+ */
 var output = new function(){
-    //Private variables
+    //Private DOM element templates initialized on startup. This makes the functions of the library faster, because the DOM node is already created.
+    //Since this library is tied up with our (AJAX-based) framework, this happens only once, as the user navigation does not reload the page.
     var templateErrorAlert = $(
         "<div class='alert alert-error'>\
             <button type='button' class='close' data-dismiss='alert'>&times;</button>\
@@ -41,6 +44,11 @@ var output = new function(){
         </div>");
 
     //Public functions
+    /**
+     * Outputs an error message in the container.
+     * @param bold The text to be displayed in bold at the start of the message
+     * @param nonBold The rest of the message (not bold)
+     */
     this.error = function(bold, nonBold) {
         templateErrorAlert.children().eq(1).html(bold);
         templateErrorAlert.children().eq(2).html(nonBold);
@@ -48,6 +56,11 @@ var output = new function(){
         framework.container.prepend(templateErrorAlert);
     };
 
+    /**
+     * Outputs a success message in the container.
+     * @param bold The text to be displayed in bold at the start of the message
+     * @param nonBold The rest of the message (not bold)
+     */
     this.success = function(bold, nonBold) {
         templateSuccessAlert.children().eq(1).html(bold);
         templateSuccessAlert.children().eq(2).html(nonBold);
@@ -55,6 +68,14 @@ var output = new function(){
         framework.container.prepend(templateSuccessAlert);
     };
 
+    /***
+     * Outputs a modal dialog.
+     * If the two last parameters are not specified, the modal will only contain a cancel button.
+     * @param header The header of the dialog window
+     * @param body The body of the dialog window
+     * @param actionButtonText Optional text for an action button
+     * @param actionFunction Optional function to be called, when clicking action button
+     */
     this.modal = function(header, body, actionButtonText, actionFunction) {
         $('.modal').remove();
         if (actionButtonText && actionFunction) { //use the action modal
