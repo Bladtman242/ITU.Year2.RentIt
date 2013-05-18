@@ -52,7 +52,6 @@ $('#star').raty({
 	            dataType: 'json',
 	            async: true,
 	            success: function(msg) {
-	                location.reload();
 	                output.success('Success!', 'Your rating has been submitted.');
 	            },
 	            error: function(msg) {
@@ -120,7 +119,6 @@ function validateUserBalance(creditsNeeded, func) {
             func();
         } else {
             output.modal('Not enough credits', 'You don\'t seem to have enough credits. Visit your <a href="#account" class="internal"><i class="icon-user"></i> account page</a> to add credits.');
-            framework.rebindInternalLinks();
         }
 }
 
