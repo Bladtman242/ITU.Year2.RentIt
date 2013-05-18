@@ -51,6 +51,7 @@ $.ajax({
             interval: 4500
         });
         $('#carousel').carousel('cycle');
+        framework.rebindInternalLinks();
     },
     error: function(msg) {
         output.error("Error!","failed to connect to server, please try again");
@@ -67,6 +68,7 @@ $.ajax({
         curCont = movs;
         createThumbContent(curCont);
         setPage(1);
+        framework.rebindInternalLinks();
     },
     error: function(msg) {
         output.error("Error!","failed to connect to server, please try again");
