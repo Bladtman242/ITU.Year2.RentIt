@@ -63,6 +63,8 @@ var framework = {
      * If set to false, the step will not be recalled in history.
      */
     loadPage: function(pageName,pushState,query, callBack) {
+            //Hide any modal windows on the current page
+            $('.modal').modal('hide');
             //Push State default true
             if(pushState == null) pushState = true;
             //Query default empty
