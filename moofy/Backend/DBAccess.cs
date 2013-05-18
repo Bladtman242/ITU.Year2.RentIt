@@ -54,15 +54,15 @@ namespace moofy.Backend {
                                                 "CREATE TABLE UserFileRating (uid INT NOT NULL, fid INT NOT NULL, rating FLOAT NOT NULL, PRIMARY KEY (uid, fid), FOREIGN KEY (uid) REFERENCES Users(id), FOREIGN KEY (fid) REFERENCES Files(id)) "+
                                                 "CREATE TABLE Admin (id INT PRIMARY KEY NOT NULL, FOREIGN KEY (id) REFERENCES Users(id)) "+
                                                 "INSERT INTO StagedFile VALUES('path') " +
-                                                "INSERT INTO Users (userName, password, name, email, balance) VALUES('SmallSon', 'password', 'Niclas Benjamin Tollstorff', 'nben@itu.dk', 0), " +
-                                                "('Bigson', 'stortpassword', 'Ikke Niclas Benjamin Tollstorff', 'lol@itu.dk', 872043) " +
+                                                "INSERT INTO Users (userName, password, name, email, balance) VALUES('SmallSon', 'password', 'John Doe', 'nben@itu.dk', 0), " +
+                                                "('Bigson', 'stortpassword', 'Ikke John Doe', 'lol@itu.dk', 872043) " +
                                                 "INSERT INTO Admin VALUES(1) "+
-                                                "INSERT INTO Files VALUES('Life of a Small Son', 10, 25, '', 2013, 'Tells the sad tale of director Niclas Benjamin Tollstorff''s life as a small son', 'http://4.bp.blogspot.com/-1tmYxvB58CY/UFjMqzTdQKI/AAAAAAAAH_M/g7kWAu4Y4kc/s1600/600px-No_image_available.svg.png',0),"+
+                                                "INSERT INTO Files VALUES('Life of a Small Son', 10, 25, '', 2013, 'Tells the sad tale of director John Doe''s life as a small son', 'http://4.bp.blogspot.com/-1tmYxvB58CY/UFjMqzTdQKI/AAAAAAAAH_M/g7kWAu4Y4kc/s1600/600px-No_image_available.svg.png',0)," +
                                                 "('Life of a Small Son Title Track (Small Son)', 2, 5, 'rentit.itu.dk/RentIt25/downloads/flute.mp3', 2013, 'Awesome flutez', 'http://4.bp.blogspot.com/-1tmYxvB58CY/UFjMqzTdQKI/AAAAAAAAH_M/g7kWAu4Y4kc/s1600/600px-No_image_available.svg.png',0), "+
                                                 "('A', 1, 2, '', 2912, 'Hej', 'URILOL', 4000), " +
                                                 "('Sang', 55, 345, '', 93, 'dsffd', '.', 1) " +
                                                 "INSERT INTO Movie VALUES(1), (3) " +
-                                                "INSERT INTO Director VALUES('Niclas Benjamin Tollstorff'), "+
+                                                "INSERT INTO Director VALUES('Ben Hansen'), " +
                                                 "('Søren') "+
                                                 "INSERT INTO MovieDirector VALUES(1,1),(3,1) " +
                                                 "INSERT INTO Song VALUES(2, 'Life of a Small Son Soundtrack'), "+
