@@ -1,20 +1,77 @@
 \subsection{Requirements}
-As part of the analysis, we need a set of requirements for our product to establish what users will and will not be able to do with the system. This section describes and discusses our choice of requirements and use cases.
+As part of the analysis, we need a set of requirements for our product to
+establish what users will and will not be able to do with the system. This
+section describes and discusses our choice of requirements and use cases.
+
+We did not immediately arrive at our current requirements. They have changed
+over a series of iterations in which we revised and discussed them internally in
+the group, as well as with the Singaporean team. For example, our first draft of
+requirements did not include songs at all. It was not until the Singaporean team
+told us that they were required by their professor to include songs in their
+service that this became part of our requirements. The Singaporean team also
+made suggestions that media files include ratings and view count to allow us to
+sort by rating and popularity. In general, the requirements were almost
+exclusively changed on request by the Singaporean team. We, the ITU team,
+naturally had few additions to our initial specification.
+
+There are two types of primary actors: users and managers. A manager’s rights are a
+superset of a regular user’s rights. In addition, managers do not have to
+purchase anything.
 
 
-We did not immediately arrive at our current requirements. They have changed over a series of iterations in which we revised and discussed them, both internally in the group, but mostly with the Singaporean team. 
-For example, our first draft of requirements did not include songs at all. It was not until the Singaporean team told us that they were required by their professor to include songs in their service that this became part of our requirements. The Singaporean team also made suggestions that media files include ratings and view count to allow us to sort by rating and popularity. In general, the requirements were almost exclusively changed when the Singaporean team requested it. We, the ITU team, hardly changed the requirements of our service unless unless the Singaporean team requested it.
-
-
-There are two types of users: users and managers. A manager’s rights are a superset of a regular user’s rights. In addition, managers do not have to purchase anything.
-
-
-Our use cases, which describe in more detail what users and managers must be able to do with the system, are shown in Appendix ~\ref{app:usecases}.
-
-\subsubsection{Security and other Design Decisions}
-When deciding on the requirements for the system, several criteria are considered, and some requirements which might be crucial in a real-life product are left out. These decisions are mainly made on the basis that this is an educational project, making these requirements more or less irrelevant to the project:
+\subsection{Use Cases}
+\label{app:usecases}
+\textbf{Users:}
 \begin{itemize}
-\item We decided to leave out user authentication in our web services, so given the URL, anyone can download a movie our song without authenticating. The data structure does, however, support user authentication with each user having a password.
-\item In a real-life renting service such as iTunes, once a user starts playing the movie that she has just rented, the movie will only be available for viewing in the next 48 hours. When a user rents and downloads a movie or song using our service, they can keep the file for as long as they want. However, the file is only available for download for a limited period of time.
-\item Naturally, we have not implemented a real payment service but rather a "fake" balance where people can deposit money to their account, for use when purchasing or renting movies and songs.
+\item A user must be able to login, register, and edit an account.
+\item A user may deposit money into her account, to be used for later
+	purchases.
+\item A user must be able to overview movies/songs by the following categories:
+	lexicographically, by release date, genre, rating, and popularity.
+\item A user must be able to locate a specific movie/song through text search,
+	matching movies with any property matching the text string.
+\item A movie must have properties describing title of movie/song, year of
+	release, director(s), genre(s) of movie, and a textual description.
+\item A user must be able to purchase a movie/song, which will then be
+	associated with her account.
+\item A user must be able to rent a movie/song, which will then be associated
+	with her account for 2 days.
+\item A user must be able to watch any movie/song associated with her account
+	in the browser, as long as it is still available through the service.
+\item A user must be able to download any movie/song associated with her
+	account, as long as it is still available through the service.
+\item A user must be able to find all movies/songs that are or have been
+	associated with her account, as long it is still available through the
+	service (ie. movies the user has purchased or rented at a given time).
+\item A user must be able to find all movies/songs that are associated with her
+	account, as long it is still available through the service (ie. movies
+	that the user can watch at the given time).
+\end{itemize}
+\textbf{Managers:}
+\begin{itemize}
+\item A manager's rights extend those of the user, so that a manager can do
+	everything the user can, without purchase.
+\item A manager must be able to upload movies/songs as well as provide
+	properties and prices to them.
+\item A manager must be able to delete movies/songs from the service.
+\end{itemize}
+\subsubsection{Security and other Design Decisions} When deciding on the
+requirements for the system, several criteria are considered, and some
+requirements which might be crucial in a real-life product are left out. These
+decisions are mainly made on the basis that this is an educational project,
+making these requirements more or less irrelevant to the project:
+\begin{itemize}
+\item We decided to leave out user authentication in our web services, so given
+	the URL, anyone can download a movie our song without authenticating.
+	The data structure does, however, support user authentication with each
+	user having a password.
+\item In a real-life renting service such as iTunes, once a user starts playing
+	the movie that she has just rented, the movie will only be available
+	for viewing in the next 48 hours. When a user rents and downloads a
+	movie or song using our service, they can keep the file for as long as
+	they want. However, the file is only available for download for a
+	limited period of time.
+\item Naturally, we have not implemented a real payment service but rather a
+	"fake" balance where people can deposit money to their account, for use
+	when purchasing or renting movies and songs.
 \end{itemize}
