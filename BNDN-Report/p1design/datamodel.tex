@@ -2,7 +2,7 @@
 \subsubsection{Data Model and Back-end Structures}
 \label{sec:datamodel}
 
-With the overall requirements set we began working on the data model of the system with an initial focus on the database entities and relationships. The database entity-relationship model was sketched in LucidChart \footnote{Lucidchart is a web-based diagramming software which allows users to collaborate and work together in real time to create flowcharts, organisational charts, website wireframes, UML designs, mind maps, software prototypes, and many other diagram types.} using the notation from Database Management Systems \cite{dbbook}. The complete E-R  model is shown in Figure ~\ref{fig:erd}.
+With the overall requirements set we began working on the data model of the system with an initial focus on the database entities and relationships. The database entity-relationship model was sketched in LucidChart \footnote{Lucidchart is a web-based diagramming software which allows users to collaborate and work together in real time to create flowcharts, organisational charts, website wireframes, UML designs, mind maps, software prototypes, and many other diagram types.} using the notation from Database Management Systems \cite{dbbook}. The complete E-R model is shown in Figure ~\ref{fig:erd}.
 
 \begin{figure}[t]
 	\centering
@@ -88,7 +88,11 @@ This design has potential to increase the performance of our solution in cases w
 
 
 \subsubsection{Supported workflows}
-Our datamodel supports all the workflows presented in our use cases, and it does so by abstracting over the database design and relying on object oriented container classes, which can be retrieved by a few calls to our database access layer. An example use of the back-end is shown here in the context of the following use case from Appendix ~\ref{app:usecases}.
+Our datamodel supports all the workflows presented in our use cases, and it
+does so by abstracting over the database design and relying on object oriented
+container classes, which can be retrieved by a few calls to our database access
+layer. An example use of the back-end is shown here in the context of the
+following requirement:
 
 \begin{itemize}
 \item A user must be able to locate a specific movie/song through text search, matching movies with any property matching the text string.

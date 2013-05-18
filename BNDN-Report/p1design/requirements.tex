@@ -18,43 +18,58 @@ There are two types of primary actors: users and managers. A manager’s rights 
 superset of a regular user’s rights. In addition, managers do not have to
 purchase anything.
 
+\label{sec:requirements}
+In this document, the word "user" shall refer to an existing, registered user.
+The word artifact shall refer to a movie or song. (I.e. the products available
+for rent/purchase in the system)
 
-\subsection{Use Cases}
-\label{app:usecases}
 \textbf{Users:}
-\begin{itemize}
-\item A user must be able to login, register, and edit an account.
+\begin{enumerate}
+\item A (non) user must be able to register an account.
+\item A user must be able to login to her account.
+\item A user must be able to edit her account.
 \item A user may deposit money into her account, to be used for later
 	purchases.
-\item A user must be able to overview movies/songs by the following categories:
-	lexicographically, by release date, genre, rating, and popularity.
-\item A user must be able to locate a specific movie/song through text search,
-	matching movies with any property matching the text string.
-\item A movie must have properties describing title of movie/song, year of
-	release, director(s), genre(s) of movie, and a textual description.
-\item A user must be able to purchase a movie/song, which will then be
-	associated with her account.
-\item A user must be able to rent a movie/song, which will then be associated
+\item A user must be able to overview artifacts, sorted by the following
+	criteria: lexicographic, release date, genre, rating, and
+	popularity (most viewed/bought).
+\item A user must be able to locate a specific artifact through text search,
+	listing artifacts where any property matches the search string.
+\item A movie must have properties describing its title, year of
+	release, director(s), and genre(s).
+\item A song must have properties describing its title, year of
+	release, artist(s), album title,  and genre(s).
+\item Additionally, an artifact must have properties to describe its unique id,
+	an URI pointing to an image (E.g. cover image for movies), an average
+	user-rating, a textual description, a purchase price, a rental price,
+	and a view count.
+\item A user must be able to purchase an artifact, which will then be associated
+	with her account, for as long as the artifact is available on the
+	service.
+\item A user must be able to rent a artifact, which will then be associated
 	with her account for 2 days.
-\item A user must be able to watch any movie/song associated with her account
+\item A user must be able to watch any artifact associated with her account
 	in the browser, as long as it is still available through the service.
-\item A user must be able to download any movie/song associated with her
-	account, as long as it is still available through the service.
-\item A user must be able to find all movies/songs that are or have been
-	associated with her account, as long it is still available through the
-	service (ie. movies the user has purchased or rented at a given time).
-\item A user must be able to find all movies/songs that are associated with her
-	account, as long it is still available through the service (ie. movies
-	that the user can watch at the given time).
-\end{itemize}
+\item A user must be able to download any artifact associated with her account,
+	as long as it is still available through the service.
+\item A user must be able to retrieve a listing of any artifact that is, or has
+	been, associated with her account, as long it is still available through
+	the service.
+\item A user must be able to find all artifacts that are currently associated
+	with her account, as long it is still available through the service (I.e.
+	artifacts that are available to the user at the given time).
+\end{enumerate}
 \textbf{Managers:}
-\begin{itemize}
+\begin{enumerate}
 \item A manager's rights extend those of the user, so that a manager can do
 	everything the user can, without purchase.
-\item A manager must be able to upload movies/songs as well as provide
-	properties and prices to them.
+\item A manager must be able to upload movies/songs
+\item A manager must be able to create and edit the properties of an artifact,
+	except for the \emph{extrinsic} properties; average rating and view
+	count.
 \item A manager must be able to delete movies/songs from the service.
-\end{itemize}
+\end{enumerate}
+
 \subsubsection{Security and other Design Decisions} When deciding on the
 requirements for the system, several criteria are considered, and some
 requirements which might be crucial in a real-life product are left out. These
