@@ -78,7 +78,7 @@ $('#star').raty({
 	                var linkJSON = getMovieLinkJSON(id);
 	                $('#buttonsDiv').empty();
 	                $('#buttonsDiv').append("<a class='internal btn btn-primary' href='?movieId=" + id + "#showMovie'>Watch Movie</a>");
-	                $('#buttonsDiv').append("<a class='btn' href='http://" + linkJSON.downloadLink + "'>Download Movie</a>");
+	                $('#buttonsDiv').append("<a class='internal btn' href='http://" + linkJSON.downloadLink + "' download='" + data.title + "'>Download Movie</a>");
 	                framework.user.balance -= data.purchasePrice;
 	            },
 	            error: function(msg) {
@@ -108,7 +108,7 @@ $('#star').raty({
 	                var linkJSON = getMovieLinkJSON(id);
 	                $('#buttonsDiv').empty();
 	                $('#buttonsDiv').append("<a class='internal btn btn-primary' href='?movieId=" + id + "#showMovie'>Watch Movie</a>");
-	                $('#buttonsDiv').append("<a class='btn' href='http://" + linkJSON.downloadLink + "'>Download Movie</a>");
+	                $('#buttonsDiv').append("<a class='internal btn' href='http://" + linkJSON.downloadLink + "' download='" + data.title + "'>Download Movie</a>");
 	                framework.user.balance -= data.rentalPrice;
 	            },
 	            error: function(msg) {
@@ -232,7 +232,7 @@ function displayMovie(data)
 	{
 		var linkJSON = getMovieLinkJSON(id);
 		buttons = "<a class='internal btn btn-primary' href='?movieId=" + id + "#showMovie'>Watch Movie</a>\
-				   <a class='btn' href='http://" + linkJSON.downloadLink + "' download='MyGoogleLogo'>Download Movie</a>";
+				   <a class='btn' href='http://" + linkJSON.downloadLink + "' download='" + data.title + "'>Download Movie</a>";
 	}
 	
 	// create site contents
