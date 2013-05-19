@@ -1,7 +1,41 @@
-\subsection{Designing a Client}
+\subsection{Client Design}
 
-- about general design of client -
+When designing the client we first looked through the requirements to decide
+which features would need to be developed in the client. Some features were
+covered entirely in the server, most had root in the server but required a
+layer in the client as well, and a few were to be developed in the client
+only.
 
-- sent i processen indså vi at promote/demote ikke kunne understøttes uden liste af users -
+\textbf{Examples\\Appendix of requirements categorized}
+
+After prioritizing the list of features, we developed it into a list of views,
+each view representing something a user of the client would see. Each feature
+was not necessarily exactly one view (most views contained several features).
+
+\textbf{Example!\\Full list in appendix}
+
+We then implemented the views, feature by feature. This means that some views
+were first developed in an \emph{incomplete} state, with the most highly
+prioritized feature, and then later developed into the full planned view. We
+chose not to try and have automated tests of the client, as it is pretty much
+just a user interface, and testing user interfaces is tricky and a very
+changeable field in software development.
+
+\textbf{References!!!}
+
+Only a single requirement caused an issue during development of the client:
+demotion of managers to users and promotion the other way. As the feature
+had a fairly low priority, the issue was not discovered until late in the
+development process.
+
+The issue arises because a manager has no way of getting a list of users. This
+is neither supported in the service nor in the client (specifications and
+implementations). Listing users is a required to access user profiles, which, in
+turn, is required to de- or promote them.
+
+This is a scary example of how bad requirements can result in huge problems much
+later in development. Fixing the problem at this point would require changes to
+the API specification and backend service on top of the already required changes
+to the client.
 
 \input{./p1design/client-technology}
