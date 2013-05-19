@@ -1,0 +1,44 @@
+<script>
+var container = $("#container");
+var id = framework.query.songId;
+var data = getSongJSON(id);
+container.append(song(data));
+
+function song(data)
+{
+	var s = "";
+	s+="<center><audio controls autoplay >\
+			<source src='http://" + data.downloadLink + "' type='audio/mp3'>\
+		</audio></center>";
+	return s;
+}	
+function getSongJSON(id)
+{
+	var json = "";
+	var postData = {};
+	if (framework.user == null)
+		output.error('Error!', 'You must be logged in to listen to a song');
+	else
+	{
+		postData.userId = framework.user.id;
+		$.ajax
+		({
+			url: 'http://rentit.itu.dk/RentIt25/moofy.svc/songs/' + id + '/download?userId=' + framework.user.id,
+			type: 'GET',
+			data: JSON.stringify(postData),
+			dataType: 'json',
+			contentType: 'application/json; charset=utf-8',
+			async: false,
+			success: function(data) 
+			{
+				json=data;
+			},
+			error: function(msg)
+			{
+				alert("Song not found --- id "+id);
+			}
+		});
+	}
+    return json;
+}
+</script>
