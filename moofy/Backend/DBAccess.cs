@@ -74,7 +74,11 @@ namespace moofy.Backend {
                                                 "INSERT INTO Artist VALUES ('Vanilla Ice'), ('Xzibit') "+
                                                 "INSERT INTO SongArtist VALUES (2,1),(4,2) "+
                                                 "INSERT INTO Genre VALUES('Dance') "+
-                                                "INSERT INTO GenreFile VALUES(1,2) " + 
+                                                "INSERT INTO GenreFile VALUES(1,2) " +
+                                                "INSERT INTO UserFile VALUES (1,1, '9999-12-31 23:59:59.000'), " +
+                                                "(1,2, '9999-12-31 23:59:59.000'), " +
+                                                "(1,3, '2012-12-24 00:00:00.000'), " +
+                                                "(1,4, '2012-12-24 00:00:00.000') " + 
                                                 "INSERT INTO UserFileRating VALUES(1,1, 10)",
                                                 connection);
             command.ExecuteNonQuery();

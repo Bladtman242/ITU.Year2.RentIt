@@ -32,8 +32,16 @@ namespace moofy.Backend.Tests {
             Assert.AreEqual(expected.Email, actual.Email);
             Assert.AreEqual(expected.Balance, actual.Balance);
             Assert.AreEqual(expected.IsAdmin, actual.IsAdmin);
-            Assert.IsTrue(actual.Movies.SequenceEqual<Purchase>(expected.Movies));
-            Assert.IsTrue(actual.Songs.SequenceEqual<Purchase>(expected.Songs));
+            Assert.AreEqual(expected.Movies.Count, actual.Movies.Count);
+            for (int i = 0; i < expected.Movies.Count; i++) {
+                Assert.IsTrue(expected.Movies[i].File.Title.Equals(actual.Movies[i].File.Title));
+                Assert.IsTrue(expected.Movies[i].EndTime.Equals(actual.Movies[i].EndTime));
+            }
+            Assert.AreEqual(expected.Songs.Count, actual.Songs.Count);
+            for (int i = 0; i < expected.Songs.Count; i++) {
+                Assert.IsTrue(expected.Songs[i].File.Title.Equals(actual.Songs[i].File.Title));
+                Assert.IsTrue(expected.Songs[i].EndTime.Equals(actual.Songs[i].EndTime));
+            }
         }
 
         //Update User tests
@@ -270,87 +278,175 @@ namespace moofy.Backend.Tests {
         //Login
         [TestMethod]
         public void LoginValidUsernameValidPasswordTest() {
-
+            User user = db.GetUser(2);
+            Assert.AreEqual(2, db.Login(user.Username, user.Password)); 
         }
 
         [TestMethod]
         public void LoginInvalidUsernamePasswordTest() {
-
+            User user1 = db.GetUser(1);
+            User user2 = db.GetUser(2);
+            Assert.AreEqual(-1, db.Login(user1.Username, user2.Password)); 
         }
 
         [TestMethod]
         public void LoginNonExistingUsernamePasswordTest() {
-
+            User user = db.GetUser(2);
+            Assert.AreEqual(-1, db.Login("Noone has this username", user.Password)); 
         }
 
         //AddUser
         [TestMethod]
         public void AddValidUserTest() {
-
+            string username = "SQLrillex";
+            string name="John";
+            string email="Johnsmail@itu.dk";
+            string password="John123";
+            int balance = 0;
+            User userToAdd = new User() {
+                Username=username,
+                Name=name,
+                Email=email,
+                Password=password,
+                Balance=balance
+            };
+            User addedUser = db.AddUser(userToAdd);
+            Assert.IsTrue(addedUser != null);
+            //Make sure the user is initialized with the right values
+            Assert.AreEqual(false, addedUser.IsAdmin);
+            Assert.AreEqual(0, addedUser.Songs.Count);
+            Assert.AreEqual(0, addedUser.Movies.Count);
+            //compare the old and new user
+            userToAdd.Id = addedUser.Id; //set the id, since this is not lazy loaded.
+            _AssertUserEquality(userToAdd, addedUser);
         }
 
         [TestMethod]
         public void AddInvalidUserTest() {
-
+            string username = null;
+            string name = "John";
+            string email = "Johnsmail@itu.dk";
+            string password = "John123";
+            int balance = 0;
+            User userToAdd = new User() {
+                Username = username,
+                Name = name,
+                Email = email,
+                Password = password,
+                Balance = balance
+            };
+            User addedUser = db.AddUser(userToAdd);
+            Assert.AreEqual(-1, addedUser.Id); //id = -1 means the user is invalid
+            Assert.IsTrue(addedUser.Name == null); //the users fields are not even set
         }
 
         //GetUser
         [TestMethod]
         public void GetValidUserTest() {
-
+            User actualUser = db.GetUser(1);
+            Assert.AreEqual(1, actualUser.Id);
+            //Match up against known data
+            Assert.IsTrue(actualUser.Name.Equals("John Doe") || actualUser.Name.Equals("Phillip De Romanero"));
+            Assert.AreEqual("SmallSon", actualUser.Username);
+            Assert.AreEqual("password", actualUser.Password);
+            Assert.AreEqual("john@itu.dk", actualUser.Email);
+            Assert.AreEqual(0, actualUser.Balance);
+            //Lazy loading tested seperately
         }
 
         [TestMethod]
         public void GetInvalidUserTest() {
-
+            User actualUser = db.GetUser(9000);
+            Assert.IsTrue(actualUser == null);
         }
 
         //GetIsAdmin
         [TestMethod]
         public void GetIsAdminAdminUserTest() {
-
+            Assert.IsTrue(db.GetIsAdmin(1));
         }
 
         [TestMethod]
         public void GetIsAdminNonAdminUserTest() {
-
+            Assert.IsFalse(db.GetIsAdmin(5));
         }
 
         [TestMethod]
         public void GetIsAdminNonExistingUserUserTest() {
+            Assert.IsFalse(db.GetIsAdmin(9000));
+        }
 
+        //GetPurchases
+        [TestMethod]
+        public void GetPurchasesValidUserWithPurchasesTest() {
+            var purchases = db.GetPurchases(1);
+            Assert.AreEqual(4, purchases.Count);
+            Assert.AreEqual("Life of a Small Son", purchases[0].File.Title);
+            Assert.AreEqual(new DateTime(9999, 12, 31, 23, 59, 59), purchases[0].EndTime);
+            Assert.AreEqual("Life of a Small Son Title Track (Small Son)", purchases[1].File.Title);
+            Assert.AreEqual(new DateTime(9999, 12, 31, 23, 59, 59), purchases[1].EndTime);
+            Assert.AreEqual("A", purchases[2].File.Title);
+            Assert.AreEqual(new DateTime(2012, 12, 24), purchases[2].EndTime);
+            Assert.AreEqual("Sang", purchases[3].File.Title);
+            Assert.AreEqual(new DateTime(2012, 12, 24), purchases[3].EndTime);
+        }
+
+        [TestMethod]
+        public void GetPurchasesValidUserWithoutPurchaseTest() {
+            var purchases = db.GetPurchases(2);
+            Assert.AreEqual(0, purchases.Count);
+        }
+
+        [TestMethod]
+        public void GetPurchasesInvalidUserTest() {
+            var purchases = db.GetPurchases(9000);
+            Assert.AreEqual(0, purchases.Count);
         }
 
         //GetSongs
         [TestMethod]
         public void GetSongsValidUserWithSongsTest() {
-
+            var songs = db.GetSongs(1);
+            Assert.AreEqual(2, songs.Count);
+            Assert.AreEqual("Life of a Small Son Title Track (Small Son)", songs[0].File.Title);
+            Assert.AreEqual(new DateTime(9999, 12, 31, 23, 59, 59), songs[0].EndTime);
+            Assert.AreEqual("Sang", songs[1].File.Title);
+            Assert.AreEqual(new DateTime(2012, 12, 24), songs[1].EndTime);
         }
 
         [TestMethod]
         public void GetSongsValidUserWithoutSongTest() {
-
+            var songs = db.GetSongs(2);
+            Assert.AreEqual(0, songs.Count);
         }
 
         [TestMethod]
         public void GetSongsInvalidUserTest() {
-
+            var songs = db.GetSongs(9000);
+            Assert.AreEqual(0, songs.Count);
         }
 
         //GetMovies
         [TestMethod]
         public void GetMoviesValidUserWithMoviesTest() {
-
+            var movies = db.GetMovies(1);
+            Assert.AreEqual(2, movies.Count);
+            Assert.AreEqual("Life of a Small Son", movies[0].File.Title);
+            Assert.AreEqual(new DateTime(9999, 12, 31, 23, 59, 59), movies[0].EndTime);
+            Assert.AreEqual("A", movies[1].File.Title);
+            Assert.AreEqual(new DateTime(2012, 12, 24), movies[1].EndTime);
         }
 
         [TestMethod]
         public void GetMoviesValidUserWithoutMovieTest() {
-
+            var movies = db.GetMovies(2);
+            Assert.AreEqual(0, movies.Count);
         }
 
         [TestMethod]
         public void GetMoviesInvalidUserTest() {
-
+            var movies = db.GetMovies(9000);
+            Assert.AreEqual(0, movies.Count);
         }
 
     }
