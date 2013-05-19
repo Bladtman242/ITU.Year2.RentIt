@@ -234,7 +234,7 @@ function displayMovie(data)
 	{
 		var linkJSON = getMovieLinkJSON(id);
 		buttons = "<a class='internal btn btn-primary' href='?movieId=" + id + "#showMovie'>Watch Movie</a>\
-				   <a class='btn' href='http://" + linkJSON.downloadLink + "' target='_blank'>Download Movie</a>";
+				   <a class='btn' href='http://" + linkJSON.downloadLink + "' download target='_blank'>Download Movie</a>";
 	}
 	
 	// create site contents
