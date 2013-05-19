@@ -1,18 +1,22 @@
 \subsection{Client Design}
 
-When designing the client we first looked through the requirements to decide
-which features would need to be developed in the client. Some features were
-covered entirely in the server, most had root in the server but required a
-layer in the client as well, and a few were to be developed in the client
-only.
+When designing the client we first looked through the requirements (listed in
+Section \ref{sec:requirements}) to decide which features would need to be
+developed in the client. Most features had root in the server but required a
+layer in the client as well, and a few were to be developed in the client only.
+A few requirements were not implemented in the service, and were hence dropped
+for the client (see Section \ref{sec:futureimps}).
 
-\textbf{Examples\\Appendix of requirements categorized}
+\textbf{Re: Above. Er der nogen requirements der kun er lavet i klienten? Ellers
+revider ovenfor.}
 
 After prioritizing the list of features, we developed it into a list of views,
-each view representing something a user of the client would see. Each feature
-was not necessarily exactly one view (most views contained several features).
+each view representing something a user of the client would see (see Appendix
+\ref{app:client-views}). Each feature was not necessarily exactly one view (most
+views contained several features).
 
-\textbf{Example!\\Full list in appendix}
+For example, the \textbf{Manager overview} view were to provide "functionality
+for uploading/creating new movies and songs", covering requirements 26 to 28.
 
 We then implemented the views, feature by feature. This means that some views
 were first developed in an \emph{incomplete} state, with the most highly

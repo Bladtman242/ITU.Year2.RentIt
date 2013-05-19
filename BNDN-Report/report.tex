@@ -19,6 +19,7 @@
 \usepackage{underscore}
 \usepackage{lastpage}
 \usepackage{pdfpages}
+\usepackage{tocvsec2}
 \usepackage[bookmarks]{hyperref}
 
 % Macros
@@ -84,10 +85,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Appendices
 \newpage
+\settocdepth{section}
 \appendix
-\section{Appendices}
-%\addcontentsline{toc}{\protect\setcounter{tocdepth}{1}}
-%\addcontentsline{toc}{section}{Appendices}
+\addcontentsline{toc}{part}{Appendices}
 \input{./Appendices/main}
 
 \end{document}
