@@ -52,7 +52,6 @@ $('#star').raty({
 	            dataType: 'json',
 	            async: true,
 	            success: function(msg) {
-	                location.reload();
 	                output.success('Success!', 'Your rating has been submitted.');
 	            },
 	            error: function(msg) {
@@ -76,6 +75,10 @@ $('#star').raty({
 	            async: true,
 	            success: function(msg) {
 	                output.success('Success!', 'The item was bought.');
+	                var linkJSON = getSongLinkJSON(id);
+	                $('#buttonsDiv').empty();
+	                $('#buttonsDiv').append("<a class='internal btn btn-primary' href='?songId=" + id + "#showSong'>Listen to Song</a>");
+				   	$('#buttonsDiv').append("<a class='btn' href='http://" + linkJSON.downloadLink + "' download='" + data.title + "'>Download Song</a>");
 	                framework.user.balance -= data.purchasePrice;
 	            },
 	            error: function(msg) {
@@ -102,6 +105,10 @@ $('#star').raty({
 	            async: true,
 	            success: function(msg) {
 	                output.success('Success!', 'The item was rented.');
+	              	var linkJSON = getSongLinkJSON(id);
+	                $('#buttonsDiv').empty();
+	                $('#buttonsDiv').append("<a class='internal btn btn-primary' href='?songId=" + id + "#showSong'>Listen to Song</a>");
+				   	$('#buttonsDiv').append("<a class='btn' href='http://" + linkJSON.downloadLink + "' download='" + data.title + "'>Download Song</a>");
 	                framework.user.balance -= data.rentalPrice;
 	            },
 	            error: function(msg) {
@@ -219,8 +226,8 @@ function displaySong()
 	if (userOwnsSong)
 	{
 		var linkJSON = getSongLinkJSON(id);
-		buttons = "<a class='internal btn btn-primary' href='?songId=" + id + "#showSong'>Listen to Song (lyder mega dumt jo)</a>\
-				   <a class='btn' href='http://" + linkJSON.downloadLink + "' download target='_blank'>Download Song</a>";
+		buttons = "<a class='internal btn btn-primary' href='?songId=" + id + "#showSong'>Listen to Song</a>\
+				   <a class='btn' href='http://" + linkJSON.downloadLink + "' download='" + data.title + "'>Download Song</a>";
 	}
 
 	// create site contents
