@@ -75,8 +75,10 @@ $('#star').raty({
 	            async: true,
 	            success: function(msg) {
 	                output.success('Success!', 'The item was bought.');
+	                var linkJSON = getMovieLinkJSON(id);
 	                $('#buttonsDiv').empty();
 	                $('#buttonsDiv').append("<a class='internal btn btn-primary' href='?movieId=" + id + "#showMovie'>Watch Movie</a>");
+	                $('#buttonsDiv').append("<a class='btn' href='http://" + linkJSON.downloadLink + "'>Download Movie</a>");
 	                framework.user.balance -= data.purchasePrice;
 	            },
 	            error: function(msg) {
@@ -103,8 +105,10 @@ $('#star').raty({
 	            async: true,
 	            success: function(msg) {
 	                output.success('Success!', 'The item was rented.');
+	                var linkJSON = getMovieLinkJSON(id);
 	                $('#buttonsDiv').empty();
 	                $('#buttonsDiv').append("<a class='internal btn btn-primary' href='?movieId=" + id + "#showMovie'>Watch Movie</a>");
+	                $('#buttonsDiv').append("<a class='btn' href='http://" + linkJSON.downloadLink + "'>Download Movie</a>");
 	                framework.user.balance -= data.rentalPrice;
 	            },
 	            error: function(msg) {
@@ -116,6 +120,11 @@ $('#star').raty({
 	        output.modal('Are you sure?', 'Do you really want to rent this movie?', 'Rent', onRentClick);
 	    };
 	    validateUserBalance(data.rentalPrice, callAfterValidation);
+	});
+	
+	$("#fileRequest").click(function() {
+		var linkJSON = getMovieLinkJSON(id);
+    	window.location = "http://" + linkJSON.downloadLink;
 	});
 
 function validateUserBalance(creditsNeeded, func) {
@@ -218,15 +227,14 @@ function displayMovie(data)
 			if (movs[i].id == id) userOwnsMovie = true;
 	}
 	
-	var linkJSON = getMovieLinkJSON(id);
+	
 		
 	// decide which buttons to show, depending on whether the user is allowed to watch the movie or not
 	if (userOwnsMovie)
 	{
+		var linkJSON = getMovieLinkJSON(id);
 		buttons = "<a class='internal btn btn-primary' href='?movieId=" + id + "#showMovie'>Watch Movie</a>\
-				  <form method='get' action='http://" + linkJSON.downloadLink + "'>\
-				  <button type='submit' class='internal btn'>HEJ TEAM</button>\
-				  </form>";
+				   <a class='btn' href='http://" + linkJSON.downloadLink + "' target='_blank'>Download Movie</a>";
 	}
 	
 	// create site contents
