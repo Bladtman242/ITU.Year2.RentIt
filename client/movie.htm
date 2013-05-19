@@ -75,8 +75,10 @@ $('#star').raty({
 	            async: true,
 	            success: function(msg) {
 	                output.success('Success!', 'The item was bought.');
+	                var linkJSON = getMovieLinkJSON(id);
 	                $('#buttonsDiv').empty();
 	                $('#buttonsDiv').append("<a class='internal btn btn-primary' href='?movieId=" + id + "#showMovie'>Watch Movie</a>");
+	                $('#buttonsDiv').append("<a class='btn' href='http://" + linkJSON.downloadLink + "'>Download Movie</a>");
 	                framework.user.balance -= data.purchasePrice;
 	            },
 	            error: function(msg) {
@@ -103,8 +105,10 @@ $('#star').raty({
 	            async: true,
 	            success: function(msg) {
 	                output.success('Success!', 'The item was rented.');
+	                var linkJSON = getMovieLinkJSON(id);
 	                $('#buttonsDiv').empty();
 	                $('#buttonsDiv').append("<a class='internal btn btn-primary' href='?movieId=" + id + "#showMovie'>Watch Movie</a>");
+	                $('#buttonsDiv').append("<a class='btn' href='http://" + linkJSON.downloadLink + "'>Download Movie</a>");
 	                framework.user.balance -= data.rentalPrice;
 	            },
 	            error: function(msg) {
@@ -116,6 +120,11 @@ $('#star').raty({
 	        output.modal('Are you sure?', 'Do you really want to rent this movie?', 'Rent', onRentClick);
 	    };
 	    validateUserBalance(data.rentalPrice, callAfterValidation);
+	});
+	
+	$("#fileRequest").click(function() {
+		var linkJSON = getMovieLinkJSON(id);
+    	window.location = "http://" + linkJSON.downloadLink;
 	});
 
 function validateUserBalance(creditsNeeded, func) {
@@ -145,6 +154,36 @@ function getMovieJSON(id)
 			alert("Movie not found --- id "+id);
 		}
 	});
+    return json;
+}
+
+function getMovieLinkJSON(id)
+{
+	var json = "";
+	var postData = {};
+	if (framework.user == null)
+		output.error('Error!', 'You must be logged in to watch a movie');
+	else
+	{
+		postData.userId = framework.user.id;
+		$.ajax
+		({
+			url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/' + id + '/download?userId=' + framework.user.id,
+			type: 'GET',
+			data: JSON.stringify(postData),
+			dataType: 'json',
+			contentType: 'application/json; charset=utf-8',
+			async: false,
+			success: function(data) 
+			{
+				json=data;
+			},
+			error: function(msg)
+			{
+				alert("Movie not found --- id "+id);
+			}
+		});
+	}
     return json;
 }
 
@@ -190,7 +229,11 @@ function displayMovie(data)
 		
 	// decide which buttons to show, depending on whether the user is allowed to watch the movie or not
 	if (userOwnsMovie)
-		buttons = "<a class='internal btn btn-primary' href='?movieId=" + id + "#showMovie'>Watch Movie</a>"
+	{
+		var linkJSON = getMovieLinkJSON(id);
+		buttons = "<a class='internal btn btn-primary' href='?movieId=" + id + "#showMovie'>Watch Movie</a>\
+				   <a href='http://" + linkJSON.downloadLink + "' download='MyGoogleLogo'>Download Movie</a>";
+	}
 	
 	// create site contents
 	if (data.numberOfVotes == 1) votes = " vote";
