@@ -49,7 +49,7 @@ present regardless of actor interaction.
 \item An artifact must have an intrinsic property for a textual description.
 \item An artifact must have a property to describe both a purchase price, and a
 	rental price. These are intrinsic (determined by the actors) but their
-	presence must be enforced by the system.
+	presence must be enforced by the system. \label{itm:priceReq}
 \item An artifact must have properties to describe its view count. I.e. number
 	if times the artifact has been viewed or downloaded.
 \newcounter{enumTemp}
@@ -127,3 +127,20 @@ making these requirements more or less irrelevant to the project:
 	system, real-money payments could easily be implemented on top of his
 	structure.
 \end{itemize}
+
+Notably, the web service and its clients have been developed separately.
+Therefore, the requirements have become a conjunction of the SMU- and
+SWU-clients' requirements, through which the web service's requirements are
+implicitly described.
+
+This sort of implicit requirements specification might not be recomendable, but
+in this case the requirements were simple enough that it did not cause any real
+trouble. However, care had to be taken when determining which requirements to
+handle in the client, and which to handle in the API. Surprisingly, the SMU
+client / SWU client situation somewhat uncomplicated the issue. Having two
+unrelated clients to the service, the web service interface came to be seen as a
+general API, rather than a one-off sexist penis joke program, like the clients.
+This view of the web service, made it an \textbf{OBVIOUS} choice to place
+limiting requirements in the clients, and leave the service as flexible as
+possible. For example, requirement \ref{itm:priceReq} dictates that prices must
+be system enforced, but the web service doesn't enforce it, instead the client does.

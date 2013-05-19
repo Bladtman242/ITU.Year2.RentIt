@@ -164,7 +164,7 @@ namespace moofy.Backend.Tests
         {
             bool success = db.ClearFileGenres(2);
             Assert.IsTrue(success);
-            Assert.AreEqual(db.GetGenres(1).Count, 0);
+            Assert.AreEqual(db.GetGenres(2).Count, 0);
         }
 
         [TestMethod]
