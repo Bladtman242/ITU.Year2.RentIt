@@ -55,7 +55,7 @@ Later in the project we became aware that the above dilemma also applies to the 
 
 \subsubsection{Accessing the Database}
 \label{sec:databaseaccess}
-After having designed the database structure we had to decide how to access and utilize the database in the best suited way for our webservice. We quickly settled for a C\#/WCF-based web service, since every group member had about the same experience in that platform from other ITU courses.
+After having designed the database structure we had to decide how to access and utilize the database in the best suited way for our web service. We quickly settled for a C\#/WCF-based web service, since every group member had about the same experience in that platform from other ITU courses.
 With access to the .NET framework, we considered to make use of the Entity Framework for our database interactions and general object-relational mapping. However several group members had been experiencing some inconvenient performance issues in previous projects. We do believe performance is an important aspect of our service and research has shown that users of the internet have become very impatient with regards to response times \cite{webusersflee}. We also deemed our queries and database interaction to be fairly simple, thus having no real need for most of the functionality in the Entity Framework. After a discussion it became clear that the only real benefit of using the framework was the possibility of faster prototyping. With our emphasis on a solid performance we choose to spend a little more time developing our own database access layer in order to maintain a more direct control over the performance of our solution.
 
 
