@@ -80,7 +80,7 @@ $('#star').raty({
 	                $('#buttonsDiv').append("<a class='internal btn btn-primary' href='?movieId=" + id + "#showMovie'>Watch Movie</a>");
 	                $('#buttonsDiv').append("<a class='internal btn' href='http://" + linkJSON.downloadLink + "' download='" + data.title + "'>Download Movie</a>");
 	                framework.user.balance -= data.purchasePrice;
-                    framework.reloadInternalLinks();
+                    framework.rebindInternalLinks();
 	            },
 	            error: function(msg) {
 	                output.error('Error!', 'An error occured. Please try again.');
@@ -111,6 +111,7 @@ $('#star').raty({
 	                $('#buttonsDiv').append("<a class='internal btn btn-primary' href='?movieId=" + id + "#showMovie'>Watch Movie</a>");
 	                $('#buttonsDiv').append("<a class='internal btn' href='http://" + linkJSON.downloadLink + "' download='" + data.title + "'>Download Movie</a>");
 	                framework.user.balance -= data.rentalPrice;
+	                framework.rebindInternalLinks();
 	            },
 	            error: function(msg) {
 	                output.error('Error!', 'An error occured. Please try again.');
@@ -133,6 +134,7 @@ function validateUserBalance(creditsNeeded, func) {
             func();
         } else {
             output.modal('Not enough credits', 'You don\'t seem to have enough credits. Visit your <a href="#account" class="internal"><i class="icon-user"></i> account page</a> to add credits.');
+            framework.rebindInternalLinks();
         }
 }
 
