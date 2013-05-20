@@ -54,8 +54,10 @@ $('#star').raty({
 	            success: function(msg) {
 	                output.success('Success!', 'Your rating has been submitted.');
 	                data = getSongJSON(id);
+	                var votes = " votes";
+	                if (data.numberOfVotes == 1) votes = " vote";
 	                $('#ratingDiv').empty();
-	                $('#ratingDiv').append("<b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + " votes");
+	                $('#ratingDiv').append("<b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + votes);
 	            },
 	            error: function(msg) {
 	                output.error('Error!', 'An error occured. Please try again.');
@@ -228,7 +230,7 @@ function displaySong()
 			if (songs[i].id == id) userOwnsSong = true;
 	}
 	// decide which buttons to show, depending on whether the user is allowed to watch the movie or not
-	if (userOwnsSong)
+	if (userOwnsSong || (framework.user && framework.user.admin))
 	{
 		var linkJSON = getSongLinkJSON(id);
 		buttons = "<a class='internal btn btn-primary' href='?songId=" + id + "#showSong'>Listen to Song</a>\
@@ -244,7 +246,7 @@ function displaySong()
 		<p><font size='4'>" + data.album + " - " + data.artists + "</font></p>\
 		<hr>\
 		<div id='star' class='pull-right'></div><div class='pull-right' style='padding-right:8px'><b>Your vote:</b></div>\
-		<div id='ratingDiv'><b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + " votes</div>\
+		<div id='ratingDiv'><b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + votes + "</div>\
 		<p><b>" + data.genres + "</b></p>\
 		" + data.description + "\
 		<hr>\

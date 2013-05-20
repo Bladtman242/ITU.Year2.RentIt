@@ -54,8 +54,10 @@ $('#star').raty({
 	            success: function(msg) {
 	                output.success('Success!', 'Your rating has been submitted.');
 	                data = getMovieJSON(id);
+	                var votes = " votes";
+	                if (data.numberOfVotes == 1) votes = " vote";
 	                $('#ratingDiv').empty();
-	                $('#ratingDiv').append("<b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + " votes");
+	                $('#ratingDiv').append("<b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + votes);
 	            },
 	            error: function(msg) {
 	                output.error('Error!', 'An error occured. Please try again.');
@@ -234,7 +236,7 @@ function displayMovie(data)
 	}
 		
 	// decide which buttons to show, depending on whether the user is allowed to watch the movie or not
-	if (userOwnsMovie)
+	if (userOwnsMovie || (framework.user && framework.user.admin))
 	{
 		var linkJSON = getMovieLinkJSON(id);
 		buttons = "<a class='internal btn btn-primary' href='?movieId=" + id + "#showMovie'>Watch Movie</a>\
@@ -248,7 +250,7 @@ function displayMovie(data)
 		<div style='padding: 3px; margin: 10px;'><br>\
 		<p><font size='6'>" + data.title + "</font><font size='5'> - " + data.release + "</font></p>\
 		<div id='star' class='pull-right' style='padding-top:15px'></div><div class='pull-right' style='padding-top:15px; padding-right:8px'><b>Your vote:</b></div>\
-		<div id='ratingDiv' style='padding-top:15px'><b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + " votes</div>\
+		<div id='ratingDiv' style='padding-top:15px'><b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + votes + "</div>\
 		<p><b>" + data.genres.join(", ") + "</b></p>\
 		<hr>\
 		<p>" + data.description + "</p><p><b>Directors:</b> " + data.directors.join(", ") + "</p>\
