@@ -111,6 +111,7 @@ $('#star').raty({
 	                $('#buttonsDiv').append("<a class='internal btn btn-primary' href='?songId=" + id + "#showSong'>Listen to Song</a>");
 				   	$('#buttonsDiv').append("<a class='btn' href='http://" + linkJSON.downloadLink + "' download='" + data.title + "'>Download Song</a>");
 	                framework.user.balance -= data.rentalPrice;
+	                framework.rebindInternalLinks();
 	            },
 	            error: function(msg) {
 	                output.error('Error!', 'An error occured. Please try again.');
