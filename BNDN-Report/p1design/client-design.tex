@@ -7,39 +7,23 @@ layer in the client as well, and a few were to be developed in the client only.
 A few requirements were not implemented in the service, and were hence dropped
 for the client (see Section \ref{sec:futureimps}).
 
-\textbf{Re: Above. Er der nogen requirements der kun er lavet i klienten? Ellers
-revider ovenfor.}
+Requirement 25, which details that managers should have access to
+all movies and songs for free, is implemented mostly in the client. If the user
+that is logged into the system is a manager, the buy and rent button are hidden,
+and the buttons for downloading or watching the material are shown instead. There
+is some validation in the web service, but the majority of the implementation lies
+in the client.
 
 After prioritizing the list of features, we developed it into a list of views,
 each view representing something a user of the client would see (see Appendix
 \ref{app:client-views}). Each feature was not necessarily exactly one view (most
 views contained several features).
 
-For example, the \textbf{Manager overview} view were to provide "functionality
+For example, \emph{Manager overview} view were to provide "functionality
 for uploading/creating new movies and songs", covering requirements 26 to 28.
 
 We then implemented the views, feature by feature. This means that some views
 were first developed in an \emph{incomplete} state, with the most highly
-prioritized feature, and then later developed into the full planned view. We
-chose not to try and have automated tests of the client, as it is pretty much
-just a user interface, and testing user interfaces is tricky and a very
-changeable field in software development.
-
-\textbf{References!!!}
-
-Only a single requirement caused an issue during development of the client:
-demotion of managers to users and promotion the other way. As the feature
-had a fairly low priority, the issue was not discovered until late in the
-development process.
-
-The issue arises because a manager has no way of getting a list of users. This
-is neither supported in the service nor in the client (specifications and
-implementations). Listing users is a required to access user profiles, which, in
-turn, is required to de- or promote them.
-
-This is a scary example of how bad requirements can result in huge problems much
-later in development. Fixing the problem at this point would require changes to
-the API specification and backend service on top of the already required changes
-to the client.
+prioritized feature, and then later developed into the full planned view.
 
 \input{./p1design/client-technology}

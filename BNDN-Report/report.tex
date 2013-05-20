@@ -21,6 +21,7 @@
 \usepackage{lastpage}
 \usepackage{pdfpages}
 \usepackage{tocvsec2}
+\usepackage{verbatim}
 \usepackage[bookmarks]{hyperref}
 
 % Macros
@@ -46,6 +47,8 @@
 \parindent=0pt % Ingen indrykkning
 \parskip=8pt plus 2pt minus 4pt
 
+% front page
+\input{./frontPage}
 % Start on page 0
 \setcounter{page}{1}
 
@@ -62,18 +65,20 @@
 \input{./p1design/businessCase}
 \section{Analysis and Design}
 \input{./p1design/requirements}
+\input{./p1design/API-discussion}
 \input{./p1design/ApplicationArchitecture}
 \input{./p1design/datamodel}
 \input{./p1design/InterInterfaces}
-\input{./p1design/API-discussion}
 \input{./p1design/client-design}
 \input{./p1design/clientOnAPI}
+\pagebreak
+\input{./testing/main}
 \pagebreak
 \section{Working with Singapore}
 \input{./p2Communication/main}
 \pagebreak
-\input{./testing/main}
-\section{Final thoughts (get better title plx)}
+\input{./conclussion}
+\pagebreak
 \input{./p3final/main}
 % section problemstatement (end)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
