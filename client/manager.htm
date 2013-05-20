@@ -338,53 +338,7 @@
                 break;
 			case('manager-promote-link'):
 				$mng_content.html(demote_promote);
-				$('.demote').click(function(e){
-									var postObject= {
-										managerid : framework.user.id
-									};
-									$.ajax({
-										   url: 'http://rentit.itu.dk/RentIt25/moofy.svc/manager/'+this.id+'/demote',
-										   type: 'POST',
-										   data: JSON.stringify(postObject),
-										   contentType: "application/json",
-										   dataType: "json",
-										   success: function(data) {
-												if(data.success) {
-													output.success("Success!","user demoted");
-												 }
-												else {
-													output.error("Error!","failed to demote user, please try again");
-												}
-											},
-											error: function(data) {
-												output.error("Error!","failed to connect to server, please try again");
-											}
-									});
-								});
-				$('.promote').click(function(e){
-									var postObject= {
-										managerid : framework.user.id,
-										userid : this.id
-									};
-									$.ajax({
-										   url: 'http://rentit.itu.dk/RentIt25/moofy.svc/manager/promote',
-										   type: 'POST',
-										   data: JSON.stringify(postObject),
-										   contentType: "application/json",
-										   dataType: "json",
-										   success: function(data) {
-												if(data.success) {
-													output.success("Success!","user demoted");
-												 }
-												else {
-													output.error("Error!","failed to demote user, please try again");
-												}
-											},
-											error: function(data) {
-												output.error("Error!","failed to connect to server, please try again");
-											}
-									});
-								});
+				setListeners();
 				break;
         }
     });
@@ -580,6 +534,62 @@
 		return $(html+"</div>");
 	}
 	
+	function setListeners()
+	{ 
+		$('.demote').click(function(e){
+									var postObject= {
+										managerid : framework.user.id
+									};
+									$.ajax({
+										   url: 'http://rentit.itu.dk/RentIt25/moofy.svc/manager/'+this.id+'/demote',
+										   type: 'POST',
+										   data: JSON.stringify(postObject),
+										   contentType: "application/json",
+										   dataType: "json",
+										   success: function(data) {
+												if(data.success) {
+													output.success("Success!","user demoted");
+													demote_promote = getAllUsers();
+													$mng_content.html(demote_promote);
+													setListeners();
+												 }
+												else {
+													output.error("Error!","failed to demote user, please try again");
+												}
+											},
+											error: function(data) {
+												output.error("Error!","failed to connect to server, please try again");
+											}
+									});
+								});
+				$('.promote').click(function(e){
+									var postObject= {
+										managerid : framework.user.id,
+										userid : this.id
+									};
+									$.ajax({
+										   url: 'http://rentit.itu.dk/RentIt25/moofy.svc/manager/promote',
+										   type: 'POST',
+										   data: JSON.stringify(postObject),
+										   contentType: "application/json",
+										   dataType: "json",
+										   success: function(data) {
+												if(data.success) {
+													output.success("Success!","user promoted");
+													demote_promote = getAllUsers();
+													$mng_content.html(demote_promote);
+													setListeners();
+												 }
+												else {
+													output.error("Error!","failed to demote user, please try again");
+												}
+											},
+											error: function(data) {
+												output.error("Error!","failed to connect to server, please try again");
+											}
+									});
+								});
+	}
 	
 	
 	
