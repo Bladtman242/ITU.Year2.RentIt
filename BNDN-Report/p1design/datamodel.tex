@@ -83,7 +83,7 @@ Our objects are designed with \emph{lazy loading} in cases where a seperate data
 
 \begin{figure}[hbt]
 	\centering
-	\includegraphics[scale=1]{./p1design/lazyload.png}
+	\includegraphics[scale=0.8]{./p1design/lazyload.png}
 	\caption{Example of our use of lazy loading. A property from other tables is loaded when read for the first time.}
 	\label{fig:lazyload}
 \end{figure}
@@ -105,10 +105,11 @@ layer. An example use of the back-end is shown here in the context of requiremen
 	listing artifacts where any property matches the search string.
 \end{itemize}
 
-Our back-end supports the above use case through only 4 lines as seen in Figure ~\ref{fig:moviesearch}.
+Our back-end supports the above requirement through only 4 lines (Figure \ref{fig:moviesearch}).
+
 \begin{figure}[hbt]
 	\centering
-	\includegraphics[scale=1]{./p1design/moviesearch.png}
+	\includegraphics[scale=0.81]{./p1design/moviesearch.png}
 	\caption{Example use of our back-end structure in the context of a use case.}
 	\label{fig:moviesearch}
 \end{figure}
