@@ -152,6 +152,9 @@ namespace moofy.Backend {
         /// <param name="user">The user to add</param>
         /// <returns>Returns the user including the id of the user, or null if the user could not be added</returns>
         public User AddUser(User user) {
+            if (user.Username == null || user.Name == null || user.Password == null || user.Email == null) {
+                return new User() { Id = -1 };
+            }
             SqlCommand command = new SqlCommand("SELECT id FROM Users " +
                                                 "WHERE userName = '" + user.Username+"'",
                                                 connection);
