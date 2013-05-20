@@ -2,21 +2,21 @@
 \subsubsection{Data Model and Back-end Structures}
 \label{sec:datamodel}
 
-With the overall requirements set we began working on the data model of the system with an initial focus on the database entities and relationships. The database entity-relationship model was sketched in LucidChart \footnote{Lucidchart is a web-based diagramming software which allows users to collaborate and work together in real time to create flowcharts, organisational charts, website wireframes, UML designs, mind maps, software prototypes, and many other diagram types.} using the notation from Database Management Systems \cite{dbbook}. The complete E-R model is shown in Figure ~\ref{fig:erd}.
+With the overall requirements set we began working on the data model of the system with an initial focus on the database entities and relationships. The database entity-relationship model was sketched in LucidChart\footnote{Lucidchart is a web-based diagramming software which allows users to collaborate and work together in real time to create flowcharts, organisational charts, website wireframes, UML designs, mind maps, software prototypes, and many other diagram types.} using the notation from \emph{Database Management Systems}\cite{dbbook} (Figure \ref{fig:erd}).
 
-\begin{figure}[t]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[scale=0.5]{./p1design/erdmodel.png}
-	\caption{Our Entity Relationship Model}
+	\caption{Entity Relationship Model of the Moofy Backend}
 	\label{fig:erd}
 \end{figure}
 
-Our E-R model follows a naming scheme, where each table is named after the real domain object it represents (singularized), with junction tables named by a concatenation of the tables linked. The naming scheme of junction tables are shown in Figure ~\ref{fig:junctionfigure}.
+Our E-R model follows a naming scheme, where each table is named after the real domain object it represents (singularized), with junction tables named by a concatenation of the tables linked (Figure \ref{fig:junctionfigure}).
 
 
 \begin{figure}[hbt]
 	\centering
-	\includegraphics[scale=0.5]{./p1design/junctionfigure.png}
+	\includegraphics[scale=0.3]{./p1design/junctionfigure.png}
 	\caption{Example of concatenated naming for junction tables.}
 	\label{fig:junctionfigure}
 \end{figure}
@@ -25,7 +25,7 @@ Our E-R model follows a naming scheme, where each table is named after the real 
 Where several junction tables exist between the same entities, we append an additional description string to the name (as seen in "UserFile\textit{Rating}").
 Our decision to use the domain objects' names singularized caused problems with the “User” and “File” tables, since these names are reserved keywords in MS SQL. We updated said tables by appending a ‘s’ to the name (making it plural), but we kept the names singularized in the junction tables.
 
-Besides creating a database structure capable of holding all the data needed for our use cases, we wanted to avoid redundant data. Our choice to avoid redundant data stems from the wish to eliminate anomalies within the database of which redundant data is a key cause. Anomalies are known to weaken the integrity of the database \cite{dbbook} due to irregular or inconsistent data, and we believe integrity is a key characteristic of a database dealing with users, their money, and their property. We enforced this constraint by applying a database normalization (third normal form) to our design, which is known to be free of update, insertion, and deletion anomalies.
+Besides creating a database structure capable of holding all the data needed for our requirements, we wanted to avoid redundant data. Our choice to avoid redundant data stems from the wish to eliminate anomalies within the database of which redundant data is a key cause. Anomalies are known to weaken the integrity of the database \cite{dbbook} due to irregular or inconsistent data, and we believe integrity is a key characteristic of a database dealing with users, their money, and their property. We enforced this constraint by applying a database normalization (third normal form) to our design, which is known to be free of update, insertion, and deletion anomalies.
 
 \subsubsection{Designing for Extendability}
 \label{sec:extendability}
