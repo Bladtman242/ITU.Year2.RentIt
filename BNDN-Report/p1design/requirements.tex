@@ -10,24 +10,26 @@ the group, as well as with the Singaporean team. For example, our first draft of
 requirements did not include songs at all. It was not until the Singaporean team
 told us that they were required by their professor to include songs in their
 service that this became part of our requirements. The Singaporean team also
-made suggestions that media files include ratings and view count to allow us to
+made the suggestion that media files should include ratings and view count to allow us to
 sort by rating and popularity. In general, the requirements were almost
-exclusively changed on request from the Singaporean team. We, the ITU team,
-had few additions to our initial specification.
+exclusively changed on request from the Singaporean team.
 
-A little nomenclature:
 There are two types of primary actors: users and managers. A manager’s rights
 are a superset of a regular user's. 
 
-In the following requirements document, the word "user" shall refer to an
-existing, registered user. Artifact shall refer to a movie or song. (I.e. the
+In the following requirements document, the word \emph{user} refers to an
+existing, registered user. Artifact shall refer to a movie or song (the
 products available for rent/purchase in the system). For the sake of this
-description, the artifact properties are divided in two categories:
-\emph{intrinsic} or \emph{extrinsic} to the artifact. \emph{Intrinsic}
+description, the artifact properties are divided into two categories:
+\emph{intrinsic} or \emph{extrinsic} to the artifact.
+
+\emph{Intrinsic}
 properties are those describing the artifact. Examples are title, URI to image,
 and average rating. These properties are decided by the system actors, and are
 not necessarily present. A manager may choose not to include an image URI, and
-new artifacts may have no ratings. \emph{Extrinsic} parameters are those
+new artifacts may have no ratings.
+
+\emph{Extrinsic} parameters are those
 describing the artifacts from the system's perspective. Examples are id, and
 view count. These parameters are completely determined by the system, and are
 present regardless of actor interaction.
@@ -105,7 +107,9 @@ present regardless of actor interaction.
 \item A manager must be able to delete movies/songs from the service.
 \end{enumerate}
 
-\subsubsection{Security and other Design Decisions} When deciding on the
+\subsubsection{Security and other Design Decisions}
+
+When deciding on the
 requirements for the system, several criteria are considered, and some
 requirements which might be crucial in a real-life product are left out. These
 decisions are mainly made on the basis that this is an educational project,
@@ -137,10 +141,11 @@ This sort of implicit requirements specification might not be recomendable, but
 in this case the requirements were simple enough that it did not cause any real
 trouble. However, care had to be taken when determining which requirements to
 handle in the client, and which to handle in the API. Surprisingly, the SMU
-client / SWU client situation somewhat uncomplicated the issue. Having two
+client/SWU client situation somewhat simplified the issue. Having two
 unrelated clients to the service, the web service interface came to be seen as a
-general API, rather than a one-off sexist penis joke program, like the clients.
-This view of the web service, made it an \textbf{OBVIOUS} choice to place
+general API, rather than a one-off, like the clients.
+This view of the web service, made it an obvious choice to place
 limiting requirements in the clients, and leave the service as flexible as
-possible. For example, requirement \ref{itm:priceReq} dictates that prices must
-be system enforced, but the web service doesn't enforce it, instead the client does.
+possible.
+
+\textbf{For example... req 25}
