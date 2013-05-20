@@ -40,6 +40,7 @@
 var curCont, curPage, pages;
 var thumbs = $("#thumbs");
 
+//Get all songs ordered by average rating and set up the initial html carousel view
 $.ajax({
     url: 'http://rentit.itu.dk/RentIt25/moofy.svc/songs/filter/?sortBy=avgRating',
     type: 'GET',
@@ -57,7 +58,7 @@ $.ajax({
         output.error("Error!","failed to connect to server, please try again");
     }
 });
-
+//Get all songs and set up the initial html thumbnail view
 $.ajax({
     url: 'http://rentit.itu.dk/RentIt25/moofy.svc/songs/filter',
     type: 'GET',
@@ -74,7 +75,11 @@ $.ajax({
     }
 });
 
-
+/**
+ *
+ * @param songs - an array of songs which will be placed in the carousel
+ * @returns {*|jQuery|HTMLElement}
+ */
 function createSongsCarousel(songs)
 {
 		var length = songs.length;
@@ -91,7 +96,7 @@ function createSongsCarousel(songs)
 					</li>";	
 		for (var i=1; i<9 && i<length - rest; i++)
 		{ 
-			if(i%3 == 0)
+			if(i%3 == 0)//new carousel "page" begins
 			{
 				s += "<div class='item'>\
 						<ul class='thumbnails'>\
@@ -111,7 +116,7 @@ function createSongsCarousel(songs)
 							</div>\
 					</li>";
 			}
-			if(i%3 == 2)
+			if(i%3 == 2)//Carousel "page" ends
 			{
 				s+=		   "<li class='span4'>\
 								<div class='thumbnail'>\
@@ -123,6 +128,7 @@ function createSongsCarousel(songs)
 					</div>";
 			}
 			}
+            //If the content is less than nine songs and not divideable with 3 the following fixes it
 			if(rest == 1)
 			{
 				s += "<div class='item'>\
@@ -157,6 +163,10 @@ function createSongsCarousel(songs)
 			}
 			return $(s);
 }
+/**
+ * create a paginated thumbnail view of an array of songs.
+ * @param songs
+ */
 function createThumbContent(songs)
 {	
 	var nrOfPages = (songs.length%12)==0 ? songs.length/12: songs.length/12 + 1;
@@ -183,17 +193,20 @@ function createThumbContent(songs)
 	pages = ps;
 	curPage=1;
 }
+//swaps to next page in the thumbnails
 function nextPage()
 {
 	thumbs.empty();
 	thumbs.append(pages[++curPage] || pages[(curPage = 0)]);
 }
+//swaps to previous page in the thumbnails
 function prevPage()
 {
 	thumbs.empty();
 	curPage = curPage-1<0 ? pages.length-1 : curPage-1;
 	thumbs.append(pages[curPage]);
 }
+//set the current page in the thumbnail look to a given number
 function setPage(nr)
 {
 	thumbs.empty();
@@ -201,6 +214,9 @@ function setPage(nr)
 	thumbs.append(pages[curPage]);
 }
 var currentFilter = "";
+/**
+ * Listener for the search button
+ */
 $("#searchSubmit").click(function() {
     currentFilter = $("#searchInput").val().trim();
     var s = currentFilter ? "/"+currentFilter : "";
@@ -221,6 +237,9 @@ $("#searchSubmit").click(function() {
             });
 	return false;
 });
+/*
+ Listener for the sortby functionality
+ */
 $("#sortBy li a").click(function(e) {
     e.preventDefault();
     var id = $(this).attr("id");
