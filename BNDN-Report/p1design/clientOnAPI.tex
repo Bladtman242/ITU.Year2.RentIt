@@ -1,3 +1,16 @@
-\subsection{Experiences with Client on API (better title, plox)}
+\subsection{Evaluation of the API}
 
----talk about experiences with building a client on our api, summarizing everything that added up to niceness. Discussion powerz!---
+Only a single requirement caused an issue during development of the client:
+demotion of managers to users and promotion the other way. As the feature
+had a fairly low priority, the issue was not discovered until late in the
+development process.
+
+The issue arises because a manager has no way of getting a list of users. This
+is neither supported in the service nor in the client (specifications and
+implementations). Listing users is required to access user profiles, which, in
+turn, is required to de- or promote them.
+
+This is a scary example of how incomplete requirements can result in huge problems much
+later in development. Solving the problem at this point would require changes to
+the API specification and backend service on top of the already required changes
+to the client.

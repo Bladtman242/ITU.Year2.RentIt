@@ -26,21 +26,4 @@ We then implemented the views, feature by feature. This means that some views
 were first developed in an \emph{incomplete} state, with the most highly
 prioritized feature, and then later developed into the full planned view.
 
-\textbf{References!!!}
-
-Only a single requirement caused an issue during development of the client:
-demotion of managers to users and promotion the other way. As the feature
-had a fairly low priority, the issue was not discovered until late in the
-development process.
-
-The issue arises because a manager has no way of getting a list of users. This
-is neither supported in the service nor in the client (specifications and
-implementations). Listing users is a required to access user profiles, which, in
-turn, is required to de- or promote them.
-
-This is a scary example of how bad requirements can result in huge problems much
-later in development. Fixing the problem at this point would require changes to
-the API specification and backend service on top of the already required changes
-to the client.
-
 \input{./p1design/client-technology}
