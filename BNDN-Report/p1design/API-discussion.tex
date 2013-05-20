@@ -1,22 +1,23 @@
-\subsection{Deciding on the External API Format}
+\subsection{Deciding on the External API Form}
 
 The two teams quickly agreed on using a RESTful JSON-based API as interface between
-frontend (client) and backend (server). This, however, still left a lot to design.
+frontend (client) and backend (server). This still left a lot to design.
 
 When designing an API it is important for it to be intuitive and attractive, as this
 allows third-party developers, as well as our overseas colleagues, to use the API for
 their purposes. Third-party developers in general represent a huge business opportunity
-in our case, as the system requires purchases in order to actually access movies. This
+in our case, as the system requires purchases in order to actually access artifacts. This
 means that third-party clients may create new revenue sources for us.
 
-When discussing how to best attack the problem of what a "nice API" is, we found two
-alternatives.
+When discussing how to best attack the problem of what a \emph{nice API} is, we found two
+options.
 
 Either we could let the API handle arbitrary datatypes or have specific services for
 every allowed datatype. The difference between the two possibilities can be illustrated
 through which services are offered by them:
 
 \begin{table}[hbt]
+    \centering
     \begin{tabular}{ | l | l | l | }
         \hline
         \textbf{Abstraction level} & High abstraction & Low abstraction \\
@@ -67,13 +68,14 @@ attributes for the types. Additionally searching is easier and fewer indexes are
 
 On the downside, the low abstraction level requires for entire new tables and services to be added
 whenever we want to support a new datatype. In turn, adding new services to the API does not make
-them accessible from the clients. In order to fully roll out an update, {\bf all clients},
+them accessible from the clients. In order to fully roll out an update, all clients,
 including third-party ones, must be updated. This all adds up, so the cost of change is massive.
 
 \subsubsection{Final decision}
-In our application we consider the support of a new datatype to be somewhat a rare occasion. In our
-business, which is centered around a very specific set of products - movies and songs - and it is with
-this line of products that our business will be known.
+In our application we consider the support of a new datatype to be somewhat a rare occasion. Our
+business is centered around a very specific set of products - movies and songs - and it is with
+this line of products it will be known.
 
 With this in mind, a high cost of change is considered acceptable. With the advantages we trade in for
-it, it is a more than acceptable potential loss.
+it, it is a more than acceptable potential loss, so we decided on a low abstraction API, and the relational
+data model that goes with it.
