@@ -11,7 +11,6 @@
 <div id="account-content">
     <!--Content added dynamically-->
 </div>
-
 <script>
 if (!framework.user) { //If the user is not logged in
     framework.loadPage(framework.defaultPage, null, null, function () {
@@ -19,7 +18,7 @@ if (!framework.user) { //If the user is not logged in
     });
 } else { //If the user is logged in, display the page
 
-    var content, itemsPerPage;
+    var content, currentItems, currentPage, currentMediaType='movie', itemsPerPage;
     content = $('#account-content');
     itemsPerPage = 10;
 
@@ -30,23 +29,26 @@ if (!framework.user) { //If the user is not logged in
      */
     function showOverview() {
         content.html('<div class="row">\
-                        <div class="span2"><img src="http://gravatar.com/avatar/' + $.md5(framework.user.email) + '?size=100&d=mm" class="img-polaroid"></div>\
-                        <p>Username: <strong id="usernameSpan">' + framework.user.username + '</strong></p>\
-                        <p>Name: <strong id="nameSpan">' + framework.user.name + '</strong></p>\
-                        <p>Email: <strong id="emailSpan">' + framework.user.email + '</strong></p>\
-                        <p>Balance: <strong id="balanceSpan">' + framework.user.balance + '</strong></p>\
-                         </div>\
-                         <legend>Media library</legend>\
-                         <ul id="mediaNav" class="nav nav-tabs">\
+                            <div class="span2"><img src="http://gravatar.com/avatar/' + $.md5(framework.user.email) + '?size=100&d=mm" class="img-polaroid"></div>\
+                            <p>Username: <strong id="usernameSpan">' + framework.user.username + '</strong></p>\
+                            <p>Name: <strong id="nameSpan">' + framework.user.name + '</strong></p>\
+                            <p>Email: <strong id="emailSpan">' + framework.user.email + '</strong></p>\
+                            <p>Balance: <strong id="balanceSpan">' + framework.user.balance + '</strong></p>\
+                     </div>\
+                     <legend>Media library</legend>\
+                     <ul id="mediaNav" class="nav nav-tabs">\
                         <li class="active">\
-                        <a id="movieNav" href="#">Movies</a>\
+                            <a id="movieNav" href="#">Movies</a>\
                         </li>\
                         <li>\
-                        <a id="songNav" href="#">Songs</a>\
+                            <a id="songNav" href="#">Songs</a>\
                         </li>\
-                        </ul>\
-                        <div class="accordion" id="accordion">\
+                    </ul>\
+                    <div class="accordion" id="accordion">\
                          </div>\
+                         <div class="pagination" id="accountPagination">\
+                            <ul id="accountPaginationList"/>\
+                    </div>\
                  ');
         showMovies(); //default tabbed nav in the media library
 
@@ -58,26 +60,27 @@ if (!framework.user) { //If the user is not logged in
             $(this).parent().addClass("active"); //and it it again to the parent of the clicked link
             switch (this.id) {
                 case('movieNav'):
+                    currentMediaType = 'movie';
                     showMovies();
                     break;
                 case('songNav'):
+                    currentMediaType = 'song';
                     showSongs();
                     break;
             }
         });
     };
 
-    function getDownloadLink(item, mediaType) {
+    function getDownloadLink(item) {
             var data = $.parseJSON(
                     $.ajax({
-                url: 'http://rentit.itu.dk/RentIt25/moofy.svc/' + mediaType + 's/' + item.id + '/download?userId=' + framework.user.id,
+                url: 'http://rentit.itu.dk/RentIt25/moofy.svc/' + currentMediaType + 's/' + item.id + '/download?userId=' + framework.user.id,
                 type: 'GET',
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
                 async: false
                 }).responseText);
             if(data.success) {
-                console.log('LOL' + data.downloadLink);
                 return ('http://' + data.downloadLink);
             } else {
                 output.error('Download link not found!', 'The download link for the item '+item.title+' was not found');
@@ -93,7 +96,9 @@ if (!framework.user) { //If the user is not logged in
             dataType: 'json',
             async: true,
             success: function (movs) {
-                $('#accordion').html(createAccordion(movs, 1, 'movie'));
+                currentItems = movs;
+                currentPage = 0;
+                createAccordion();
                 framework.rebindInternalLinks();
             },
             error: function (msg) {
@@ -110,7 +115,9 @@ if (!framework.user) { //If the user is not logged in
             dataType: 'json',
             async: true,
             success: function (songs) {
-                $('#accordion').html(createAccordion(songs, 1, 'song'));
+                currentItems = songs;
+                currentPage = 0;
+                createAccordion();
                 framework.rebindInternalLinks();
             },
             error: function (msg) {
@@ -262,15 +269,29 @@ if (!framework.user) { //If the user is not logged in
         });
     };
 
+    function setPage(number)
+    {
+        currentPage = number;
+        createAccordion();
+    }
 
+    function createpaginate() {
+        var pagination = '<li' + ((currentPage == 0) ? ' class="disabled" ' : '') + '><a href="javascript:' + ((currentPage == 0) ? 'void(0)' : 'setPage('+ (currentPage - 1) +')') + '">Previous</a></li>';
+        for(var i = 0; i<currentItems.length ; i = i + itemsPerPage) {
+            pagination += '<li' + ((currentPage == (i/itemsPerPage)) ? ' class="active" ' : '') + '><a href="javascript:setPage('+ (i/itemsPerPage) +
+                    ')">'+(i/itemsPerPage+1)+'</a></li>';
+        }
+        pagination += '<li' + ((currentPage == (Math.floor(currentItems.length/itemsPerPage))) ? ' class="disabled" ' : '') + '><a href="javascript:' + ((currentPage == (Math.floor(currentItems.length/itemsPerPage))) ? 'void(0)' : 'setPage('+ (currentPage + 1) +
+                ')') + '" >Next</a></li>';
+        $('#accountPaginationList').html(pagination);
+        return pagination;
+    }
 
-    function createAccordion(items, page, mediaType) {
-        if (!items || !page || !mediaType) return;
-        var mediaType = mediaType.toLowerCase();
-        var mediaTypeFirstUpper = mediaType.charAt(0).toUpperCase()+ mediaType.slice(1);
-        var page = page - 1; //we are 0-indexed. Parameter is not.
+    function createAccordion() {
+        var mediaTypeFirstUpper = currentMediaType.charAt(0).toUpperCase()+ currentMediaType.slice(1);
+        var items = currentItems;
         var accordion = '';
-        var startIndex = page * itemsPerPage;
+        var startIndex = currentPage * itemsPerPage;
         var endIndex = startIndex + itemsPerPage; //exclusive
 
         for(var i = startIndex; i<endIndex && i<items.length ; i++) {
@@ -285,7 +306,7 @@ if (!framework.user) { //If the user is not logged in
                             <div class="accordion-inner">\
                                 <div class="row">\
                                     <div class="span2">\
-                                        <img class="rounded" src="' +items[i].coverUri+'" alt="" height="140px" width="109" display="inline" />\
+                                        <img class="img-polaroid" src="' +items[i].coverUri+'" alt="" height="140px" width="109" display="inline" />\
                                     </div>\
                                     <div class="span7">\
                                         <p>'
@@ -294,9 +315,9 @@ if (!framework.user) { //If the user is not logged in
                                     </div>\
                                     <div class="span2">\
                                         <div class="btn-group btn-group-vertical pull-right">\
-                                            <a class="btn internal" href="?'+mediaType+'Id='+items[i].id+'#'+mediaType+'">Description</a>\
-                                            <a class="btn internal" href="?'+mediaType+'Id='+items[i].id+'#show'+mediaTypeFirstUpper+'">Watch</a>\
-                                            <a class="btn" id="downloadLink" href="'+getDownloadLink(items[i], mediaType)+'" download="'+items[i].title+'">Download</a>\
+                                            <a class="btn internal" href="?'+currentMediaType+'Id='+items[i].id+'#'+currentMediaType+'">Description</a>\
+                                            <a class="btn internal" href="?'+currentMediaType+'Id='+items[i].id+'#show'+mediaTypeFirstUpper+'">Watch</a>\
+                                            <a class="btn" id="downloadLink" href="'+getDownloadLink(items[i])+'" download="'+items[i].title+'">Download</a>\
                                         </div>\
                                     </div>\
                                 </div>\
@@ -304,7 +325,8 @@ if (!framework.user) { //If the user is not logged in
                         </div>\
                     </div>';
         }
-        return accordion;
+        $('#accordion').html(accordion);
+        createpaginate();
     }
 /*
 
