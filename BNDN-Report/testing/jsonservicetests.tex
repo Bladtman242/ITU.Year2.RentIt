@@ -1,9 +1,17 @@
-\subsection{Web service Tests}
+\subsubsection{Web service Tests}
 The tests for the web service itself were supposed to ensure the presence,
 parameter adherence, and response correctness of the endpoints themselves.
-While the tests are close to being complete, the C# methods for setting the http
-responses' status codes were so unfamiliar, that it was completed only for part
-of the API. This intensified a mistake made in the tests; the http status codes
-were tested together with the other criteria, rather than in separate test
-methods. The two problems in conjunction resulted in the web service not passing
-its tests. This made it impossible 
+While the tests are close to being complete, the C\# methods for setting the
+http responses' status codes were so unfamiliar, that they were implemented only
+for a part of the API. This intensified a mistake made in the tests; the http
+status codes were tested together with the other criteria, rather than in
+separate test methods. The two problems in conjunction resulted in the web
+service not passing its tests. This made it impossible to use the test suite for
+change acceptance, thus rendering the web service test useless. There is
+something to be said for feasibility testing critical functionality here, but
+the problem would have been insignificant, had the tests for status codes been
+separated from the rest.
+
+Rather than creating expectancy tables for a set of incomplete, non-passing
+tests, we refer to the initial draft for the web service tests, as seen in
+appendix \ref{app:jsontest}.
