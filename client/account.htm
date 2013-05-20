@@ -17,7 +17,6 @@ if (!framework.user) { //If the user is not logged in
         output.error('Login required.', 'You need to log in to see this page');
     });
 } else { //If the user is logged in, display the page
-
     var content, currentItems, currentPage, currentMediaType='movie', itemsPerPage;
     content = $('#account-content');
     itemsPerPage = 10;
@@ -71,6 +70,11 @@ if (!framework.user) { //If the user is not logged in
         });
     };
 
+    /**
+     * Gets the download link for a specific item
+     * @param item The item to fetch a link for
+     * @returns {string} The link to the item. Javascript:void(0) if no item found.
+     */
     function getDownloadLink(item) {
             var data = $.parseJSON(
                     $.ajax({
@@ -84,11 +88,35 @@ if (!framework.user) { //If the user is not logged in
                 return ('http://' + data.downloadLink);
             } else {
                 output.error('Download link not found!', 'The download link for the item '+item.title+' was not found');
-                return '#';
+                return 'javascript:void(0)';
             }
     }
 
-    function showMovies() {
+    /*//we did not have time to complete the filtering
+    function filterItems(filter) {
+
+        var callBack = function(element, index, array) {
+            return (element.description.toLowerCase().contains(filter) ||
+                    element.title.toLowerCase().contains(filter));
+        };
+
+        switch (currentMediaType) {
+            case('movie'):
+                currentItems = currentItems.filter(callBack);
+                break;
+            case('song'):
+                currentItems = currentItems.filter(callBack);
+                break;
+        };
+
+    }*/
+
+    /**
+     * Shows the the current users' movies
+     * @param filter Optional parameter. This was not implemented.
+     * @param sortBy Optional parameter. This was not implemented.
+     */
+    function showMovies(filter, sortBy) {
         $.ajax({
             url: 'http://rentit.itu.dk/RentIt25/moofy.svc/users/'+framework.user.id+'/movies/current',
             type: 'GET',
@@ -96,8 +124,11 @@ if (!framework.user) { //If the user is not logged in
             dataType: 'json',
             async: true,
             success: function (movs) {
-                currentItems = movs;
                 currentPage = 0;
+                currentItems = movs;
+                if(filter) {
+                    filterItems(filter);
+                }
                 createAccordion();
                 framework.rebindInternalLinks();
             },
@@ -107,7 +138,12 @@ if (!framework.user) { //If the user is not logged in
         });
     };
 
-    function showSongs() {
+    /**
+     * Shows the the current users' songs
+     * @param filter Optional parameter. This was not implemented.
+     * @param sortBy Optional parameter. This was not implemented.
+     */
+    function showSongs(filter, sortBy) {
         $.ajax({
             url: 'http://rentit.itu.dk/RentIt25/moofy.svc/users/'+framework.user.id+'/songs/current',
             type: 'GET',
@@ -269,12 +305,19 @@ if (!framework.user) { //If the user is not logged in
         });
     };
 
+    /**
+     * Sets the page in the overview view
+     * @param number The page number. 0 indexed.
+     */
     function setPage(number)
     {
         currentPage = number;
         createAccordion();
     }
 
+    /**
+     * Creates the page-indicator at the bottom
+     */
     function createpaginate() {
         var pagination = '<li' + ((currentPage == 0) ? ' class="disabled" ' : '') + '><a href="javascript:' + ((currentPage == 0) ? 'void(0)' : 'setPage('+ (currentPage - 1) +')') + '">Previous</a></li>';
         for(var i = 0; i<currentItems.length ; i = i + itemsPerPage) {
@@ -284,9 +327,11 @@ if (!framework.user) { //If the user is not logged in
         pagination += '<li' + ((currentPage == (Math.floor(currentItems.length/itemsPerPage))) ? ' class="disabled" ' : '') + '><a href="javascript:' + ((currentPage == (Math.floor(currentItems.length/itemsPerPage))) ? 'void(0)' : 'setPage('+ (currentPage + 1) +
                 ')') + '" >Next</a></li>';
         $('#accountPaginationList').html(pagination);
-        return pagination;
     }
 
+    /**
+     * Creates the list of items for the user
+     */
     function createAccordion() {
         var mediaTypeFirstUpper = currentMediaType.charAt(0).toUpperCase()+ currentMediaType.slice(1);
         var items = currentItems;
@@ -306,7 +351,7 @@ if (!framework.user) { //If the user is not logged in
                             <div class="accordion-inner">\
                                 <div class="row">\
                                     <div class="span2">\
-                                        <img class="img-polaroid" src="' +items[i].coverUri+'" alt="" height="140px" width="109" display="inline" />\
+                                        <img class="img-polaroid" src="' +items[i].coverUri+'" alt="" height="126px" width="98px" display="inline" />\
                                     </div>\
                                     <div class="span7">\
                                         <p>'

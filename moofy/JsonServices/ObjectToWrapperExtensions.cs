@@ -36,6 +36,7 @@ namespace moofy.JsonServices {
             return new SongWrapper() {
                 id = song.Id,
                 title = song.Title,
+                description = song.Description,
                 release = song.Year,
                 genres = song.Genres.ToArray<string>(),
                 album = song.Album,
