@@ -70,5 +70,17 @@ namespace moofy.JsonServices {
             BodyStyle = WebMessageBodyStyle.WrappedRequest,
             UriTemplate = "{id}/update")]
         SuccessFlag UpdateUser(string id, string name = null, string email = null, string password = null);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "filter")]
+        UserWrapper[] ListAllUsers();
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "filter/{filter}")]
+        UserWrapper[] FilterUsers(string filter);
     }
 }

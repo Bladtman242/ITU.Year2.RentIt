@@ -150,7 +150,7 @@ namespace moofy.JsonServices {
             User u = db.GetUser(uid);
             IList<Purchase> purchases = u.Songs;
             foreach (Purchase p in purchases) {
-                if (p.EndTime < DateTime.Now)
+                if (p.EndTime > DateTime.Now)
                     songList.Add(db.GetSong(p.File.Id).ToWrapper());
             }
             db.Close();
@@ -183,6 +183,29 @@ namespace moofy.JsonServices {
                 success = success,
                 message = success ? "Succesfully updated user." : "Failed to update user info!"
             };
+        }
+
+        public UserWrapper[] ListAllUsers()
+        {
+            db.Open();
+            UserWrapper[] result = db.FilterUsers("").ToWrapper();
+            db.Close();
+            return result;
+        }
+
+        public UserWrapper[] FilterUsers(string filter)
+        {
+            if (filter != "emptyList")
+            {//Why the hell would someone use that for a filter?
+                db.Open();
+                UserWrapper[] us = db.FilterUsers(filter).ToWrapper();
+                db.Close();
+                return us;
+            }
+            else
+            {
+                return new UserWrapper[0];
+            }
         }
 
     }
