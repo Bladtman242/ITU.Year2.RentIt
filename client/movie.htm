@@ -80,6 +80,7 @@ $('#star').raty({
 	                $('#buttonsDiv').append("<a class='internal btn btn-primary' href='?movieId=" + id + "#showMovie'>Watch Movie</a>");
 	                $('#buttonsDiv').append("<a class='internal btn' href='http://" + linkJSON.downloadLink + "' download='" + data.title + "'>Download Movie</a>");
 	                framework.user.balance -= data.purchasePrice;
+                    framework.reloadInternalLinks();
 	            },
 	            error: function(msg) {
 	                output.error('Error!', 'An error occured. Please try again.');
