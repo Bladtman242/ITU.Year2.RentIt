@@ -15,6 +15,11 @@ namespace moofy.JsonServices {
             set;
         }
 
+        public string description {
+            get;
+            set;
+        }
+
         public int release {
             get;
             set;
