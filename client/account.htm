@@ -276,13 +276,13 @@ if (!framework.user) { //If the user is not logged in
     }
 
     function createpaginate() {
-        var pagination = '<li' + ((currentPage == 0) ? ' class="disabled" ' : '') + '><a href="javascript:setPage('+ (currentPage - 1) +')">Previous</a></li>';
+        var pagination = '<li' + ((currentPage == 0) ? ' class="disabled" ' : '') + '><a href="javascript:' + ((currentPage == 0) ? 'void(0)' : 'setPage('+ (currentPage - 1) +')') + '">Previous</a></li>';
         for(var i = 0; i<currentItems.length ; i = i + itemsPerPage) {
             pagination += '<li' + ((currentPage == (i/itemsPerPage)) ? ' class="active" ' : '') + '><a href="javascript:setPage('+ (i/itemsPerPage) +
                     ')">'+(i/itemsPerPage+1)+'</a></li>';
         }
-        pagination += '<li' + ((currentPage == (Math.floor(currentItems.length/itemsPerPage))) ? ' class="disabled" ' : '') + '><a href="javascript:setPage('+ (currentPage + 1) +
-                ')" >Next</a></li>';
+        pagination += '<li' + ((currentPage == (Math.floor(currentItems.length/itemsPerPage))) ? ' class="disabled" ' : '') + '><a href="javascript:' + ((currentPage == (Math.floor(currentItems.length/itemsPerPage))) ? 'void(0)' : 'setPage('+ (currentPage + 1) +
+                ')') + '" >Next</a></li>';
         $('#accountPaginationList').html(pagination);
         return pagination;
     }
