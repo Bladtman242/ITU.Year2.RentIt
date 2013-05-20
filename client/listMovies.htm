@@ -38,7 +38,7 @@
 <script>
 var curCont, curPage, pages;
 var thumbs = $("#thumbs");
-
+//Get all movies ordered by average rating and set up the initial html carousel view
 $.ajax({
     url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/filter/?sortBy=avgRating',
     type: 'GET',
@@ -57,7 +57,7 @@ $.ajax({
         output.error("Error!","failed to connect to server, please try again");
     }
 });
-
+//Get all movies and set up the initial html thumbnail view
 $.ajax({
     url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/filter',
     type: 'GET',
@@ -74,7 +74,11 @@ $.ajax({
         output.error("Error!","failed to connect to server, please try again");
     }
 });
-
+/**
+ *
+ * @param movs  -  an array of movies to put in the carousel
+ * @returns {*|jQuery|HTMLElement}
+ */
 function createMoviesCarousel(movs)
 {
 		var length = movs.length;
@@ -90,7 +94,7 @@ function createMoviesCarousel(movs)
 					</li>";	
 		for (var i=1; i<9 && i<length - rest; i++)
 		{ 
-			if(i%3 == 0)
+			if(i%3 == 0)//new carousel "page" begins
 			{
 				s += "<div class='item'>\
 						<ul class='thumbnails'>\
@@ -108,7 +112,7 @@ function createMoviesCarousel(movs)
 							</div>\
 					</li>";
 			}
-			if(i%3 == 2)
+			if(i%3 == 2)//Carousel "page" ends
 			{
 				s+=		   "<li class='span4'>\
 								<div class='thumbnail'>\
@@ -118,7 +122,8 @@ function createMoviesCarousel(movs)
 						</ul>\
 					</div>";
 			}
-			}
+		}
+            //If the content is less than nine movies and not divideable with 3 the following fixes it
 			if(rest == 1)
 			{
 				s += "<div class='item'>\
@@ -150,6 +155,10 @@ function createMoviesCarousel(movs)
 			}
 			return $(s);
 }
+/**
+ * Creates a paginated thumbnail view of movies from a movie array
+ * @param movs - an array of movies to present in thumbnail format
+ */
 function createThumbContent(movs)
 {	
 	var nrOfPages = (movs.length%12)==0 ? movs.length/12: movs.length/12 + 1;
@@ -176,17 +185,20 @@ function createThumbContent(movs)
 	pages = ps;
 	curPage=1;
 }
+//Goes to the next page in the thumbnail pagination
 function nextPage()
 {
 	thumbs.empty();
 	thumbs.append(pages[++curPage] || pages[(curPage = 0)]);
 }
+//Goes to the previous page in the thumbnail pagination
 function prevPage()
 {
 	thumbs.empty();
 	curPage = curPage-1<0 ? pages.length-1 : curPage-1;
 	thumbs.append(pages[curPage]);
 }
+//Sets the current page to the specified page nr
 function setPage(nr)
 {
 	thumbs.empty();
@@ -195,6 +207,7 @@ function setPage(nr)
 }
 
 var currentFilter = "";
+//Listener for the search button
 $("#searchSubmit").click(function() {
 	currentFilter = $("#searchInput").val().trim();
 	var s = currentFilter ? "/"+currentFilter : "";
@@ -215,6 +228,7 @@ $("#searchSubmit").click(function() {
             });
 	return false;
 });
+//Listener for the sortby function
 $("#sortBy li a").click(function(e) {
     e.preventDefault();
     var id = $(this).attr("id");
