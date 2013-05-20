@@ -1,7 +1,7 @@
 <!--Nav pills-->
 <ul id="accountNavigation" class="nav nav-pills">
     <li class="active">
-        <a id="accountOverview" href="#">Account overview</a>
+        <a id="accountOverview" href="#">Overview</a>
     </li>
     <li><a id="accountEdit" href="#">Edit profile</a></li>
     <li><a id="accountBalance" href="#">Add credits</a></li>
@@ -13,37 +13,118 @@
 </div>
 
 <script>
-    if (!framework.user) { //If the user is not logged in
-        framework.loadPage(framework.defaultPage, null, null, function() {
-            output.error('Login required.', 'You need to log in to see this page');
-        });
-    } else { //If the user is logged in, display the page
+if (!framework.user) { //If the user is not logged in
+    framework.loadPage(framework.defaultPage, null, null, function () {
+        output.error('Login required.', 'You need to log in to see this page');
+    });
+} else { //If the user is logged in, display the page
 
-        var content;
-        content = $('#account-content');
+    var content, itemsPerPage;
+    content = $('#account-content');
+    itemsPerPage = 10;
 
-        //We wrap the content in functions as to always use the latest data
-        /**
-         * Creates the conctent of the overview page
-         * @returns {string} The html of the overview page
-         */
-        function createOverview() {
-            return '<div class="row">\
+    //We wrap the content in functions as to always use the latest data
+    /**
+     * Creates the conctent of the overview page
+     * @returns {string} The html of the overview page
+     */
+    function showOverview() {
+        content.html('<div class="row">\
                         <div class="span2"><img src="http://gravatar.com/avatar/' + $.md5(framework.user.email) + '?size=100&d=mm" class="img-polaroid"></div>\
                         <p>Username: <strong id="usernameSpan">' + framework.user.username + '</strong></p>\
                         <p>Name: <strong id="nameSpan">' + framework.user.name + '</strong></p>\
                         <p>Email: <strong id="emailSpan">' + framework.user.email + '</strong></p>\
                         <p>Balance: <strong id="balanceSpan">' + framework.user.balance + '</strong></p>\
-                 </div>\
-                ';
-        };
+                         </div>\
+                         <legend>Media library</legend>\
+                         <ul id="mediaNav" class="nav nav-tabs">\
+                        <li class="active">\
+                        <a id="movieNav" href="#">Movies</a>\
+                        </li>\
+                        <li>\
+                        <a id="songNav" href="#">Songs</a>\
+                        </li>\
+                        </ul>\
+                        <div class="accordion" id="accordion">\
+                         </div>\
+                 ');
+        showMovies(); //default tabbed nav in the media library
 
-        /**
-         * Creates the conctent of the edit page
-         * @returns {string} The html of the edit page
-         */
-        function createEdit() {
-            return '<form id="editUserForm" class="form-horizontal">\
+        //add pagination listeners for the media library
+        //Adds a click listener to the navigation of the overview page.
+        $("#mediaNav a").click(function (e) {
+            e.preventDefault(); //Prevent the default click listener, since this is a a-tag.
+            $("#mediaNav li.active").removeClass("active"); //Remove the active styling of every account navigation tab, ...
+            $(this).parent().addClass("active"); //and it it again to the parent of the clicked link
+            switch (this.id) {
+                case('movieNav'):
+                    showMovies();
+                    break;
+                case('songNav'):
+                    showSongs();
+                    break;
+            }
+        });
+    };
+
+    function getDownloadLink(item, mediaType) {
+            var data = $.parseJSON(
+                    $.ajax({
+                url: 'http://rentit.itu.dk/RentIt25/moofy.svc/' + mediaType + 's/' + item.id + '/download?userId=' + framework.user.id,
+                type: 'GET',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                async: false
+                }).responseText);
+            if(data.success) {
+                console.log('LOL' + data.downloadLink);
+                return ('http://' + data.downloadLink);
+            } else {
+                output.error('Download link not found!', 'The download link for the item '+item.title+' was not found');
+                return '#';
+            }
+    }
+
+    function showMovies() {
+        $.ajax({
+            url: 'http://rentit.itu.dk/RentIt25/moofy.svc/users/'+framework.user.id+'/movies/current',
+            type: 'GET',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            async: true,
+            success: function (movs) {
+                $('#accordion').html(createAccordion(movs, 1, 'movie'));
+                framework.rebindInternalLinks();
+            },
+            error: function (msg) {
+                output.error("Error!", "failed to connect to server, please try again");
+            }
+        });
+    };
+
+    function showSongs() {
+        $.ajax({
+            url: 'http://rentit.itu.dk/RentIt25/moofy.svc/users/'+framework.user.id+'/songs/current',
+            type: 'GET',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            async: true,
+            success: function (songs) {
+                $('#accordion').html(createAccordion(songs, 1, 'song'));
+                framework.rebindInternalLinks();
+            },
+            error: function (msg) {
+                output.error("Error!", "failed to connect to server, please try again");
+            }
+        });
+    };
+
+    /**
+     * Creates the conctent of the edit page
+     * @returns {string} The html of the edit page
+     */
+    function showEdit() {
+        content.html('<form id="editUserForm" class="form-horizontal">\
                     <legend>Edit profile</legend>\
                     <div class="control-group">\
                         <label class="control-label" for="inputName">Name (optional)</label>\
@@ -75,15 +156,66 @@
                     <div class="form-actions">\
                         <input type="submit" class="btn btn-primary" value="Save changes"/>\
                     </div>\
-            </form>';
-        };
+            </form>');
+        //Submit handler
+        $('#editUserForm').submit(function () {
+            var cleanedInputName = $("#inputName").val().trim();
+            var cleanedInputEmail = $("#inputEmail").val().trim();
+            var cleanedInputPassword = $("#inputPassword").val().trim();
 
-        /**
-         * Creates the conctent of the balance page
-         * @returns {string} The html of the balance page
-         */
-        function createBalance() {
-            return '<legend>Current payment method</legend>\
+            var submit = false;
+            var postData = {};
+            if (cleanedInputName) {
+                submit = true;
+                postData.name = cleanedInputName;
+            }
+            if (cleanedInputEmail) {
+                submit = true;
+                postData.email = cleanedInputEmail;
+            }
+            if (cleanedInputPassword) {
+                submit = true;
+                postData.password = cleanedInputPassword;
+            }
+
+            if (submit) {
+                $.ajax({
+                    url: 'http://rentit.itu.dk/RentIt25/moofy.svc/users/' + framework.user.id + '/update',
+                    type: 'POST',
+                    data: JSON.stringify(postData),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    async: true,
+                    success: function (msg) {
+                        if (msg.success) {
+                            if (cleanedInputName) framework.user.name = cleanedInputName;
+                            if (cleanedInputEmail) framework.user.email = cleanedInputEmail;
+                            if (cleanedInputPassword) framework.user.password = cleanedInputEmail;
+                            //TODO: Consider giving the framework a reference to the following function or listen on the user object for changes
+                            reloadUserBox();
+                            framework.loadPage('account');
+                            output.success('Profile updated!', 'The profile was successfully updated.');
+                        } else {
+                            output.error('Error!', 'The profile was not updated.');
+                        }
+                    },
+                    error: function (msg) {
+                        output.error('Error!', 'The profile was not updated.');
+                    }
+                });
+            } else {
+                output.error('No information was entered!', 'Please enter text in the fields you want to change.');
+            }
+            return false;
+        });
+    };
+
+    /**
+     * Creates the conctent of the balance page
+     * @returns {string} The html of the balance page
+     */
+    function showBalance() {
+        content.html('<legend>Current payment method</legend>\
                     <img src="http://www.tbor.org/Photos/VisaMastercard.jpg" height="300px" width="200px">\
                     <p>Visa/mastercard: XXXX-XXXX-XXXX-3457</p>\
                     <button id="paymentMethodButton" class="btn btn-primary">Change payment method</button>\
@@ -97,108 +229,146 @@
                         <span class="add-on">.00</span>\
                     </div>\
                     <input id="editUserSubmit" type="submit" class="btn btn-primary" value="Make transfer"/>\
-                </form>';
-        };
-
-        //Adds a click listener to the navigation of the account page.
-        $("#accountNavigation a").click(function (e) {
-            e.preventDefault(); //Prevent the default click listener, since this is a a-tag.
-            $("#accountNavigation li.active").removeClass("active"); //Remove the active styling of every account navigation tab, ...
-            $(this).parent().addClass("active"); //and it it again to the parent of the clicked link
-            switch (this.id) {
-                case('accountOverview'):
-                    content.html(createOverview());
-                    break;
-                case('accountEdit'):
-                    content.html(createEdit());
-                    //Submit handler
-                    $('#editUserForm').submit(function () {
-                        var cleanedInputName = $("#inputName").val().trim();
-                        var cleanedInputEmail = $("#inputEmail").val().trim();
-                        var cleanedInputPassword = $("#inputPassword").val().trim();
-
-                        var submit = false;
-                        var postData = {};
-                        if (cleanedInputName) {
-                            submit = true;
-                            postData.name = cleanedInputName;
-                        }
-                        if (cleanedInputEmail) {
-                            submit = true;
-                            postData.email = cleanedInputEmail;
-                        }
-                        if (cleanedInputPassword) {
-                            submit = true;
-                            postData.password = cleanedInputPassword;
-                        }
-
-                        if (submit) {
-                            $.ajax({
-                                url: 'http://rentit.itu.dk/RentIt25/moofy.svc/users/' + framework.user.id + '/update',
-                                type: 'POST',
-                                data: JSON.stringify(postData),
-                                contentType: 'application/json; charset=utf-8',
-                                dataType: 'json',
-                                async: true,
-                                success: function (msg) {
-                                    if (msg.success) {
-                                        if (cleanedInputName) framework.user.name = cleanedInputName;
-                                        if (cleanedInputEmail) framework.user.email = cleanedInputEmail;
-                                        if (cleanedInputPassword) framework.user.password = cleanedInputEmail;
-                                        //TODO: Consider giving the framework a reference to the following function or listen on the user object for changes
-                                        reloadUserBox();
-                                        framework.loadPage('account');
-                                        output.success('Profile updated!', 'The profile was successfully updated.');
-                                    } else {
-                                        output.error('Error!', 'The profile was not updated.');
-                                    }
-                                },
-                                error: function (msg) {
-                                    output.error('Error!', 'The profile was not updated.');
-                                }
-                            });
-                        } else {
-                            output.error('No information was entered!', 'Please enter text in the fields you want to change.');
-                        }
-                        return false;
-                    });
-
-                    break;
-                case('accountBalance'):
-                    content.html(createBalance());
-                    $('#balanceForm').submit(function () {
-                        var money = $("#moneyInput").val().trim();
-                        var postData = {moneyAmount: money};
-                        $.ajax({
-                            url: 'http://rentit.itu.dk/RentIt25/moofy.svc/users/' + framework.user.id + '/deposit',
-                            type: 'POST',
-                            data: JSON.stringify(postData),
-                            contentType: 'application/json; charset=utf-8',
-                            dataType: 'json',
-                            async: true,
-                            success: function (msg) {
-                                if (msg.success) {
-                                    framework.user.balance += +money; //The unary + operator is required to treat money as an int rather than string
-                                    $('#userBalance').text(framework.user.balance);
-                                    output.success('Money transfered!', 'The money was succesfully transferred.');
-                                } else {
-                                    output.error('Error!', 'The money was not transferred.');
-                                }
-                            },
-                            error: function (msg) {
-                                output.error('Error!', 'The money was not transferred.');
-                            }
-                        });
-                        return false;
-                    });
-
-
-                    $('#paymentMethodButton').click(function () {
-                        output.modal('This function does not exist yet', 'You can not change your payment method in the Moofy beta experience.');
-                    });
-                    break;
-            }
+                </form>');
+        $('#balanceForm').submit(function () {
+            var money = $("#moneyInput").val().trim();
+            var postData = {moneyAmount: money};
+            $.ajax({
+                url: 'http://rentit.itu.dk/RentIt25/moofy.svc/users/' + framework.user.id + '/deposit',
+                type: 'POST',
+                data: JSON.stringify(postData),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: true,
+                success: function (msg) {
+                    if (msg.success) {
+                        framework.user.balance += +money; //The unary + operator is required to treat money as an int rather than string
+                        $('#userBalance').text(framework.user.balance);
+                        output.success('Money transfered!', 'The money was succesfully transferred.');
+                    } else {
+                        output.error('Error!', 'The money was not transferred.');
+                    }
+                },
+                error: function (msg) {
+                    output.error('Error!', 'The money was not transferred.');
+                }
+            });
+            return false;
         });
-        content.html(createOverview());
+
+
+        $('#paymentMethodButton').click(function () {
+            output.modal('This function does not exist yet', 'You can not change your payment method in the Moofy beta experience.');
+        });
+    };
+
+
+
+    function createAccordion(items, page, mediaType) {
+        if (!items || !page || !mediaType) return;
+        var mediaType = mediaType.toLowerCase();
+        var mediaTypeFirstUpper = mediaType.charAt(0).toUpperCase()+ mediaType.slice(1);
+        var page = page - 1; //we are 0-indexed. Parameter is not.
+        var accordion = '';
+        var startIndex = page * itemsPerPage;
+        var endIndex = startIndex + itemsPerPage; //exclusive
+
+        for(var i = startIndex; i<endIndex && i<items.length ; i++) {
+            accordion +=
+                    '<div class="accordion-group">\
+                        <div class="accordion-heading">\
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse' + i + '">' +
+                                items[i].title
+                         + '</a>\
+                        </div>\
+                        <div id="collapse' + i + '" class="accordion-body collapse">\
+                            <div class="accordion-inner">\
+                                <div class="row">\
+                                    <div class="span2">\
+                                        <img class="rounded" src="' +items[i].coverUri+'" alt="" height="140px" width="109" display="inline" />\
+                                    </div>\
+                                    <div class="span7">\
+                                        <p>'
+                                            + items[i].description +
+                                        '</p>\
+                                    </div>\
+                                    <div class="span2">\
+                                        <div class="btn-group btn-group-vertical pull-right">\
+                                            <a class="btn internal" href="?'+mediaType+'Id='+items[i].id+'#'+mediaType+'">Description</a>\
+                                            <a class="btn internal" href="?'+mediaType+'Id='+items[i].id+'#show'+mediaTypeFirstUpper+'">Watch</a>\
+                                            <a class="btn" id="downloadLink" href="'+getDownloadLink(items[i], mediaType)+'" download="'+items[i].title+'">Download</a>\
+                                        </div>\
+                                    </div>\
+                                </div>\
+                            </div>\
+                        </div>\
+                    </div>';
+        }
+        return accordion;
     }
+/*
+
+    function createThumbContent(movs) {
+        var itemsPerPage = 4;
+        var nrOfPages = (movs.length % itemsPerPage) == 0 ? movs.length / itemsPerPage : movs.length / itemsPerPage + 1;
+        var pagi = "<li><a href='javascript:prevPage()'>Prev</a></li>";
+        var ps = new Array();
+        for (var i = 1; i <= nrOfPages; i++) {
+            pagi += "<li><a href='javascript:setPage(" + i + ")'>" + i + "</a></li>";
+        }
+        pagi += "<li><a href='javascript:nextPage()'>Next</a></li>";
+        var pagin = $("#pagin");
+        pagin.empty();
+        pagin.append($(pagi));
+        for (var i = 0; i < movs.length; i++) {
+            var listString = "<li class='span3'><div class='thumbnail'><a class='internal' href='?movieId=" + movs[i].id + "#movie'><img class='accountThumbListElem' src='" + movs[i].coverUri + "' alt='' border='0' title='" + movs[i].title + "' /></a><div class='caption thumbCapt'><h5>" + movs[i].title + "</h5>Rating:&thinsp;" + movs[i].avgRating.toFixed(2);
+            +"</div></div></li>";
+            if (ps[Math.floor(i / itemsPerPage)]) { //If the entry already contains text..
+                ps[Math.floor(i / itemsPerPage)] += listString; //append
+            }
+            else {
+                ps[Math.floor(i / itemsPerPage)] = listString;
+            }
+        }
+        pages = ps;
+        curPage = 1;
+    }
+
+    function nextPage() {
+        thumbs.empty();
+        thumbs.append(pages[++curPage] || pages[(curPage = 0)]);
+    }
+
+    function prevPage() {
+        thumbs.empty();
+        curPage = curPage - 1 < 0 ? pages.length - 1 : curPage - 1;
+        thumbs.append(pages[curPage]);
+    }
+
+    function setPage(nr) {
+        thumbs.empty();
+        curPage = nr - 1;
+        thumbs.append(pages[curPage]);
+    }
+*/
+
+    //Adds a click listener to the navigation of the account page.
+    $("#accountNavigation a").click(function (e) {
+        e.preventDefault(); //Prevent the default click listener, since this is a a-tag.
+        $("#accountNavigation li.active").removeClass("active"); //Remove the active styling of every account navigation tab, ...
+        $(this).parent().addClass("active"); //and it it again to the parent of the clicked link
+        switch (this.id) {
+            case('accountOverview'):
+                    showOverview();
+                break;
+            case('accountEdit'):
+                    showEdit();
+                break;
+            case('accountBalance'):
+                showBalance();
+                break;
+        }
+    });
+    showOverview();
+}
 </script>

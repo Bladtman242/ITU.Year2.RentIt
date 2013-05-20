@@ -10,6 +10,9 @@
     <li>
         <a href="#" id="manager-upload-song-link">Create new song</a>
     </li>
+	<li>
+        <a href="#" id="manager-promote-link">Promote/demote users</a>
+    </li>
 </ul>
 
 <div id="manager-content">
@@ -162,7 +165,8 @@
                 <button id="uploadSongSubmit" class="btn btn-primary">Create</button>\
             </div>\
         </form>');
-    
+   
+	var demote_promote = $('<div style="width:100%; height:100%; overflow:scroll;">'+filterUsers("")+'</div>');
     var tmp_id = -1337;
     
     $("#manager-navigation a").click(function(e) {
@@ -332,6 +336,9 @@
                 }
                 
                 break;
+			case('manager-promote-link'):
+				$mng_content.html(demote_promote);
+				break;
         }
     });
     
@@ -501,6 +508,36 @@
         }
     }
     else $("#manager-overview-link").click();
+	
+	function filterUsers(filter)
+	{
+		if(filter=="") 
+		{
+			var html = "";
+			$.ajax({
+                url: 'http://rentit.itu.dk/RentIt25/moofy.svc/users/filter',
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function(usrs) {
+				  
+				  for(var i = 0; i<usrs.length; i++)
+				  {
+					var usr = usrs[i];
+					var button = usr.admin ? "<button class='btn btn-primary'>Demote</button>" : "<button class='btn btn-primary'>Promote</button>";
+					html+="<div id="+usr.id+">"+usr.name + button + "</br>";
+				  }
+                },
+                error: function(msg) {
+                    output.error("Error!","failed to connect to server, please try again");
+                }
+            });
+			return html;
+				
+		}
+		else return "lalalla";
+	}
 </script>
 
 

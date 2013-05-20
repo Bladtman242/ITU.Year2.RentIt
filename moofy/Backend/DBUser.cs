@@ -7,6 +7,35 @@ using System.Data.SqlClient;
 namespace moofy.Backend {
     public partial class DBAccess {
         /// <summary>
+        /// Returns an array of users matching a search string
+        /// </summary>
+        /// <param name="filter">The search string</param>
+        /// <returns>The array of users matching the search string</returns>
+        public User[] FilterUsers(string filter)
+        {
+            List<User> users = new List<User>();
+            SqlCommand command = new SqlCommand("SELECT * FROM Users "+
+                                                "WHERE userName LIKE '%" + filter + "%' "+
+                                                "OR name LIKE '%" + filter + "%' ",
+                                                connection);
+            SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+
+                users.Add(new User()
+                {
+                    Id = Int32.Parse(reader["id"].ToString()),
+                    Username = reader["userName"].ToString(),
+                    Name = reader["name"].ToString(),
+                    Balance =Int32.Parse(reader["balance"].ToString()),
+                    Email = reader["email"].ToString()
+                });
+            }
+
+            return users.ToArray();
+        }
+        /// <summary>
         /// Updates a user to have specified information
         /// </summary>
         /// <param name="user">a user object with the new information</param>
