@@ -104,6 +104,9 @@ var framework = {
             });
         },
     
+    /**
+     * Should be called after adding internal links dynamically.
+     */
     rebindInternalLinks: function() {
             //Link bindings (for internal links) - rebound on every page load as new links appear.
                 $("a.internal").unbind('click');
