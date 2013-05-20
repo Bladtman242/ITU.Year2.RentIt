@@ -58,13 +58,16 @@ Later in the project we became aware that the above dilemma also applies to the 
 \subsubsection{Accessing the Database}
 \label{sec:databaseaccess}
 After having designed the database structure we had to decide how to access and utilize the database in the best suited way for our web service. We quickly settled for a C\#/WCF-based web service, since every group member had about the same experience in that platform from other ITU courses.
-With access to the .NET framework, we considered to make use of the Entity Framework for our database interactions and general object-relational mapping. However several group members had been experiencing some inconvenient performance issues in previous projects. We do believe performance is an important aspect of our service and research has shown that users of the internet have become very impatient with regards to response times \cite{webusersflee}. We also deemed our queries and database interaction to be fairly simple, thus having no real need for most of the functionality in the Entity Framework. After a discussion it became clear that the only real benefit of using the framework was the possibility of faster prototyping. With our emphasis on a solid performance we choose to spend a little more time developing our own database access layer in order to maintain a more direct control over the performance of our solution.
+
+With access to the .NET framework, we considered to make use of the Entity Framework for our database interactions and general object-relational mapping, however, several group members had been experiencing some issues in previous projects, complicating development and workflow and lowering the performance of resulting products. As performance is an important aspect of our service and research has shown that users of the internet have become very impatient with regards to response times\cite{webusersflee}. We also deemed our queries and database interaction to be fairly simple, thus having no real need for most of the functionality in the Entity Framework.
+
+After a discussion it became clear that the only real benefit of using the framework was the possibility of faster prototyping. With our emphasis on a solid performance we chose to spend a little more time developing our own database access layer in order to maintain a more direct control over the performance of our solution.
 
 
 \subsubsection{From Entities to Classes}
 Although supporting declarative and functional features, C\# has been designed with the object oriented paradigm in mind \cite{csharpecma}, and as such we decided to use an object oriented approach for our back-end solution. 
 
-We created several object oriented containers (classes) capable of holding the data of our web service. An example of our internal data classes capable of holding media can be seen in Figure ~\ref{fig:orm}.
+We created several object oriented containers (classes) capable of holding the data of our web service. An example of our internal data classes capable of holding media (fulfilling our requirements) can be seen in Figure ~\ref{fig:orm}.
 \begin{figure}[hbt]
 	\centering
 	\includegraphics[scale=0.7]{./p1design/orm.png}
@@ -76,7 +79,7 @@ This object oriented structure is derived from the IS-A relationship of the file
 
 \subsubsection{Lazy loading}
 
-Our objects are designed with \emph{lazy loading} in cases where a seperate database table is needed in order to set a property. Lazy loading is a design pattern, which defers the initialization of a variable until the variable is needed for the first time. This means that when an instance of the user class is prompted to answer if the user is an administrator/manager, the answer will be loaded and stored in the object for future reference. If the user object is never asked for the value of this property, then the value will never be retrieved from the database. In practice this looks like shown in Figure ~\ref{fig:lazyload}.
+Our objects are designed with \emph{lazy loading} in cases where a seperate database table is needed in order to set a property. Lazy loading is a design pattern, which defers the initialization of a variable until the variable is needed for the first time. This means that when an instance of the user class is prompted to answer if the user is an administrator/manager, the answer will be loaded and stored in the object for future reference. If the user object is never asked for the value of this property, then the value will never be retrieved from the database (see example in Figure \ref{fig:lazyload}).
 
 \begin{figure}[hbt]
 	\centering
@@ -86,18 +89,20 @@ Our objects are designed with \emph{lazy loading} in cases where a seperate data
 \end{figure}
 
 
-This design has potential to increase the performance of our solution in cases where, for instance, only the username of a user object is of interest, since no extra queries or joins with other database tables will be executed. In hindsight our design does not need this feature, as the lazy loaded properties are used extensively, thus causing several queries per object on the average. A solution with one query and joined tables might have been preferable, since the database would then not have to handshake, allocate connection buffers, etc. several times per object. As such, with regards to our use of lazy loading, we might have fell victim to "premature optimization" \cite{premoptim}, but we have no test measurements of the actual performance loss.
+This design has potential to increase the performance of our solution in cases where, eg., only the username of a user object is of interest, since no extra queries or joins with other database tables will be executed.
+
+In hindsight our design does not need this feature, as the lazy loaded properties are used extensively, thus causing several queries per object on the average. A solution with a single query and joined tables might have been preferable, since the database would then not have to handshake, allocate connection buffers, etc. several times per object. As such, we might have fallen victim to "premature optimization"\cite{premoptim}, but we have no test measurements of the actual performance loss.
 
 
 \subsubsection{Supported workflows}
-Our datamodel supports all the workflows presented in our use cases, and it
+Our datamodel supports all our requirements, and it
 does so by abstracting over the database design and relying on object oriented
 container classes, which can be retrieved by a few calls to our database access
-layer. An example use of the back-end is shown here in the context of the
-following requirement:
+layer. An example use of the back-end is shown here in the context of requirement 20:
 
 \begin{itemize}
-\item A user must be able to locate a specific movie/song through text search, matching movies with any property matching the text string.
+\item A user must be able to locate a specific artifact through text search,
+	listing artifacts where any property matches the search string.
 \end{itemize}
 
 Our back-end supports the above use case through only 4 lines as seen in Figure ~\ref{fig:moviesearch}.
