@@ -53,6 +53,9 @@ $('#star').raty({
 	            async: true,
 	            success: function(msg) {
 	                output.success('Success!', 'Your rating has been submitted.');
+	                data = getMovieJSON(id);
+	                $('#ratingDiv').empty();
+	                $('#ratingDiv').append("<b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + " votes");
 	            },
 	            error: function(msg) {
 	                output.error('Error!', 'An error occured. Please try again.');
@@ -245,7 +248,7 @@ function displayMovie(data)
 		<div style='padding: 3px; margin: 10px;'><br>\
 		<p><font size='6'>" + data.title + "</font><font size='5'> - " + data.release + "</font></p>\
 		<div id='star' class='pull-right' style='padding-top:15px'></div><div class='pull-right' style='padding-top:15px; padding-right:8px'><b>Your vote:</b></div>\
-		<p style='padding-top:15px'><b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + votes + "</p>\
+		<div id='ratingDiv' style='padding-top:15px'><b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + " votes</div>\
 		<p><b>" + data.genres.join(", ") + "</b></p>\
 		<hr>\
 		<p>" + data.description + "</p><p><b>Directors:</b> " + data.directors.join(", ") + "</p>\

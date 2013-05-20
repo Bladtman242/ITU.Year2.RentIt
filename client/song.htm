@@ -53,6 +53,9 @@ $('#star').raty({
 	            async: true,
 	            success: function(msg) {
 	                output.success('Success!', 'Your rating has been submitted.');
+	                data = getSongJSON(id);
+	                $('#ratingDiv').empty();
+	                $('#ratingDiv').append("<b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + " votes");
 	            },
 	            error: function(msg) {
 	                output.error('Error!', 'An error occured. Please try again.');
@@ -241,10 +244,11 @@ function displaySong()
 		<p><font size='4'>" + data.album + " - " + data.artists + "</font></p>\
 		<hr>\
 		<div id='star' class='pull-right'></div><div class='pull-right' style='padding-right:8px'><b>Your vote:</b></div>\
-		<p><b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + votes + "</p>\
-		<p><b>" + data.genres + "</p>\
+		<div id='ratingDiv'><b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + " votes</div>\
+		<p><b>" + data.genres + "</b></p>\
+		" + data.description + "\
 		<hr>\
-		<div id='buttonsDiv'>\
+		<b><div id='buttonsDiv'>\
 		" + buttons + "\
 		</div>\
 		</div></div>";
