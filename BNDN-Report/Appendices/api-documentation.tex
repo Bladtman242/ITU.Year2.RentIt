@@ -20,22 +20,22 @@ POST users/\{id\}/deposit\\
 
 GET  users/\{id\}/movies\\
 \emph{/*Returns all movies currently or previously associated with user*/}\\
-/*Movie array (see movies/\{id\})*/
+/* Movie array (see movies/\{id\}) */
 
 GET  users/\{id\}/movies/current\\
 \emph{/*Returns currently associated movies*/}\\
-/*Movie array (see movies/\{id\})*/
+/* Movie array (see movies/\{id\}) */
 
 GET  users/\{id\}/songs\\
 \emph{/*Returns all songs currently or previously associated with user*/}\\
-/*Song array (see songs/\{id\})*/
+/* Song array (see songs/\{id\}) */
 
 GET  users/\{id\}/songs/current\\
 \emph{/*Returns currently associated movies*/}\\
-/*Song array (see songs/\{id\})*/
+/* Song array (see songs/\{id\}) */
 
 POST users/\{id\}/update\\
-\emph{/*all arguments below are OPTIONAL, add only the ones you need to update. Leave out the rest.*/}\\
+\emph{/* All arguments below are OPTIONAL, add only the ones you need to update. Leave out the rest. */} \\
 \textbf{\{ name: /*string*/, email: /*string*/, password: /*string*/ \}\\}
 \{ success: /*boolean*/, message: /*string*/ \}
 
@@ -46,259 +46,106 @@ Managers have free access to the same things as users. Managers can also upload 
 \emph{managerid} is the id of a manager (who is demoting).
 
 POST manager/promote\\
-\textbf{\{ managerid: /*int*/, userid: /*int*/ \}}
+\textbf{\{ managerid: /*int*/, userid: /*int*/ \}} \\
+\{ success: /*boolean*/, message: /*string*/ \}
 
-    \{ success: /*boolean*/, message: /*string*/ \}
+POST manager/\{id\}/demote \\
+\textbf{\{ managerid: /*int*/ \}} \\
+\{ success: /*boolean*/, message: /*string*/ \}
 
-POST manager/\{id\}/demote
+GET  movies/\{id\} \\
+\{ title: /*string*/, release: /*int*/, directors: /*string array*/, genres: /*string array*/, description: /*string*/, coverUri: /*string*/, rentalPrice: /*int*/, purchasePrice: /*int*/, avgRatings: /*double*/, numberOfVotes: /*int*/\ \}
 
-    \{ managerid: /*int*/ \}
+POST movies/\{id\}/purchase \\
+\textbf{\{ userId: /*int*/ \}} \\
+\{ success: /*boolean*/, message: /*string*/ \}
 
-    \{ success: /*boolean*/, message: /*string*/ \}
+POST movies/\{id\}/rent \\
+\textbf{\{ userId: /*int*/ \}} \\
+\{ success: /*boolean*/, message: /*string*/ \}
 
-GET  movies/\{id\}
+GET movies/\{id\}/download?userId=\{userId\} \\
+\{ success: /*boolean*/, downloadLink: /*string*/ \}
 
-    \{
+GET  movies/filter /*matches all movies*/ \\
+/* Movie array (see movies/\{id\}) */
 
-        title: /*string*/,
+GET  movies/filter/\{filter\} \\
+/* Movie array (see movies/\{id\}) */
 
-        release: /*int*/,
+GET  movies/filter/\{filter\}?sortBy=\{sortBy\} \\
+/* Movie array (see movies/\{id\}) */ \\
+/* Note: Valid values for sortBy are “title”, “genre”, “release”. */
 
-        directors: /*string array*/,
+POST movies/upload \\
+/* Body is file data */ \\
+\{ success: /*boolean*/, tmpid: /*string*/ \}
 
-        genres: /*string array*/,
+POST movies/create \\
+\textbf{\{ managerid: /*int*/, tmpid: /*int*/, title: /*string*/, release: /*int*/, directors: /*string array*/, 
+genres: /*string array*/, description: /*string*/, rentalPrice: /*int*/, purchasePrice: /*int*/, coverUri: /*string*/\}} \\
+\{ success: /*boolean*/, id: /*int*/ \}
 
-        description: /*string*/,
+POST movies/\{id\}/delete \\
+\textbf{\{ managerid: /*int*/ \}} \\
+\{ success: /*boolean*/, message: /*string*/ \}
 
-        coverUri: /*string*/,
+POST movies/\{id\}/rate \\
+\textbf{\{ userId: /*int*/, rating: /*int*/ \}}
+\{ success: /*boolean*/, message: /*string*/ \}
 
-        rentalPrice: /*int*/,
+GET movies/\{id\}/ratings?userId=\{userId\} \\
+\{ itemId: /*int*/, userId: /*int*/, rating: /*int*/ \}
 
-        purchasePrice: /*int*/,
+POST movies/\{id\}/update \\
+\emph{/* all arguments below are OPTIONAL, add only the ones you need to update. Leave out the rest. */} \\
+\textbf{\{ managerid: /*int*/, title: /*string*/, description: /*string*/, rentalPrice: /*int*/, purchasePrice: /*int*/, 
+release: /*int*/, coverUri: /*string*/, genres: /*string array*/, directors: /*string array*/\}} \\
+\{ success: /*boolean*/, message: /*string*/ \}
 
-        avgRatings: /*double*/,
+GET  songs/\{id\} \\
+\{ title: /*string*/, release: /*int*/, artist: /*string*/, album: /*string*/, genres: /*string array*/, coverUri: /*string*/, rentalPrice: /*int*/, purchasePrice: /*int*/, avgRatings: /*double*/, numberOfVotes: /*int*/\}
 
-        numberOfVotes: /*int*/
+POST songs/\{id\}/purchase \\
+\textbf{\{ userId: /*int*/ \}} \\
+\{ success: /*boolean*/, message: /*string*/ \}
 
-       \}
+POST songs/\{id\}/rent \\
+\textbf{\{ userId: /*int*/ \}} \\
+\{ success: /*boolean*/, message: /*string*/ \}
 
-POST movies/\{id\}/purchase
+GET  songs/\{id\}/download \\
+\{ success: /*boolean*/, downloadLink: /*string*/ \}
 
-    \{ userId: /*int*/ \}
+GET  songs/filter/ /* matches all movies */ \\
+/* Song array (see songs/\{id\}) */
 
-    \{ success: /*boolean*/, message: /*string*/ \}
+GET  songs/filter/\{filter\} \\
+/* Song array (see songs/\{id\}) */
 
-POST movies/\{id\}/rent
+GET  songs/filter/\{filter\}?sortBy=\{sortBy\} \\
+/* Song array (see songs/\{id\}) */ \\
+/* Note: Valid values for sortBy are “title”, “genre”, “release”. */
 
-    \{ userId: /*int*/ \}
+POST songs/upload /* Body is file data */ \\
+\textbf{\{ success: /*boolean*/, tmpid: /*string*/ \}}
 
-    \{ success: /*boolean*/, message: /*string*/ \}
+POST songs/create \\
+\textbf{\{ managerid: /*int*/, tmpid: /*int*/, title: /*string*/, description: /*string*/, release: /*int*/, artists: /*string array*/, album: /*string*/, genres: /*string array*/, rentalPrice: /*int*/, purchasePrice: /*int*/, coverUri /*string*/ \}} \\
+\{ success: /*boolean*/, id: /*int*/ \}
 
-GET  movies/\{id\}/download?userId=\{userId\}
+POST songs/\{id\}/delete \\
+\textbf{\{ managerid: /*int*/ \}}
+\{ success: /*boolean*/, message: /*string*/ \}
 
-    \{ success: /*boolean*/, downloadLink: /*string*/ \}
+POST songs/\{id\}/rate \\
+\textbf{\{ userId: /*int*/, rating: /*int*/ \}}
+\{ success: /*boolean*/, message: /*string*/ \}
 
-GET  movies/filter                     //matches all movies
+GET songs/\{id\}/ratings?userId=\{userId\} \\
+\{ itemId: /*int*/, userId: /*int*/, rating: /*int*/ \}
 
-    [/*Movie array (see movies/\{id\})*/]
-
-GET  movies/filter/\{filter\}
-
-    [/*Movie array (see movies/\{id\})*/]
-
-GET  movies/filter/\{filter\}?sortBy=\{sortBy\}
-
-    [/*Movie array (see movies/\{id\})*/]
-
-    //Note: Valid values for sortBy are “title”, “genre”, “release”.
-
-POST movies/upload
-
-    //Body is file data
-
-    \{ success: /*boolean*/, tmpid: /*string*/ \}
-
-POST movies/create
-
-    \{
-
-         managerid: /*int*/,
-
-         tmpid: /*int*/,
-
-         title: /*string*/,
-
-         release: /*int*/,
-
-         directors: /*string array*/,
-
-         genres: /*string array*/,
-
-         description: /*string*/,
-
-         rentalPrice: /*int*/,
-
-         purchasePrice: /*int*/,
-
-         coverUri: /*string*/
-
-    \}
-
-    \{ success: /*boolean*/, id: /*int*/ \}
-
-POST movies/\{id\}/delete
-
-      \{ managerid: /*int*/ \}
-
-      \{ success: /*boolean*/, message: /*string*/ \}
-
-POST movies/\{id\}/rate
-
-    \{ userId: /*int*/, rating: /*int*/ \}
-
-    \{ success: /*boolean*/, message: /*string*/ \}
-
-GET movies/\{id\}/ratings?userId=\{userId\}
-
-    \{ itemId: /*int*/, userId: /*int*/, rating: /*int*/ \}
-
-POST movies/\{id\}/update //all arguments below are OPTIONAL, add only the
-
-                      //ones you need to update. Leave out the rest.
-
-    \{
-
-         managerid: /*int*/,
-
-         title: /*string*/,
-
-         description: /*string*/,
-
-         rentalPrice: /*int*/,
-
-         purchasePrice: /*int*/,
-
-         release: /*int*/,
-
-         coverUri: /*string*/,
-
-         genres: /*string array*/,
-
-         directors: /*string array*/
-
-    \}
-
-    \{ success: /*boolean*/, message: /*string*/ \}
-
-GET  songs/\{id\}
-
-    \{
-
-        title: /*string*/,
-
-        release: /*int*/,
-
-        artist: /*string*/,
-
-        album: /*string*/,
-
-        genres: /*string array*/,
-
-        coverUri: /*string*/,
-
-        rentalPrice: /*int*/,
-
-        purchasePrice: /*int*/,
-
-        avgRatings: /*double*/,
-
-        numberOfVotes: /*int*/
-
-       \}
-
-POST songs/\{id\}/purchase
-
-    \{ userId: /*int*/ \}
-
-    \{ success: /*boolean*/, message: /*string*/ \}
-
-POST songs/\{id\}/rent
-
-    \{ userId: /*int*/ \}
-
-    \{ success: /*boolean*/, message: /*string*/ \}
-
-GET  songs/\{id\}/download
-
-    \{ success: /*boolean*/, downloadLink: /*string*/ \}
-
-GET  songs/filter/                    //matches all movies
-
-    [/*Song array (see songs/\{id\})*/]
-
-GET  songs/filter/\{filter\}
-
-    [/*Song array (see songs/\{id\})*/]
-
-GET  songs/filter/\{filter\}?sortBy=\{sortBy\}
-
-    [/*Song array (see songs/\{id\})*/]
-
-    //Note: Valid values for sortBy are “title”, “genre”, “release”.
-
-POST songs/upload
-
-    //Body is file data
-
-    \{ success: /*boolean*/, tmpid: /*string*/ \}
-
-POST songs/create
-
-    \{ managerid: /*int*/, tmpid: /*int*/, title: /*string*/, description: /*string*/, release: /*int*/, artists: /*string array*/, album: /*string*/, genres: /*string array*/, rentalPrice: /*int*/, purchasePrice: /*int*/, coverUri /*string*/ \}
-
-    \{ success: /*boolean*/, id: /*int*/ \}
-
-POST songs/\{id\}/delete
-
-      \{ managerid: /*int*/ \}
-
-      \{ success: /*boolean*/, message: /*string*/ \}
-
-POST songs/\{id\}/rate   
-
-    \{ userId: /*int*/, rating: /*int*/ \}
-
-    \{ success: /*boolean*/, message: /*string*/ \}
-
-GET songs/\{id\}/ratings?userId=\{userId\}
-
-    \{ itemId: /*int*/, userId: /*int*/, rating: /*int*/ \}
-
-POST songs/\{id\}/update //all arguments below are OPTIONAL, add only the
-
-                      //ones you need to update. Leave out the rest.
-
-    \{
-
-         managerid: /*int*/,
-
-         artist: /*string*/,
-
-         album: /*string*/,
-
-         title: /*string*/,
-
-         description: /*string*/,
-
-         rentalPrice: /*int*/,
-
-         purchasePrice: /*int*/,
-
-         release: /*int*/,
-
-         coverUri: /*string*/,
-
-         genres: /*string array*/
-
-    \}
-    \{ success: /*boolean*/, message: /*string*/ \}
+POST songs/\{id\}/update /* All arguments below are OPTIONAL, add only the ones you need to update. Leave out the rest. */ \\
+\textbf{\{ managerid: /*int*/, artist: /*string*/, album: /*string*/, title: /*string*/, description: /*string*/, 
+rentalPrice: /*int*/, purchasePrice: /*int*/, release: /*int*/, coverUri: /*string*/, genres: /*string array*/ \}} \\
+\{ success: /*boolean*/, message: /*string*/ \}
