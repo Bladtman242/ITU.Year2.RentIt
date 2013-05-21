@@ -1,0 +1,94 @@
+html {
+    text-align: center;
+
+}
+body {
+    margin-top: 20px;
+    width: 1000px;
+    display: inline-block;
+    text-align: left;
+}
+#container {
+    padding: 0 20px;
+    text-align: left;
+}
+header {
+    padding: 10px;
+}
+#logo {
+    cursor: pointer;
+}
+header hgroup, #login-box, #user-profile-box {
+    display: inline-block;
+    vertical-align: top;
+}
+#login-box input, #login-box label {
+    font-size: 0.7em;
+    height: 15px;
+}
+#login-box .control-group {
+    margin-bottom: 4px;
+}
+#user-name {
+    font-size: 1.3em;
+}
+#myAccountLinkBox {
+    cursor: pointer;
+}
+#user-pic {
+    width: 64px;
+    height: 64px;
+    display: inline-block;
+    vertical-align: top;
+}
+#user-info {
+    display: inline-block;
+    vertical-align: top;
+}
+.navbar {
+    margin-top: 15px;
+}
+
+footer {
+    background: rgb(245,245,245);
+    border-top: 1px solid rgb(229,229,229);
+    text-align: center;
+    padding: 15px 15px 50px 15px;
+    margin-top: 30px;
+}
+.carouselElem{
+    height:390px;
+}
+.thumbListElem{
+    height:200px;
+    width:155px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.thumbCapt{
+    white-space:nowrap; 
+    width:12em; 
+    overflow:hidden; 
+    text-overflow:ellipsis;
+}
+.frontPageImg{
+    width: 47%;
+    height: 240px;
+    display:inline;
+}
+#paginDiv{
+    display:inline-block;
+    padding-top:10px;
+    vertical-allign:middle;
+    padding-left:350px;
+}
+#sortBy{
+    display:inline-block;
+    margin-left:630px;
+}
+#searchForm{
+    display:inline-block;
+
+    vertical-allign:middle;
+}

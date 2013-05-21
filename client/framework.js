@@ -1,5 +1,9 @@
-//TODO: When clicking links in the navbar, history sometimes breaks! (but only most of the time - sometimes it works).
-
+/**
+ * This framework implements som simple, general features used in the client. It implements asynchronous
+ * navigation between pages, as well as a query parser (parsing the search part of the URI, making it
+ * easily accessbile) and more.
+ */
+ 
 //Framework object, "namespace" for all framework functions.
 var framework = {
     /**
@@ -27,6 +31,12 @@ var framework = {
         _full: ""
     },
     
+    /**
+     * Load a URI search string into the query object (framework.query).
+     * If an argument q is supplied, this will be used as the raw/full query string,
+     * if none is supplied, location.search.substring(1) will be used (this is the currently
+     * set query in the URL).
+     */
     loadQuery: function(q) {
         framework.query = {};
         framework.query._full = location.search.substring(1);
@@ -37,11 +47,14 @@ var framework = {
         var qstrLen = qstr.length;
         var keyAccumulator = "";
         var valueAccumulator = "";
+        //Parse a key...
         for(var i = 0; i < qstrLen; i++) {
             if(qstr[i] == "=") {
                 i++;
+                //Start parsing a value (= was reached)
                 for(; i < qstrLen; i++) {
                     if(qstr[i] == "&") {
+                        //Value finished, add to query object.
                         framework.query[keyAccumulator] = valueAccumulator;
                         keyAccumulator = "";
                         valueAccumulator = "";
@@ -173,10 +186,11 @@ window.onpopstate = function(event) {
     }
 };
 
+//On page load (first load OR refresh of browser)
 $(document).ready(function() {
     framework.container = $('#container');
     
-    //If a page (hash) is set:
+    //If a page (hash) is set, load the according page. Otherwise load default page.
     if(location.hash != "") {
         framework.loadPage(location.hash.substring(1),true,location.search.substring(1));
     }
