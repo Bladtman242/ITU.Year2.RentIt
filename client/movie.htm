@@ -57,7 +57,7 @@ $('#star').raty({
 	                var votes = " votes";
 	                if (data.numberOfVotes == 1) votes = " vote";
 	                $('#ratingDiv').empty();
-	                $('#ratingDiv').append("<b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + votes);
+	                $('#ratingDiv').append("<b>Rating:</b> " + data.avgRating.toFixed(2) + " - Based on " + data.numberOfVotes + votes);
 	            },
 	            error: function(msg) {
 	                output.error('Error!', 'An error occured. Please try again.');
@@ -83,7 +83,7 @@ $('#star').raty({
 	                var linkJSON = getMovieLinkJSON(id);
 	                $('#buttonsDiv').empty();
 	                $('#buttonsDiv').append("<a class='internal btn btn-primary' href='?movieId=" + id + "#showMovie'>Watch Movie</a>");
-	                $('#buttonsDiv').append("<a class='internal btn' href='http://" + linkJSON.downloadLink + "' download='" + data.title + "'>Download Movie</a>");
+	                $('#buttonsDiv').append("<a class='internal btn' href='http://" + linkJSON.downloadLink + "' download='" + data.title + "'>Download</a>");
 	                framework.user.balance -= data.purchasePrice;
                     framework.rebindInternalLinks();
 	            },
@@ -114,7 +114,7 @@ $('#star').raty({
 	                var linkJSON = getMovieLinkJSON(id);
 	                $('#buttonsDiv').empty();
 	                $('#buttonsDiv').append("<a class='internal btn btn-primary' href='?movieId=" + id + "#showMovie'>Watch Movie</a>");
-	                $('#buttonsDiv').append("<a class='internal btn' href='http://" + linkJSON.downloadLink + "' download='" + data.title + "'>Download Movie</a>");
+	                $('#buttonsDiv').append("<a class='internal btn' href='http://" + linkJSON.downloadLink + "' download='" + data.title + "'>Download</a>");
 	                framework.user.balance -= data.rentalPrice;
 	                framework.rebindInternalLinks();
 	            },
@@ -240,7 +240,7 @@ function displayMovie(data)
 	{
 		var linkJSON = getMovieLinkJSON(id);
 		buttons = "<a class='internal btn btn-primary' href='?movieId=" + id + "#showMovie'>Watch Movie</a>\
-				   <a class='btn' href='http://" + linkJSON.downloadLink + "' download='" + data.title + "'>Download Movie</a>";
+				   <a class='btn' href='http://" + linkJSON.downloadLink + "' download='" + data.title + "'>Download</a>";
 	}
 	
 	// create site contents
@@ -250,7 +250,7 @@ function displayMovie(data)
 		<div style='padding: 3px; margin: 10px;'><br>\
 		<p><font size='6'>" + data.title + "</font><font size='5'> - " + data.release + "</font></p>\
 		<div id='star' class='pull-right' style='padding-top:15px'></div><div class='pull-right' style='padding-top:15px; padding-right:8px'><b>Your vote:</b></div>\
-		<div id='ratingDiv' style='padding-top:15px'><b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + votes + "</div>\
+		<div id='ratingDiv' style='padding-top:15px'><b>Rating:</b> " + data.avgRating.toFixed(2) + " - Based on " + data.numberOfVotes + votes + "</div>\
 		<p><b>" + data.genres.join(", ") + "</b></p>\
 		<hr>\
 		<p>" + data.description + "</p><p><b>Directors:</b> " + data.directors.join(", ") + "</p>\
