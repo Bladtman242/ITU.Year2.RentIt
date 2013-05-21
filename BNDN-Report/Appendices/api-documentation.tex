@@ -14,6 +14,12 @@ POST users/login\\
 GET  users/\{id\}\\
 \{ username: /*string*/, name: /*string*/, email: /*string*/, balance: /*int*/, admin: /*boolean*/ \}
 
+GET  users/filter /*matches all users*/ \\
+/* User array (see users/\{id\}) */
+
+GET  users/filter/\{filter\} \\
+/* User array (see users/\{id\}) */
+
 POST users/\{id\}/deposit\\
 \textbf{\{ moneyAmount: /*int*/ \}}\\
 \{ success: /*boolean*/, message: /*string*/ \}
