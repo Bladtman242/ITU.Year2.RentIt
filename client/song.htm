@@ -31,6 +31,7 @@ if(framework.user && framework.user.admin) {
     });
 }
 
+//Ratings
 $('#star').raty({ 
 	score: data.avgRating,
 	path: 'vendor/raty-2.5.2/lib/img/',
@@ -67,8 +68,9 @@ $('#star').raty({
 	}
 	});
 
+    //Buy and Rent buttons...
+    
 	$('#buyButton').click(function () {
-	    //TODO: Get actual user id and credits for current item
 	    var onBuyClick = function() {
 	        var postData = JSON.stringify({ userId: framework.user.id});
 	        $.ajax({
@@ -99,7 +101,6 @@ $('#star').raty({
 	});
 
 	$('#rentButton').click(function () {
-	    //TODO: Get actual user id and credits for current item
 	    var onRentClick = function() {
 	        var postData = JSON.stringify({ userId: framework.user.id});
 	        $.ajax({
@@ -129,6 +130,9 @@ $('#star').raty({
 	    validateUserBalance(data.rentalPrice, callAfterValidation);
 	});
 
+/**
+ * Executes func if the current user has the required credits.
+ */
 function validateUserBalance(creditsNeeded, func) {
     if (framework.user.balance >= creditsNeeded) {
             func();
@@ -138,6 +142,9 @@ function validateUserBalance(creditsNeeded, func) {
         }
 }
 
+/**
+ * Returns the javascript object for the song with the given id.
+ */
 function getSongJSON(id)
 {
 	var json = "";
@@ -160,6 +167,10 @@ function getSongJSON(id)
     return json;
 }
 
+/**
+ * Returns the JSON wih a success flag and a download link for the given song. The
+ * user must have access to the song.
+ */
 function getSongLinkJSON(id)
 {
 	var json = "";
@@ -190,6 +201,9 @@ function getSongLinkJSON(id)
     return json;
 }
 
+/**
+ * Returns an object with all songs belonging to a user.
+ */
 function userSongs(userId)
 {
 	var json = "";
@@ -212,6 +226,9 @@ function userSongs(userId)
     return json;
 }
 
+/**
+ * Returns the HTML to display the current song.
+ */
 function displaySong()
 {
 	var s = "";

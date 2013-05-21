@@ -5,6 +5,9 @@ var data = getSongJSON(id);
 var link = getSongLinkJSON(id);
 container.append(song());
 
+/**
+ * Returns the audio element to play the current song.
+ */
 function song()
 {
 	var s = "<center><h3>Now playing " + data.album + " by " + data.artists + "</h3>";
@@ -14,6 +17,9 @@ function song()
 	return s;
 }	
 
+/**
+ * Get the JSON describing a song.
+ */
 function getSongJSON(id)
 {
 	var json = "";
@@ -36,6 +42,9 @@ function getSongJSON(id)
     return json;
 }
 
+/**
+ * Returns an object with a download link if the current user has access to it.
+ */
 function getSongLinkJSON(id)
 {
 	var json = "";

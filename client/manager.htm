@@ -16,12 +16,14 @@
 </ul>
 
 <div id="manager-content">
-    <!--Nothing-->
+    <!--Nothing (loaded later...)-->
 </div>
 
 <script>
+    //The div to contain the manager pages contents.
     var $mng_content = $("#manager-content");
     
+    //Content for the intro-page (overview) for the manager page.
     var overview = $('<p>Welcome to the manager overview! I\'ll be your guide.</p>\
         <p>This is where you will be creating new songs and movies.</p>\
         If you wish to edit an existing movie, go to the page for the particular movie and click\
@@ -29,6 +31,7 @@
         <p>If you wish to promote a user or demote another manager, go to the particular user\'s\
         profile and click the corresponding link.</p>');
     
+    //Upload movie forms.
     var upload_movie = $('<form id="fileForm" class="form-horizontal" enctype="multipart/form-data">\
                 <legend>Upload movie file</legend>\
                 <div class="control-group">\
@@ -95,6 +98,7 @@
             </div>\
         </form>');
     
+    //Upload song forms.
     var upload_song = $('<form id="fileForm" class="form-horizontal" enctype="multipart/form-data">\
                 <legend>Upload song file</legend>\
                 <div class="control-group">\
@@ -165,8 +169,10 @@
                 <button id="uploadSongSubmit" class="btn btn-primary">Create</button>\
             </div>\
         </form>');
-   
+
+    //Get the demote/promote page's content
 	var demote_promote = getAllUsers();
+    
     var tmp_id = -1337;
     
     $("#manager-navigation a").click(function(e) {
@@ -174,6 +180,8 @@
         $("#manager-navigation li.active").removeClass("active");
         var $t = $(this);
         $t.parent().addClass("active");
+        
+        //Depending on the id of the link clicked, load the appropriate page.
         switch(this.id) {
             case('manager-overview-link'):
                 $mng_content.html(overview);
@@ -343,9 +351,10 @@
         }
     });
     
+    //If this page was reached from an edit link (edit-mode instead of create mode).
     if(framework.query.edit) {
         if(!framework.query.id) {
-            alert("No id set! Oopsie!");
+            output.error("Invalid request.","No id set! Oopsie!");
         }
         else if(framework.query.edit == "movie") {
             $("#manager-upload-movie-link").click(); //load html
@@ -357,7 +366,7 @@
             $("#manager-navigation").hide();
             $("#uploadMovieSubmit").text("Update information");
             
-            //Load values
+            //Load values for form
             $.ajax
             ({
                 url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/' + framework.query.id,
@@ -434,7 +443,7 @@
             $("#manager-navigation").hide();
             $("#uploadSongSubmit").text("Update information");
             
-            //Load values
+            //Load values for form
             $.ajax
             ({
                 url: 'http://rentit.itu.dk/RentIt25/moofy.svc/songs/' + framework.query.id,
@@ -590,11 +599,7 @@
 									});
 								});
 	}
-	
-	
-	
-		
 </script>
 
-
-<!--<script src="manager-restriction.js"></script>-->
+<!--Restrict to managers only -->
+<script src="manager-restriction.js"></script>

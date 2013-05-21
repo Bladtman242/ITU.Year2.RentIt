@@ -38,6 +38,7 @@
 <script>
 var curCont, curPage, pages;
 var thumbs = $("#thumbs");
+
 //Get all movies ordered by average rating and set up the initial html carousel view
 $.ajax({
     url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/filter/?sortBy=avgRating',
@@ -57,6 +58,7 @@ $.ajax({
         output.error("Error!","failed to connect to server, please try again");
     }
 });
+
 //Get all movies and set up the initial html thumbnail view
 $.ajax({
     url: 'http://rentit.itu.dk/RentIt25/moofy.svc/movies/filter',
@@ -75,7 +77,7 @@ $.ajax({
     }
 });
 /**
- *
+ * Gets the nine first movies and place them in the carrousel (3 sections of 3 movies).
  * @param movs  -  an array of movies to put in the carousel
  * @returns {*|jQuery|HTMLElement}
  */

@@ -1,7 +1,9 @@
-if(!framework.user.admin) {
+//Restricts access to the page this script is included on to managers ONLY. This means that any
+//non-manager visiting the page will be redirected to the default page.
+if(!framework.user || !framework.user.admin) {
     framework.loadPage(framework.defaultPage);
     
-    var restrictedModal = $(
+      var restrictedModal = $(
         "<div class='restrictModal modal'> <div class='modal-header'>\
             <button type='button' class='close' data-dismiss='modal'>&times</button>\
             <div id='restrictModalHeader'/><h3>Restricted access!</h3></div>\
