@@ -39,8 +39,8 @@ During the design of our entity relationship model, we took time to brainstorm h
 In the following we will explain how we designed for extendability in the context of the first case, but the principle applies to them both.
 The naïve solution would be to create a new table for each media type e.g. 
 \textbf{Song (id, title, artist, album, coverURI, rentPrice, …)} or
-\textbf{Movie (id, title, director, coverURI, rentPrice, …)}
-This will however create a lot of duplicate columns in different tables. If requirements change in such a way that new information should be added to our media types later, eg. a view count this would need to be added to every media table.
+\textbf{Movie (id, title, director, coverURI, rentPrice, …)}.
+This will however create a lot of duplicate columns in different tables. If requirements change in such a way that new information should be added to our media types later, eg. a view count, this would need to be added to every media table.
 The realization that several columns of information is shared across the media suggest an inheritance based approach, where the shared columns are placed in a “super table”, while every media table will take part in an IS-A relationship with said “super table”. This is the design that can be seen in Figure ~\ref{fig:erd}.
 
 With our minds set on centralizing the common media attributes in the Files super table, we noted that both a movie director and a song artist could be gathered under a common label "Creator". The Files table would then be connected to a "person" table, which would store both song artists and movie directors.
