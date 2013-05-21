@@ -14,41 +14,41 @@ The following tests regard the functionality accessible by regular users. \\
 
 {\centering
 \scalebox{0.7}
-{\begin{tabular}{ | p{2cm} | p{3cm} | p{4cm} | p{4cm} | }
+{\begin{tabular}{ | p{2cm} | p{3cm} | p{4cm} | p{4cm} | p{0.5cm} | }
 	\hline
-	Requirement & Input & Expected Output & Actual Output \\
+	Requirement & Input & Expected Output & Actual Output & Pass \\
 	\hline
-	9 & Valid user information & The newly created user is logged in on the current page and informed that the account has been created & The newly created user is logged in on the current page and informed that the account has been created \\
+	9 & Valid user information & The newly created user is logged in on the current page and informed that the account has been created & The newly created user is logged in on the current page and informed that the account has been created & $\sqrt{}$ \\
 	\hline
-	10 & Valid login credentials & The user is logged in on the current page & The user is logged in on the current page \\
+	10 & Valid login credentials & The user is logged in on the current page & The user is logged in on the current page & $\sqrt{}$ \\
 	\hline
-	11 & Valid input data & The account changes are made and the user is informed about this & The account changes are made and the user is informed about this \\
+	11 & Valid input data & The account changes are made and the user is informed about this & The account changes are made and the user is informed about this & $\sqrt{}$ \\
 	\hline
-	12 & \textbf{Not implemented} & - & - \\
+	12 & \textbf{Not implemented} & Account closed, unable to perform 10. & Unable to close account & $\div{}$ \\
 	\hline
-	13 & \textbf{Not implemented} & - & - \\
+	13 & \textbf{Not implemented} & Reopen account, able to perform 10 & Unable to close account. & $\div{}$ \\
 	\hline
-	14 & Positive amount of money entered & The money is deposited to the account and the contents are updated to reflect this & The money is deposited to the account and the contents are updated to reflect this \\
+	14 & Positive amount of money entered & The money is deposited to the account and the contents are updated to reflect this & The money is deposited to the account and the contents are updated to reflect this & $\sqrt{}$ \\
 	\hline
-	15 & The user has sufficient funds and clicks the "Buy" button on the current artifact & The artifact is associated with the user and the "Buy" and "Rent" buttons are replaced with a "Watch" button and a "Download" button & The artifact is associated with the user and the "Buy" and "Rent" buttons are replaced with a "Watch" button and a "Download" button \\
+	15 & The user has sufficient funds and clicks the "Buy" button on the current artifact & The artifact is associated with the user and the "Buy" and "Rent" buttons are replaced with a "Watch" button and a "Download" button & The artifact is associated with the user and the "Buy" and "Rent" buttons are replaced with a "Watch" button and a "Download" button & $\sqrt{}$ \\
 	\hline
-	16 & The user has sufficient funds and clicks the "Rent" button on the current artifact & The artifact is associated with the user and the "Buy" and "Rent" buttons are replaced with a "Listen" button and a "Download" button & The artifact is associated with the user and the "Buy" and "Rent" buttons are replaced with a "Listen" button and a "Download" button \\
+	16 & The user has sufficient funds and clicks the "Rent" button on the current artifact & The artifact is associated with the user and the "Buy" and "Rent" buttons are replaced with a "Listen" button and a "Download" button & The artifact is associated with the user and the "Buy" and "Rent" buttons are replaced with a "Listen" button and a "Download" button & $\sqrt{}$ \\
 	\hline
-	17 & The user selects a rating on the current artifact & The rating is changed accordingly and the page is updated to reflect the newly submitted change & The rating is changed accordingly and the page is updated to reflect the newly submitted change \\
+	17 & The user selects a rating on the current artifact & The rating is changed accordingly and the page is updated to reflect the newly submitted change & The rating is changed accordingly and the page is updated to reflect the newly submitted change & $\sqrt{}$ \\
 	\hline
-	18 & The user has already rated an artifact and selects a new rating on that artifact & The rating is changed according to the newly submitted rating and the page is updated to reflect the newly submitted change & The rating is changed according to the newly submitted rating and the page is updated to reflect the newly submitted change \\
+	18 & The user has already rated an artifact and selects a new rating on that artifact & The rating is changed according to the newly submitted rating and the page is updated to reflect the newly submitted change & The rating is changed according to the newly submitted rating and the page is updated to reflect the newly submitted change & $\sqrt{}$ \\
 	\hline
-	19 & The user selects a category to sort the artifacts by & The artifacts are sorted according to the select category & The artifacts are sorted according to the select category \\
+	19 & The user selects a category to sort the artifacts by & The artifacts are sorted according to the select category & The artifacts are sorted according to the select category & $\sqrt{}$ \\
 	\hline
-	20 & The user enters a valid search string into search box and searches & The list of artifacts is updated to only show artifacts that match the search string (be it in the title, description, or directors) & The list of artifacts is updated to only show artifacts that match the search string (be it in the title, description, or directors) \\
+	20 & The user enters a valid search string into search box and searches & The list of artifacts is updated to only show artifacts that match the search string (be it in the title, description, or directors) & The list of artifacts is updated to only show artifacts that match the search string (be it in the title, description, or directors) & $\sqrt{}$ \\
 	\hline
-	21 & The user clicks the "Watch Movie" or "Listen to Song" button on a currently owned artifact & A new page opens, playing the movie or song & A new page opens, playing the movie or song \\
+	21 & The user clicks the "Watch Movie" or "Listen to Song" button on a currently owned artifact & A new page opens, playing the movie or song & A new page opens, playing the movie or song & $\sqrt{}$ \\
 	\hline
-	22 & The user clicks the "Download" button on a currently owned artifact & The artifact starts to download & The artifact starts to download \\
+	22 & The user clicks the "Download" button on a currently owned artifact & The artifact starts to download & The artifact starts to download & $\sqrt{}$ \\
 	\hline
-	23 & \textbf{Not implemented}  & - & - \\
+	23 & \textbf{Not implemented}  & A page with all currently and previously accessible artifacts & Unable to find such page. & $\div{}$ \\
 	\hline
-	24 & The user navigates to her account page and selects a type of artifact to show & All artifacts currently associated with the user are displayed & All artifacts currently associated with the user are displayed \\
+	24 & The user navigates to her account page and selects a type of artifact to show & All artifacts currently associated with the user are displayed & All artifacts currently associated with the user are displayed & $\sqrt{}$ \\
 	\hline
 \end{tabular}}}
 
@@ -57,16 +57,16 @@ The following tests regard the functionality accessible exclusively by managers.
 
 {\centering
 \scalebox{0.7}
-{\begin{tabular}{ | p{2cm} | p{3cm} | p{4cm} | p{4cm} | }
+{\begin{tabular}{ | p{2cm} | p{3cm} | p{4cm} | p{4cm} | p{0.5cm} | }
 	\hline
-	Requirement & Input & Expected Output & Actual Output \\
+	Requirement & Input & Expected Output & Actual Output & Pass \\
 	\hline
-	25 & Run all the above tests with a manager account instead of a regular user & Every test is passed & Every test is passed \\
+	25 & Run all the above tests with a manager account instead of a regular user & Every test is passed & Every test is passed & $\sqrt{}$ \\
 	\hline
-	26 & A valid file is uploaded and the property fields are filled out & The artifact is created, and the manager is redirected to the artifact's page & The artifact is created, and the manager is redirected to the artifact's page \\
+	26 & A valid file is uploaded and the property fields are filled out & The artifact is created, and the manager is redirected to the artifact's page & The artifact is created, and the manager is redirected to the artifact's page & $\sqrt{}$ \\
 	\hline
-	27 & Valid input data & The properties of the artifact are changed according to the input data & The properties of the artifact are changed according to the input data \\
+	27 & Valid input data & The properties of the artifact are changed according to the input data & The properties of the artifact are changed according to the input data & $\sqrt{}$ \\
 	\hline
-	28 & The manager clicks the "Delete" button on an artifact & The artifact is deleted & The artifact is deleted \\
+	28 & The manager clicks the "Delete" button on an artifact & The artifact is deleted & The artifact is deleted & $\sqrt{}$ \\
 	\hline
 \end{tabular}}}
