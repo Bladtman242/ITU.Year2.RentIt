@@ -2,11 +2,11 @@
 The tests for the web service itself were supposed to ensure the presence,
 parameter adherence, and response correctness of the endpoints themselves.
 While the tests are close to being complete, the C\# methods for setting the
-http responses' status codes were so unfamiliar, that they were implemented only
-for a part of the API. This intensified a mistake made in the tests; the http
+HTTP responses' status codes were so unfamiliar, that they were implemented only
+for a part of the API. This intensified a mistake made in the tests; the HTTP
 status codes were tested together with the other criteria, rather than in
 separate test methods. The two problems in conjunction resulted in the web
-service not passing its tests. This made it impossible to use the test suite for
+service not passing its tests. This made it impossible to use the tests for
 change acceptance, thus rendering the web service test useless. There is
 something to be said for feasibility testing critical functionality here, but
 the problem would have been insignificant, had the tests for status codes been

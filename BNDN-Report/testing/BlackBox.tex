@@ -1,13 +1,10 @@
 \subsection{Client Tests}
 
-We
-chose not to try and have automated tests of the client, as it is pretty much
-just a user interface, and testing user interfaces is tricky and a very
-changeable field in software development.
-
-\textbf{REFERENCES FOR ABOVE!}
-
-This section describes how the requirements have been tested using a black-box type test, in which we only test that a certain input has the right outcome. The tests were all carried out manually.
+We chose not to try and have automated tests of the client, as it is pretty
+much just a user interface, and testing user interfaces is tricky and a very
+changeable field in software development. This section describes how the
+requirements have been tested using a black-box type test, in which we only
+test that a certain input has the right outcome.
 
 \subsubsection{User Tests}
 The following tests regard the functionality accessible by regular users. \\
@@ -46,7 +43,7 @@ The following tests regard the functionality accessible by regular users. \\
 	\hline
 	22 & The user clicks the "Download" button on a currently owned artifact & The artifact starts to download & The artifact starts to download & $\sqrt{}$ \\
 	\hline
-	23 & \textbf{Not implemented}  & A page with all currently and previously accessible artifacts & Unable to find such page. & $\div{}$ \\
+	23 & \textbf{Not implemented} & A page with all currently and previously accessible artifacts & Unable to find such page. & $\div{}$ \\
 	\hline
 	24 & The user navigates to her account page and selects a type of artifact to show & All artifacts currently associated with the user are displayed & All artifacts currently associated with the user are displayed & $\sqrt{}$ \\
 	\hline
@@ -61,7 +58,7 @@ The following tests regard the functionality accessible exclusively by managers.
 	\hline
 	Requirement & Input & Expected Output & Actual Output & Pass \\
 	\hline
-	25 & Run all the above tests with a manager account instead of a regular user & Every test is passed & Every test is passed & $\sqrt{}$ \\
+	25 & Run all the above tests with a manager account instead of a regular user & Every implemented test is passed & Every implemented test is passed & $\sqrt{}$ \\
 	\hline
 	26 & A valid file is uploaded and the property fields are filled out & The artifact is created, and the manager is redirected to the artifact's page & The artifact is created, and the manager is redirected to the artifact's page & $\sqrt{}$ \\
 	\hline
