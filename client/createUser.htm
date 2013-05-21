@@ -66,6 +66,8 @@
                 success: function(flag) {
 					if(flag.success)
 					{
+                        $.cookie("username", cleanedInputUsername);
+                        $.cookie("password", cleanedInputPassword);
 						setUser(parseInt(flag.message), true);
                         framework.loadPage(framework.defaultPage, null, null, function() {
                             output.success("Profile Created","The profile was succesfully created.");
