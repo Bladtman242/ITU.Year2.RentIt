@@ -83,7 +83,7 @@ $('#star').raty({
 	                var linkJSON = getSongLinkJSON(id);
 	                $('#buttonsDiv').empty();
 	                $('#buttonsDiv').append("<a class='internal btn btn-primary' href='?songId=" + id + "#showSong'>Listen to Song</a>");
-				   	$('#buttonsDiv').append("<a class='btn' href='http://" + linkJSON.downloadLink + "' download='" + data.title + "'>Download Song</a>");
+				   	$('#buttonsDiv').append("<a class='btn' href='http://" + linkJSON.downloadLink + "' download='" + data.title + "'>Download</a>");
 	                framework.user.balance -= data.purchasePrice;
                     framework.rebindInternalLinks();
 	            },
@@ -114,7 +114,7 @@ $('#star').raty({
 	              	var linkJSON = getSongLinkJSON(id);
 	                $('#buttonsDiv').empty();
 	                $('#buttonsDiv').append("<a class='internal btn btn-primary' href='?songId=" + id + "#showSong'>Listen to Song</a>");
-				   	$('#buttonsDiv').append("<a class='btn' href='http://" + linkJSON.downloadLink + "' download='" + data.title + "'>Download Song</a>");
+				   	$('#buttonsDiv').append("<a class='btn' href='http://" + linkJSON.downloadLink + "' download='" + data.title + "'>Download</a>");
 	                framework.user.balance -= data.rentalPrice;
 	                framework.rebindInternalLinks();
 	            },
@@ -230,11 +230,11 @@ function displaySong()
 			if (songs[i].id == id) userOwnsSong = true;
 	}
 	// decide which buttons to show, depending on whether the user is allowed to watch the movie or not
-	if (userOwnsSong || (framework.user && framework.user.admin))
+	if (userOwnsSong)
 	{
 		var linkJSON = getSongLinkJSON(id);
 		buttons = "<a class='internal btn btn-primary' href='?songId=" + id + "#showSong'>Listen to Song</a>\
-				   <a class='btn' href='http://" + linkJSON.downloadLink + "' download='" + data.title + "'>Download Song</a>";
+				   <a class='btn' href='http://" + linkJSON.downloadLink + "' download='" + data.title + "'>Download</a>";
 	}
 
 	// create site contents
