@@ -61,12 +61,7 @@
             .navbar {
                 margin-top: 15px;
             }
-            #manager-link {
-                bottom: 0;
-                right: 0;
-                margin: 18px 15px;
-                position: fixed;
-            }
+
 			footer {
                 background: rgb(245,245,245);
                 border-top: 1px solid rgb(229,229,229);
@@ -168,6 +163,7 @@
                         <li><a href="#listMovies" class="internal"><i class="icon-film"></i> Movies</a></li>
                         <li><a href="#listSongs" class="internal"><i class="icon-music"></i> Songs</a></li>
                         <li><a href="#account" class="internal"><i class="icon-user"></i> Account</a></li>
+                        <li id="manager-nav" ><a href="#manager" class="internal" ><i class="icon-globe"></i> Manager Overview</a></li>
                         <li><a href="#about" class="internal"><i class="icon-question-sign"></i> About</a></li>
                     </ul>
                 </div>
@@ -176,7 +172,6 @@
         <div id="container">
             <!--Nothing-->
         </div>
-        <a id="manager-link" href="#manager" class="internal btn btn-inverse">Manager Overview</a>
         <footer>
             <span style="-moz-transform: scaleX(-1); -o-transform: scaleX(-1); -webkit-transform: scaleX(-1); transform: scaleX(-1); display: inline-block;">
             &copy;
@@ -216,16 +211,16 @@
                     $("#user-pic").html('<img src="http://gravatar.com/avatar/'+$.md5(framework.user.email)+'?size=64&d=mm">');
                     //Add manager link to nav bar if admin!
                     if(framework.user.admin) {
-                        $("#manager-link").show();
+                        $("#manager-nav").show();
                     }
                     else {
-                        $("#manager-link").hide();
+                        $("#manager-nav").hide();
                     }
                 }
                 else {
                     $("#user-profile-box").hide();
                     $("#login-box").show();
-                    $("#manager-link").hide();
+                    $("#manager-nav").hide();
                 }
             }
 			$("#signinSubmit").click(function() {
