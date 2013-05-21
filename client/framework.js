@@ -69,8 +69,8 @@ var framework = {
             if(pushState == null) pushState = true;
             //Query default empty
             if(query == null) {
-                query = "";
                 framework.loadQuery();
+                query = framework.query._full;
             }
             else {
                 framework.loadQuery(query);
@@ -167,8 +167,8 @@ framework.loadQuery();
 //Handle history pop-event: Pop history frame (back/forward navigration)
 window.onpopstate = function(event) {
     if(event.state != null) {
-        page = event.state.page;
-        query = query;
+        var page = event.state.page;
+        var query = event.state.query;
         framework.loadPage(page,false,query);
     }
 };
