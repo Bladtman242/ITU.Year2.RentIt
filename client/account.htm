@@ -9,7 +9,7 @@
 
 <!--Content-->
 <div id="account-content">
-    <!--Content added dynamically-->
+    <!--Content added dynamically (code below)-->
 </div>
 <script>
 if (!framework.user) { //If the user is not logged in
@@ -92,7 +92,8 @@ if (!framework.user) { //If the user is not logged in
             }
     }
 
-    /*//we did not have time to complete the filtering
+    //Filters the currently shown items. Not yet implemented fully.
+    //TODO: Finalize this!
     function filterItems(filter) {
 
         var callBack = function(element, index, array) {
@@ -200,13 +201,15 @@ if (!framework.user) { //If the user is not logged in
                         <input type="submit" class="btn btn-primary" value="Save changes"/>\
                     </div>\
             </form>');
-        //Submit handler
+        //Submit handler (update user information)
         $('#editUserForm').submit(function () {
             var cleanedInputName = $("#inputName").val().trim();
             var cleanedInputEmail = $("#inputEmail").val().trim();
             var cleanedInputPassword = $("#inputPassword").val().trim();
-
+            
+            //This variable decides whether or not any data has changed (if any data has, the form should submit)
             var submit = false;
+            
             var postData = {};
             if (cleanedInputName) {
                 submit = true;
@@ -373,51 +376,6 @@ if (!framework.user) { //If the user is not logged in
         $('#accordion').html(accordion);
         createpaginate();
     }
-/*
-
-    function createThumbContent(movs) {
-        var itemsPerPage = 4;
-        var nrOfPages = (movs.length % itemsPerPage) == 0 ? movs.length / itemsPerPage : movs.length / itemsPerPage + 1;
-        var pagi = "<li><a href='javascript:prevPage()'>Prev</a></li>";
-        var ps = new Array();
-        for (var i = 1; i <= nrOfPages; i++) {
-            pagi += "<li><a href='javascript:setPage(" + i + ")'>" + i + "</a></li>";
-        }
-        pagi += "<li><a href='javascript:nextPage()'>Next</a></li>";
-        var pagin = $("#pagin");
-        pagin.empty();
-        pagin.append($(pagi));
-        for (var i = 0; i < movs.length; i++) {
-            var listString = "<li class='span3'><div class='thumbnail'><a class='internal' href='?movieId=" + movs[i].id + "#movie'><img class='accountThumbListElem' src='" + movs[i].coverUri + "' alt='' border='0' title='" + movs[i].title + "' /></a><div class='caption thumbCapt'><h5>" + movs[i].title + "</h5>Rating:&thinsp;" + movs[i].avgRating.toFixed(2);
-            +"</div></div></li>";
-            if (ps[Math.floor(i / itemsPerPage)]) { //If the entry already contains text..
-                ps[Math.floor(i / itemsPerPage)] += listString; //append
-            }
-            else {
-                ps[Math.floor(i / itemsPerPage)] = listString;
-            }
-        }
-        pages = ps;
-        curPage = 1;
-    }
-
-    function nextPage() {
-        thumbs.empty();
-        thumbs.append(pages[++curPage] || pages[(curPage = 0)]);
-    }
-
-    function prevPage() {
-        thumbs.empty();
-        curPage = curPage - 1 < 0 ? pages.length - 1 : curPage - 1;
-        thumbs.append(pages[curPage]);
-    }
-
-    function setPage(nr) {
-        thumbs.empty();
-        curPage = nr - 1;
-        thumbs.append(pages[curPage]);
-    }
-*/
 
     //Adds a click listener to the navigation of the account page.
     $("#accountNavigation a").click(function (e) {

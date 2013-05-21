@@ -10,109 +10,14 @@
         <script src="vendor/jquery.md5.js"></script>
 		<script src="vendor/raty-2.5.2/lib/jquery.raty.min.js"></script>
         <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-        <style type="text/css">
-            html {
-                text-align: center;
-
-            }
-            body {
-                margin-top: 20px;
-                width: 1000px;
-                display: inline-block;
-                text-align: left;
-            }
-            #container {
-                padding: 0 20px;
-                text-align: left;
-            }
-            header {
-                padding: 10px;
-            }
-            #logo {
-                cursor: pointer;
-            }
-            header hgroup, #login-box, #user-profile-box {
-                display: inline-block;
-                vertical-align: top;
-            }
-            #login-box input, #login-box label {
-                font-size: 0.7em;
-                height: 15px;
-            }
-            #login-box .control-group {
-                margin-bottom: 4px;
-            }
-            #user-name {
-                font-size: 1.3em;
-            }
-            #myAccountLinkBox {
-                cursor: pointer;
-            }
-            #user-pic {
-                width: 64px;
-                height: 64px;
-                display: inline-block;
-                vertical-align: top;
-            }
-            #user-info {
-                display: inline-block;
-                vertical-align: top;
-            }
-            .navbar {
-                margin-top: 15px;
-            }
-
-			footer {
-                background: rgb(245,245,245);
-                border-top: 1px solid rgb(229,229,229);
-                text-align: center;
-                padding: 15px 15px 50px 15px;
-                margin-top: 30px;
-            }
-			.carouselElem{
-				height:390px;
-			}
-			.thumbListElem{
-                height:200px;
-                width:155px;
-				display: block;
-				margin-left: auto;
-				margin-right: auto;
-			}
-			.thumbCapt{
-				white-space:nowrap; 
-				width:12em; 
-				overflow:hidden; 
-				text-overflow:ellipsis;
-			}
-			.frontPageImg{
-				width: 47%;
-				height: 240px;
-				display:inline;
-			}
-			#paginDiv{
-				display:inline-block;
-				padding-top:10px;
-				vertical-allign:middle;
-				padding-left:350px;
-			}
-            #sortBy{
-                display:inline-block;
-                margin-left:630px;
-            }
-			#searchForm{
-				display:inline-block;
-
-				vertical-allign:middle;
-			}
-        </style>
+        <link rel="stylesheet" type="text/css" href="style.css">
         <script src="framework.js"></script>
         <script src="output.js"></script>
 		<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
     </head>
     <body>
         <header>
-            <!--Name of the song, explosivo-->
+            <!--Site title and tagline-->
             <hgroup id="logo">
                 <h1>moofy</h1>
                 <h5>super-cool rental</h5>
@@ -170,7 +75,7 @@
             </div>
         </header>
         <div id="container">
-            <!--Nothing-->
+            <!--Nothing (loaded dynamically)-->
         </div>
         <footer>
             <span style="-moz-transform: scaleX(-1); -o-transform: scaleX(-1); -webkit-transform: scaleX(-1); transform: scaleX(-1); display: inline-block;">
@@ -201,6 +106,7 @@
                 framework.loadPage(framework.defaultPage);
             });
 
+            //Reloads the box showing either login box or user profile summary
             function reloadUserBox() {
                 if(framework.user) {
 					$("#login-box").hide();
@@ -223,12 +129,18 @@
                     $("#manager-nav").hide();
                 }
             }
+            
+            //When signing in
 			$("#signinSubmit").click(function() {
 				var inputPassword = $("#signPass").val();
 				var inputUsername = $("#signName").val();
 				login(inputUsername, inputPassword);
 				return false;
 			});
+            
+            /**
+             * Login function. Logs in (through call to web service) and updates boxes.
+             */
 			function login(usrnm, psswrd, sync) {
 				var postData = {};
 				postData.username=usrnm;
@@ -261,7 +173,10 @@
 					}
 				});
 			}
-			
+
+            /**
+             * Sets the user box to contain info on the current user.
+             */
 			function setUser(id, sync) {
 				$.ajax({
 					url: 'http://rentit.itu.dk/RentIt25/moofy.svc/users/'+id,
@@ -277,7 +192,7 @@
 					error: function(msg)
 					{
                         reloadUserBox();
-						alert("fail setuser");
+						output.error("Failed to show user info in box!","You logged in successfully, but something went wrong when trying to get your user information, so the user box (top right) wasn't updated properly...");
 					}
 				});
 			}

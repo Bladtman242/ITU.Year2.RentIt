@@ -4,6 +4,9 @@ var id = framework.query.movieId;
 var data = getMovieJSON(id);
 container.append(movie(data));
 
+/**
+ * Returns the movie player for the given movie.
+ */
 function movie(data)
 {
 	var s = "";
@@ -12,6 +15,9 @@ function movie(data)
 		</video></center>";
 	return s;
 }	
+/**
+ * Returns an object describing the movie with the given id.
+ */
 function getMovieJSON(id)
 {
 	var json = "";

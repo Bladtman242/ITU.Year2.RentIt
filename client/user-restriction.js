@@ -1,3 +1,5 @@
+//Verifies that a user is currently logged in. If this is not the case, the 
+//user is redirected to the default page.
 if(!framework.user) {
     framework.loadPage(framework.defaultPage);
     
