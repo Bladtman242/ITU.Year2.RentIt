@@ -1,17 +1,36 @@
 \subsection{Evaluation of the API}
 \label{sec:evalapi}
 
-Only a single requirement caused an issue during development of the client:
-demotion of managers to users and promotion the other way. As the feature
-had a fairly low priority, the issue was not discovered until late in the
-development process.
+Developing the client was a great opportunity to use and evaluate the web service. In general, using
+javascript in the client simplified interoperability, as all conversion between data-types was handled
+in the language. As such we could use the user object returned when logging in directly as the user
+object in the client.
 
-The issue arises because a manager has no way of getting a list of users. This
-is neither supported in the service nor in the client (specifications and
-implementations). Listing users is required to access user profiles, which, in
-turn, is required to de- or promote them.
+When getting big amounts of data (all movies, all songs, all users, etc.) it was not very performant,
+with the current API, to go through these.
 
-This is a scary example of how incomplete requirements can result in huge problems much
-later in development. Solving the problem at this point would require changes to
-the API specification and backend service on top of the already required changes
-to the client.
+For example, when displaying a single movie to a user that
+is logged in, the movie is first retreived. This is straight-forward, and returns only the required
+data. To check whether the movie should be watchable and downloadable, however, we had to check whether
+it was in the set of movies currently availible to the user. This required getting a lot of data that
+wasn't necessarily required.
+
+As transferring data over the network is the obvious bottleneck in our system (the actual computations
+on either side are very quick), sending as little data as possible is desirable. We could have solved this
+problem by having a call specifically for checking whether a user owns a specific artifact.
+
+Additionally, when getting lots of data (for example when showing all movies) only a little of the data
+is actually used at first (showing the highest rated movies, and the first 12 movies when sorting
+alphabetically). We could have decreased the impact of the bottleneck in this case by introducing
+pagination: allowing the client to get a few elements at a time, calling the API again when more elements
+need to be loaded.
+
+With the current API, to upload a movie, it is required to first call \verb+movies/upload+ and then
+\verb+movies/create+. This largely originated as a technical constraint because JSON is not an appropriate
+format for binary data (like movie files). In the client this was, fortunately, easily circumvented by
+allowing file upload to happen asynchronously and automatically carrying over the required information
+from the \verb+movies/upload+ call to the \verb+movies/create+ call. The same was the case for the creation
+of new songs.
+
+Several things could be improved with the API, but it is currently a working and easily learnable
+interface.
