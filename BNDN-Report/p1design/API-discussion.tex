@@ -16,8 +16,8 @@ means that third-party clients may create new revenue sources for us.
 When discussing how to best attack the problem of what a \emph{nice API} is, we found two
 options.
 
-Either we could let the API handle arbitrary datatypes or have specific services for
-every allowed datatype. The difference between the two possibilities can be illustrated
+Either we could let the API handle arbitrary data types or have specific services for
+every allowed data type. The difference between the two possibilities can be illustrated
 through which services are offered by them:
 
 \begin{table}[hbt]
@@ -33,52 +33,59 @@ through which services are offered by them:
     \caption{Services offered by different abstraction levels}
 \end{table}
 
-In the high abstraction case a call to the files service may return any of the supported
-data types, so the client can not know this for sure at the time of calling the service.
-This problem can be solved in the following ways: first off, the client discovers content
-through a service that will also disclose the type of the content (so it is already aware
-of the type) and, secondly, the files-service itself will return the type of the content
-as well as the content itself.
+In the high abstraction case a call to the files service may return any of the
+supported data types, so the client can not know the return type for sure at
+the time of calling the service. This problem can be solved in the following
+ways: first off, the client discovers content through a service that will also
+disclose the type of the content (so it is already aware of the type) and,
+secondly, the files-service itself will return the type of the content as well
+as the content itself.
 
-In contrast, the movies- and songs-services always return movies and songs, respectively.
+In the low abstraction case, the movies- and songs-services will always return
+respectively movies and songs.
 
 This difference can be illustrated by looking at the services as if they were method calls.
 In this case, the files-service would have a return-type of "Object", whereas the movies-
 and songs-services would have "Movie" and "Song".
 
 The high abstraction level works like a dynamically typed language (PHP, Javascript) would
-work, wheras the low abstraction level works like a type-strong language like C\# or Java.
+work, whereas the low abstraction level works like a type-strong language like C\# or Java.
 
 \subsubsection{Cost of Change}
-In the high abstraction level service it is easy to expand the range of datatypes we offer,
+In the high abstraction level service it is easy to expand the range of data types we offer,
 as they will be using the same API. This can with great advantage be paired with a discovery
 service that lets clients discover the supported data-types in real-time. The cost of change
 is pretty much non-existent.
 
-This has \textbf{\emph{a lot}} of coolness factor.
+This has \emph{a lot} of coolness factor.
 
 This approach is very dynamic and allows for updates to be rolled out seamlessly. It is, however,
 best suited for a tuple-space based database and not a relational one, such as the one we have
 chosen to work with.
 
-In a relational database, using the high abstraction would require either massive scans of one
-huge table containing all files in the system or having multiple indexes for the same, huge table,
-which would be quicker, but also take up double the space.
+In a relational database, using the high abstraction would require either
+massive scans of one huge table containing all files in the system or having
+multiple indexes for the same, huge table, which would be quicker, but also
+take up double the space.
 
-The low abstraction level is very well suited for the relational database. Creating a table for each
-of the services (one for movies, one for songs) is a natural choice and lets us have the desired
-attributes for the types. Additionally searching is easier and fewer indexes are needed per table
-(so it takes up less space).
+The low abstraction level is very well suited for the relational database.
+Creating a table for each of the services (one for movies, one for songs) is a
+natural choice and lets us have the desired attributes for the types.
+Additionally searching is easier and fewer indexes are needed per table (so it
+takes up less space).
 
 On the downside, the low abstraction level requires for entire new tables and services to be added
-whenever we want to support a new datatype. In turn, adding new services to the API does not make
+whenever we want to support a new data type. In turn, adding new services to the API does not make
 them accessible from the clients. In order to fully roll out an update, all clients,
 including third-party ones, must be updated. This all adds up, so the cost of change is massive.
 
 \subsubsection{Final decision}
-In our application we consider the support of a new datatype to be somewhat a rare occasion. Our
-business is centered around a very specific set of products - movies and songs - and it is with
-this line of products it will be known.
+In our application we consider the support of a new data type to be somewhat a
+rare occasion. Our business is centered around a very specific set of products -
+movies and songs - and it is with this line of products it will be known. Add to
+that the fact that relational databases are extremely common, while tuple
+space database implementations are sparse, and even more so when opting for C\#
+compatibility.
 
 With this in mind, a high cost of change is considered acceptable. With the advantages we trade in for
 it, it is a more than acceptable potential loss, so we decided on a low abstraction API, and the relational
