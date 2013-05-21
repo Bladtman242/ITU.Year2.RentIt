@@ -1,18 +1,19 @@
 \subsection{Evaluation of the API}
 \label{sec:evalapi}
 
-Developing the client was a great opportunity to use and evaluate the web service. In general, using
-javascript in the client simplified interoperability, as all conversion between data-types was handled
-in the language. As such we could use the user object returned when logging in directly as the user
-object in the client.
+Developing the client was a great opportunity to use and evaluate the web
+service. In general, using javascript in the client simplified
+interoperability, as all conversion between data-types was handled in the
+language. As such we could use the user object returned when logging in
+directly as the user object in the client.
 
-When getting big amounts of data (all movies, all songs, all users, etc.) it was not very performant,
-with the current API, to go through these.
+When getting big amounts of data (all movies, all songs, all users, etc.) it
+was not very fast, with the current API, to go through these.
 
 For example, when displaying a single movie to a user that
-is logged in, the movie is first retreived. This is straight-forward, and returns only the required
+is logged in, the movie is first retrieved. This is straight-forward, and returns only the required
 data. To check whether the movie should be watchable and downloadable, however, we had to check whether
-it was in the set of movies currently availible to the user. This required getting a lot of data that
+it was in the set of movies currently available to the user. This required getting a lot of data that
 wasn't necessarily required.
 
 As transferring data over the network is the obvious bottleneck in our system (the actual computations
@@ -32,5 +33,5 @@ allowing file upload to happen asynchronously and automatically carrying over th
 from the \verb+movies/upload+ call to the \verb+movies/create+ call. The same was the case for the creation
 of new songs.
 
-Several things could be improved with the API, but it is currently a working and easily learnable
-interface.
+In conclusion, several things could be improved with the API, but it is
+currently a working and easily learnable interface.
