@@ -5,17 +5,18 @@ establish what users will and will not be able to do with the system. This
 section describes and discusses our choice of requirements and use cases.
 
 We did not immediately arrive at our current requirements. They have changed
-over a series of iterations in which we revised and discussed them internally in
-the group, as well as with the Singaporean team. For example, our first draft of
-requirements did not include songs at all. It was not until the Singaporean team
-told us that they were required by their professor to include songs in their
-service that this became part of our requirements. The Singaporean team also
-made the suggestion that media files should include ratings and view count to allow us to
-sort by rating and popularity. In general, the requirements were almost
-exclusively changed on request from the Singaporean team.
+over a series of iterations in which we revised and discussed them internally
+in the group, as well as with the Singaporean team. For example, our first
+draft of requirements did not include songs at all. It was not until the
+Singaporean team told us that they were required by their professor to include
+songs in their service that this became part of our requirements. The
+Singaporean team also made the suggestion that media files should include
+ratings and view counts to allow us to sort by rating and popularity. The
+requirements were almost exclusively changed on request from the Singaporean
+team.
 
 There are two types of primary actors: users and managers. A manager’s rights
-are a superset of a regular user's. 
+are a superset of a regular user's.
 
 In the following requirements document, the word \emph{user} refers to an
 existing, registered user. Artifact shall refer to a movie or song (the
@@ -25,9 +26,9 @@ description, the artifact properties are divided into two categories:
 
 \emph{Intrinsic}
 properties are those describing the artifact. Examples are title, URI to image,
-and average rating. These properties are decided by the system actors, and are
-not necessarily present. A manager may choose not to include an image URI, and
-new artifacts may have no ratings.
+and artifact description. These properties are decided by the system actors,
+and are not necessarily present. A manager may choose not to include an image
+URI, and new artifacts may have no ratings.
 
 \emph{Extrinsic} parameters are those
 describing the artifacts from the system's perspective. Examples are id, and
@@ -42,9 +43,9 @@ present regardless of actor interaction.
 	release, artist(s), album title, and genre(s).
 \item An artifact must have an extrinsic property describing its unique id.
 \item An artifact must have an intrinsic property to describe an URI pointing to
-	an image (E.g. cover image for movies).
+	an image (e.g. cover image for movies).
 \item An artifact must have a property to describe its average
-	user-rating. This property is intrinsic (determined by actors, may be
+	user rating. This property is intrinsic (determined by actors, may be
 	non-present) but only individual ratings are set by by actors, the
 	average is maintained by the system, and it must not be an option for an
 	actor to edit the average directly.
@@ -52,8 +53,8 @@ present regardless of actor interaction.
 \item An artifact must have a property to describe both a purchase price, and a
 	rental price. These are intrinsic (determined by the actors) but their
 	presence must be enforced by the system. \label{itm:priceReq}
-\item An artifact must have properties to describe its view count. I.e. number
-	if times the artifact has been viewed or downloaded.
+\item An artifact must have properties to describe its view count, i.e. number
+	of times the artifact has been viewed or downloaded.
 \newcounter{enumTemp}
 \setcounter{enumTemp}{\theenumi}
 \end{enumerate}
@@ -73,7 +74,7 @@ present regardless of actor interaction.
 	service.
 \item A user must be able to rent a artifact, which will then be associated
 	with her account for 2 days.
-\item A user must be able rate any artifact.
+\item A user must be able to rate any artifact.
 \item A user must be able to change her rating of any artifact.
 	This cannot be registered as a new rating, but must be an alteration of
 	the old one, so that a user can only give the same artifact \emph{one}
@@ -91,42 +92,42 @@ present regardless of actor interaction.
 	been, associated with her account, as long it is still available through
 	the service.
 \item A user must be able to find all artifacts that are currently associated
-	with her account, as long it is still available through the service (I.e.
+	with her account, as long it is still available through the service (i.e.
 	artifacts that are available to the user at the given time).
 \setcounter{enumTemp}{\theenumi}
 \end{enumerate}
 \textbf{Managers:}
 \begin{enumerate}
 \setcounter{enumi}{\theenumTemp}
-\item A manager's rights extend those of the user, so that a manager can do
-	everything the user can.
-\item A manager must be able to upload movies/songs
+\item A manager's rights extend those of a user, so that a manager can do
+	everything a user can.
+\item A manager must be able to upload artifacts.
 \item A manager must be able to create and edit the properties of any artifact,
 	except for the \emph{extrinsic} properties; average rating and view
 	count.
-\item A manager must be able to delete movies/songs from the service.
+\item A manager must be able to delete artifacts from the service.
 \end{enumerate}
 
 \subsubsection{Security and other Design Decisions}
+When deciding on the requirements for the system, several criteria are
+considered, and some requirements which might be crucial in a real-life product
+are left out. These decisions are mainly made on the basis that this is an
+educational project, making these requirements more or less irrelevant to the
+project:
 
-When deciding on the
-requirements for the system, several criteria are considered, and some
-requirements which might be crucial in a real-life product are left out. These
-decisions are mainly made on the basis that this is an educational project,
-making these requirements more or less irrelevant to the project:
 \begin{itemize}
 \item Our download links stay active at all times, so given a link, 
 	anyone can download/view an artifact without authenticating.
 \item In a real-life renting service such as iTunes, once a user starts playing
 	the movie that she has just rented, the movie will only be available
 	for viewing in the next 48 hours. When a user rents and downloads a
-	movie or song using our service, they can keep the file for as long as
-	they want. However, the file is only available for download for a
-	limited period of time.
+	artifact using our service, they can keep the file for as long as they
+	want. However, the file is only available for download for a limited
+	period of time.
 \item Real-money payment is not implemented. Rather, a "fake" balance where
 	people can deposit money to their account, for use when purchasing or
 	renting movies and songs. However, given access to an E-commerce
-	system, real-money payments could easily be implemented on top of his
+	system, real-money payments could easily be implemented on top of this
 	structure.
 \end{itemize}
 
@@ -137,13 +138,10 @@ implicitly described.
 
 This sort of implicit requirements specification might not be recomendable, but
 in this case the requirements were simple enough that it did not cause any real
-trouble. However, care had to be taken when determining which requirements to
+problems. However, care had to be taken when determining which requirements to
 handle in the client, and which to handle in the API. Surprisingly, the SMU
-client/SWU client situation somewhat simplified the issue. Having two
-unrelated clients to the service, the web service interface came to be seen as a
-general API, rather than a one-off, like the clients.
-This view of the web service, made it an obvious choice to place
-limiting requirements in the clients, and leave the service as flexible as
-possible.
-
-\textbf{For example... req 25}
+client/SWU client situation somewhat simplified the issue. Having two unrelated
+clients to the service, the web service interface came to be seen as a general
+API, rather than a one-off program, like the clients. This view of the web
+service made it an obvious choice to place limiting requirements in the
+clients, and make the service as flexible as possible.
