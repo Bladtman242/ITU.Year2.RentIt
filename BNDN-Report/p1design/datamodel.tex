@@ -57,9 +57,9 @@ In the following we will explain how we designed for extendability in the
 context of the first case, but the principle applies to them both. The naïve
 solution would be to create a new table for each media type e.g. Song (id,
 title, artist, album, coverURI, rentPrice, …) or Movie (id, title, director,
-coverURI, rentPrice, …) This will however create a lot of duplicate columns in
+coverURI, rentPrice, …). This will however create a lot of duplicate columns in
 different tables. If requirements change in such a way that new information
-should be added to our media types later, eg. a view count this would need to
+should be added to our media types later, eg. a view count, this would need to
 be added to every media table. The realization that several columns of
 information is shared across the media suggest an inheritance based approach,
 where the shared columns are placed in a “super table”, while every media table
@@ -71,6 +71,7 @@ super table, we noted that both a movie director and a song artist could be
 gathered under a common label "Creator". The Files table would then be
 connected to a "person" table, which would store both song artists and movie
 directors.
+
 
 \begin{figure}[hbt]
 	\centering
