@@ -14,6 +14,12 @@ POST users/login\\
 GET  users/\{id\}\\
 \{ username: /*string*/, name: /*string*/, email: /*string*/, balance: /*int*/, admin: /*boolean*/ \}
 
+GET  users/filter /*matches all users*/ \\
+/* User array (see users/\{id\}) */
+
+GET  users/filter/\{filter\} \\
+/* User array (see users/\{id\}) */
+
 POST users/\{id\}/deposit\\
 \textbf{\{ moneyAmount: /*int*/ \}}\\
 \{ success: /*boolean*/, message: /*string*/ \}
@@ -41,7 +47,7 @@ POST users/\{id\}/update\\
 
 \subsection{Managers}
 
-Managers have free access to the same things as users. Managers can also upload and delete movies, which users can NOT.
+Managers have access to the same things as users. Managers can also upload and delete movies, which users can NOT.
 
 \emph{managerid} is the id of a manager (who is demoting).
 

@@ -99,7 +99,7 @@ present regardless of actor interaction.
 \begin{enumerate}
 \setcounter{enumi}{\theenumTemp}
 \item A manager's rights extend those of the user, so that a manager can do
-	everything the user can, albeit without purchase.
+	everything the user can.
 \item A manager must be able to upload movies/songs
 \item A manager must be able to create and edit the properties of any artifact,
 	except for the \emph{extrinsic} properties; average rating and view
@@ -115,10 +115,8 @@ requirements which might be crucial in a real-life product are left out. These
 decisions are mainly made on the basis that this is an educational project,
 making these requirements more or less irrelevant to the project:
 \begin{itemize}
-\item We decided to leave out user authentication in our web services, so given
-	the URL, anyone can download a movie our song without authenticating.
-	The data structure does, however, support user authentication with each
-	user having a password.
+\item Our download links stay active at all times, so given a link, 
+	anyone can download/view an artifact without authenticating.
 \item In a real-life renting service such as iTunes, once a user starts playing
 	the movie that she has just rented, the movie will only be available
 	for viewing in the next 48 hours. When a user rents and downloads a
