@@ -57,7 +57,7 @@ $('#star').raty({
 	                var votes = " votes";
 	                if (data.numberOfVotes == 1) votes = " vote";
 	                $('#ratingDiv').empty();
-	                $('#ratingDiv').append("<b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + votes);
+	                $('#ratingDiv').append("<b>Rating:</b> " + data.avgRating.toFixed(2) + " - Based on " + data.numberOfVotes + votes);
 	            },
 	            error: function(msg) {
 	                output.error('Error!', 'An error occured. Please try again.');
@@ -246,7 +246,7 @@ function displaySong()
 		<p><font size='4'>" + data.album + " - " + data.artists + "</font></p>\
 		<hr>\
 		<div id='star' class='pull-right'></div><div class='pull-right' style='padding-right:8px'><b>Your vote:</b></div>\
-		<div id='ratingDiv'><b>Rating:</b> " + data.avgRating + " - Based on " + data.numberOfVotes + votes + "</div>\
+		<div id='ratingDiv'><b>Rating:</b> " + data.avgRating.toFixed(2) + " - Based on " + data.numberOfVotes + votes + "</div>\
 		<p><b>" + data.genres + "</b></p>\
 		" + data.description + "\
 		<hr>\
