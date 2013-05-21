@@ -15,7 +15,7 @@ Adding documentation comments to this code would simply require for the team to 
 %Begin example of C# API interface implementation
 \begin{table}[hbt]
     \centering
-    \begin{tabular}{ | l | }
+        \begin{tabular}{ | l | }
         \hline
         [WebInvoke(Method = "POST", \\
         \hspace{5em}
@@ -60,13 +60,14 @@ a success.
 %Following is an example of the JSON documentation
 \begin{table}[hbt]
     \centering
-    \begin{tabular}{ | l | }
+    \scalebox{0.9}
+    {\begin{tabular}{ | l | }
         \hline
         POST users/create \\
         \textbf{\{ name: /*string*/, username: /*string*/, email: /*string*/, password: /*string*/ \}} \\
         \{ success: /*boolean*/, message: /*string*/ \} \\
         \hline
-    \end{tabular}
+    \end{tabular}}
     \caption{Example of API documentation showing the request and response formats for creating a new user.}
 \end{table}
 %End of example
